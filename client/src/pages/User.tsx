@@ -76,7 +76,7 @@ const User: React.FC = () => {
         await axiosInstance.post("/users", values);
         message.success("User added successfully");
       }
-      setIsModalVisible(false);
+      handleModalClose();
       fetchUsers();
     } catch (error: any) {
       console.log(error);
@@ -89,8 +89,9 @@ const User: React.FC = () => {
     }
   };
 
-  const handleModalCancel = () => {
+  const handleModalClose = () => {
     form.resetFields();
+    setErrors({} as ErrorsType);
     setIsModalVisible(false);
   };
 
@@ -121,9 +122,9 @@ const User: React.FC = () => {
         width={400}
         title={isEditing ? "Edit User" : "Add User"}
         open={isModalVisible}
-        onCancel={handleModalCancel}
+        onCancel={handleModalClose}
         footer={[
-          <Button key="back" onClick={handleModalCancel}>
+          <Button key="back" onClick={handleModalClose}>
             Cancel
           </Button>,
           <Button key="submit" type="primary" form="userForm" htmlType="submit">
