@@ -8,12 +8,14 @@ import Recipient from "./pages/Recipient";
 import AppPage from "./pages/App";
 import Template from "./pages/Template";
 import Log from "./pages/Log";
+import PrivateRoute from "./components/PrivateRoute";
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainLayout />} >
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<PrivateRoute><MainLayout /></PrivateRoute>} >
           <Route index element={<Home />} />
           <Route path="recipients" element={<Recipient />} />
           <Route path="apps" element={<AppPage />} />
@@ -22,8 +24,6 @@ const App: React.FC = () => {
           <Route path="logs" element={<Log />} />
           <Route path="users" element={<User />} />
         </Route>
-
-        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
