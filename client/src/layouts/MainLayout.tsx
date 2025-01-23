@@ -62,14 +62,13 @@ const MainLayout: React.FC = () => {
           WhatsApp Gateway
         </Header>
 
-        <Content style={{ margin: '0 16px' }}>
+        <Content style={{ margin: '16px' }}>
           <div
             style={{
               padding: 24,
-              minHeight: 'calc(100vh - 150px)',
+              minHeight: 'calc(100vh - 165px)',
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
-              marginTop: 20,
             }}
           >
             <Outlet />

@@ -8,11 +8,18 @@ type UserType = {
   email: string;
 }
 
+type ErrorsType = {
+  name: string[];
+  email: string[];
+  password: string[];
+}
+
 const User: React.FC = () => {
   const [users, setUsers] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm();
+  const [errors, setErrors] = useState({} as ErrorsType);
 
   useEffect(() => {
     fetchUsers();
@@ -44,8 +51,8 @@ const User: React.FC = () => {
       await axiosInstance.delete(`/users/${userId}`);
       message.success("User deleted successfully");
       fetchUsers();
-    } catch (error) {
-      message.error("Failed to delete user");
+    } catch (error: any) {
+      message.error(error.response?.data?.message ?? error.message);
     }
   };
 
@@ -71,12 +78,19 @@ const User: React.FC = () => {
       }
       setIsModalVisible(false);
       fetchUsers();
-    } catch (error) {
-      message.error("Failed to save user");
+    } catch (error: any) {
+      console.log(error);
+
+      if (error.response?.status === 400) {
+        setErrors(error.response.data.errors);
+      }
+
+      message.error(error.response?.data?.message ?? error.message);
     }
   };
 
   const handleModalCancel = () => {
+    form.resetFields();
     setIsModalVisible(false);
   };
 
@@ -129,14 +143,16 @@ const User: React.FC = () => {
           <Form.Item
             label="Name"
             name="name"
-            rules={[{ required: true, message: "Please input the name!" }]}
+            validateStatus={errors.name ? "error" : ""}
+            help={errors.name?.join(", ")}
           >
             <Input />
           </Form.Item>
           <Form.Item
             label="Email"
             name="email"
-            rules={[{ required: true, message: "Please input the email!" }]}
+            validateStatus={errors.email ? "error" : ""}
+            help={errors.email?.join(", ")}
           >
             <Input />
           </Form.Item>
@@ -144,7 +160,8 @@ const User: React.FC = () => {
           <Form.Item
             label="Password"
             name="password"
-            rules={[{ required: !isEditing, message: "Please input the password!" }]}
+            validateStatus={errors.password ? "error" : ""}
+            help={errors.password?.join(", ")}
           >
             <Input.Password />
           </Form.Item>

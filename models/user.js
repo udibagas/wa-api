@@ -27,14 +27,36 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init(
     {
-      name: DataTypes.STRING,
-      email: DataTypes.STRING,
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        validate: {
+          notNull: { msg: "Name is required" },
+          notEmpty: { msg: "Name is required" },
+        },
+      },
+      email: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        unique: { msg: "Email already exists" },
+        validate: {
+          isEmail: { msg: "Invalid email format" },
+          notNull: { msg: "Email is required" },
+          notEmpty: { msg: "Email is required" },
+        },
+      },
       password: {
+        allowNull: false,
         type: DataTypes.STRING,
         set(value) {
+          if (!value) return;
           const saltRounds = 10;
           const hash = bcrypt.hashSync(value, saltRounds);
           this.setDataValue("password", hash);
+        },
+        validate: {
+          notNull: { msg: "Password is required" },
+          notEmpty: { msg: "Password is required" },
         },
       },
     },
