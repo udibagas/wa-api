@@ -1,0 +1,22 @@
+body {
+  background-color: #f0f2f5;
+  /* Set the background color */
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.login-card {
+  width: 100%;
+  width: 350px;
+}

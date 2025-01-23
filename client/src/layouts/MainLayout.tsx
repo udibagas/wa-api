@@ -6,8 +6,8 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import '../App.css';
+import { Layout, Menu, theme } from 'antd';
+import '../css/App.css';
 import { Link, Outlet } from 'react-router';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -43,10 +43,6 @@ const MainLayout: React.FC = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e);
-  };
-
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -54,7 +50,7 @@ const MainLayout: React.FC = () => {
         <div className="logo" >
           A
         </div>
-        <Menu onClick={onClick} theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
       </Sider>
       <Layout>
         <Header style={{ padding: '0 20px', background: colorBgContainer, fontWeight: 'bold', fontSize: '1.5rem' }}>
@@ -62,16 +58,13 @@ const MainLayout: React.FC = () => {
         </Header>
 
         <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
           <div
             style={{
               padding: 24,
-              minHeight: 360,
+              minHeight: 'calc(100vh - 150px)',
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
+              marginTop: 20,
             }}
           >
             <Outlet />
