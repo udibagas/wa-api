@@ -8,7 +8,7 @@ import {
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import '../css/App.css';
-import { Link, Outlet } from 'react-router';
+import { Link, Outlet, useLocation } from 'react-router';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -29,12 +29,12 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem(<Link to="/">Dashboard</Link>, '1', <DashboardOutlined />),
-  getItem(<Link to="/recipients">Recipients</Link>, '2', <TeamOutlined />),
-  getItem(<Link to="/apps">Apps</Link>, '3', <SettingFilled />),
-  getItem(<Link to="/templates">Templates</Link>, '4', <TeamOutlined />),
-  getItem(<Link to="/logs">Logs</Link>, '5', <UserOutlined />),
-  getItem(<Link to="/users">Users</Link>, '6', <UserOutlined />),
+  getItem(<Link to="/">Dashboard</Link>, 'home', <DashboardOutlined />),
+  getItem(<Link to="/recipients">Recipients</Link>, 'recipients', <TeamOutlined />),
+  getItem(<Link to="/apps">Apps</Link>, 'apps', <SettingFilled />),
+  getItem(<Link to="/templates">Templates</Link>, 'templates', <TeamOutlined />),
+  getItem(<Link to="/logs">Logs</Link>, 'logs', <UserOutlined />),
+  getItem(<Link to="/users">Users</Link>, 'users', <UserOutlined />),
 ];
 
 const MainLayout: React.FC = () => {
@@ -43,6 +43,9 @@ const MainLayout: React.FC = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const location = useLocation();
+  const selectedKey = location.pathname.split('/')[1] || 'home';
+
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -50,7 +53,7 @@ const MainLayout: React.FC = () => {
         <div className="logo" >
           A
         </div>
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <Menu theme="dark" defaultSelectedKeys={[selectedKey]} mode="inline" items={items} />
       </Sider>
       <Layout>
         <Header style={{ padding: '0 20px', background: colorBgContainer, fontWeight: 'bold', fontSize: '1.5rem' }}>

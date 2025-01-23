@@ -4,7 +4,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Recipient extends Model {
     static associate(models) {
-      Recipient.belongsTo(models.Group, {
+      Recipient.belongsTo(models.RecipientGroup, {
         foreignKey: "GroupId",
         as: "group",
       });

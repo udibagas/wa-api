@@ -1,30 +1,47 @@
 import React from "react";
-import { Form, Input, Button, Checkbox, Card } from "antd";
-import '../css/Login.css'; // Import the CSS file for custom styles
+import { Form, Input, Button, Card, message, FormProps } from "antd";
+import styles from '../css/Login.module.css'; // Import the CSS file for custom styles
+import { useNavigate } from "react-router";
+import axios from "axios";
+
+type LoginValues = {
+  email?: string;
+  password?: string;
+};
 
 const Login: React.FC = () => {
-  const onFinish = (values: any) => {
+  const navigate = useNavigate();
+
+  const onFinish: FormProps<LoginValues>['onFinish'] = async (values) => {
     console.log("Success:", values);
+    try {
+      const { data } = await axios.post("http://localhost:3000/api/login", values);
+      localStorage.setItem("token", data.token);
+      message.success("Login successful!");
+      navigate("/");
+    } catch (error: any) {
+      console.log(error)
+      message.error(error.response?.data?.message ?? error.message);
+    }
   };
 
-  const onFinishFailed = (errorInfo: any) => {
+  const onFinishFailed: FormProps<LoginValues>['onFinishFailed'] = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
   return (
-    <div className="login-container">
-      <Card title={<div style={{ textAlign: 'center', fontSize: '1.5rem' }}>WhatsApp Gateway</div>} className="login-card">
+    <div className={styles.loginContainer}>
+      <Card title={<div style={{ textAlign: 'center', fontSize: '1.5rem' }}>WhatsApp Gateway</div>} className={styles.loginCard}>
         <Form
           layout="vertical"
           name="login"
-          initialValues={{ remember: true }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            label="Email"
+            name="email"
+            rules={[{ required: true, message: "Please input your email!" }]}
           >
             <Input />
           </Form.Item>

@@ -1,0 +1,13 @@
+.loginContainer {
+  background-color: #f0f2f5;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginCard {
+  width: 100%;
+  width: 350px;
+}
