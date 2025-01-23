@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import {
+  BarsOutlined,
   DashboardOutlined,
+  FileTextOutlined,
   SettingFilled,
   TeamOutlined,
   UserOutlined,
@@ -32,8 +34,8 @@ const items: MenuItem[] = [
   getItem(<Link to="/">Dashboard</Link>, 'home', <DashboardOutlined />),
   getItem(<Link to="/recipients">Recipients</Link>, 'recipients', <TeamOutlined />),
   getItem(<Link to="/apps">Apps</Link>, 'apps', <SettingFilled />),
-  getItem(<Link to="/templates">Templates</Link>, 'templates', <TeamOutlined />),
-  getItem(<Link to="/logs">Logs</Link>, 'logs', <UserOutlined />),
+  getItem(<Link to="/templates">Templates</Link>, 'templates', <FileTextOutlined />),
+  getItem(<Link to="/logs">Logs</Link>, 'logs', <BarsOutlined />),
   getItem(<Link to="/users">Users</Link>, 'users', <UserOutlined />),
 ];
 
