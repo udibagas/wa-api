@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, Form, Input, message } from "antd";
-import axiosInstance from "../utils/axiosInstance"; // Import the Axios instance
+import React, { useState } from "react";
+import { Table, Button, Modal, Form, Input } from "antd";
+import useCrud from "../hooks/useCrud";
 
 type UserType = {
   id: number;
@@ -8,31 +8,11 @@ type UserType = {
   email: string;
 }
 
-type ErrorsType = {
-  name: string[];
-  email: string[];
-  password: string[];
-}
-
 const User: React.FC = () => {
-  const [users, setUsers] = useState([]);
+  const { data: users, errors, addItem, updateItem, showDeleteConfirm, } = useCrud<UserType>("/users");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm();
-  const [errors, setErrors] = useState({} as ErrorsType);
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await axiosInstance.get("/users");
-      setUsers(response.data);
-    } catch (error: any) {
-      message.error(error.message);
-    }
-  };
 
   const handleAddUser = () => {
     setIsEditing(false);
@@ -46,52 +26,23 @@ const User: React.FC = () => {
     setIsModalVisible(true);
   };
 
-  const handleDeleteUser = async (userId: number) => {
-    try {
-      await axiosInstance.delete(`/users/${userId}`);
-      message.success("User deleted successfully");
-      fetchUsers();
-    } catch (error: any) {
-      message.error(error.response?.data?.message ?? error.message);
-    }
-  };
-
-  const showDeleteConfirm = (userId: number) => {
-    Modal.confirm({
-      title: 'Are you sure you want to delete this user?',
-      content: 'This action cannot be undone.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk: () => handleDeleteUser(userId),
-    });
-  };
-
   const handleModalOk = async (values: UserType) => {
     try {
       if (values.id) {
-        await axiosInstance.put(`/users/${values.id}`, values);
-        message.success("User updated successfully");
+        await updateItem(values.id, values);
       } else {
-        await axiosInstance.post("/users", values);
-        message.success("User added successfully");
+        await addItem(values);
       }
       handleModalClose();
-      fetchUsers();
     } catch (error: any) {
-      console.log(error);
-
-      if (error.response?.status === 400) {
-        setErrors(error.response.data.errors);
-      }
-
-      message.error(error.response?.data?.message ?? error.message);
+      console.log("Error");
     }
+
+
   };
 
   const handleModalClose = () => {
     form.resetFields();
-    setErrors({} as ErrorsType);
     setIsModalVisible(false);
   };
 
