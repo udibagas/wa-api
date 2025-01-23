@@ -1,7 +1,8 @@
 import React from "react";
 import { Form, Input, Button, Card, message, FormProps } from "antd";
 import styles from '../css/Login.module.css'; // Import the CSS file for custom styles
-import { useNavigate } from "react-router";
+import { useNavigate, Navigate } from "react-router";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import axios from "axios";
 
 type LoginValues = {
@@ -20,7 +21,6 @@ const Login: React.FC = () => {
       message.success("Login successful!");
       navigate("/");
     } catch (error: any) {
-      console.log(error)
       message.error(error.response?.data?.message ?? error.message);
     }
   };
@@ -28,6 +28,10 @@ const Login: React.FC = () => {
   const onFinishFailed: FormProps<LoginValues>['onFinishFailed'] = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
+  if (localStorage.getItem("token")) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div className={styles.loginContainer}>
@@ -39,22 +43,20 @@ const Login: React.FC = () => {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            label="Email"
             name="email"
             rules={[{ required: true, message: "Please input your email!" }]}
           >
-            <Input />
+            <Input prefix={<UserOutlined />} placeholder="Username" />
           </Form.Item>
 
           <Form.Item
-            label="Password"
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <Input.Password />
+            <Input.Password prefix={<LockOutlined />} placeholder="Password" />
           </Form.Item>
 
-          <Form.Item style={{ marginTop: 50 }}>
+          <Form.Item>
             <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
               Login
             </Button>

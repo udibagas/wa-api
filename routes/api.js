@@ -8,4 +8,6 @@ router.post("/login", login);
 router.post("/logout", logout);
 router.post("/sendMessage", upload.single("image"), sendMessage);
 
+router.use("/users", require("./users"));
+
 module.exports = router;

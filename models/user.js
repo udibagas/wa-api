@@ -31,7 +31,6 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       password: {
         type: DataTypes.STRING,
-        select: false,
         set(value) {
           const saltRounds = 10;
           const hash = bcrypt.hashSync(value, saltRounds);
@@ -42,6 +41,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "User",
+      defaultScope: {
+        attributes: { exclude: ["password"] },
+      },
     }
   );
 
