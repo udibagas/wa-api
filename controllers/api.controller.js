@@ -1,6 +1,6 @@
 const wa = require("../services/wa.service");
 
-exports.sendMessage = async (req, res) => {
+exports.sendMessage = async (req, res, next) => {
   try {
     const {
       message,
@@ -34,13 +34,14 @@ exports.sendMessage = async (req, res) => {
         break;
 
       default:
-        throw new Error("Invalid message type");
+        const error = new Error("Invalid message type");
+        error.status = 400;
+        throw error;
     }
 
     const body = await response.responseBodyToJSON();
     res.status(200).json(body);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
