@@ -1,9 +1,8 @@
-import fs from "fs";
-import axios from "axios";
-import FormData from "form-data";
-import { configDotenv } from "dotenv";
-import WhatsApp from "whatsapp";
-configDotenv();
+require("dotenv").config();
+const fs = require("fs");
+const axios = require("axios");
+const FormData = require("form-data");
+const WhatsApp = require("whatsapp");
 
 const {
   WA_BASE_URL,
@@ -33,4 +32,4 @@ wa.uploadImage = async (imagePath) => {
   return response.data;
 };
 
-export default wa;
+module.exports = wa;

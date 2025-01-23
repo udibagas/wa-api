@@ -1,8 +1,7 @@
-import { configDotenv } from "dotenv";
-import express from "express";
-import wa from "./wa.js";
-import multer from "multer";
-configDotenv();
+require("dotenv").config();
+const express = require("express");
+const wa = require("./wa.js");
+const multer = require("multer");
 
 const app = express();
 const port = process.env.PORT || 3000;

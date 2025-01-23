@@ -20,4 +20,4 @@ const basicAuth = (req, res, next) => {
   return res.status(403).send("Access denied.");
 };
 
-export default basicAuth;
+module.exports = basicAuth;

@@ -1,7 +1,7 @@
 {
   "name": "wa-api",
   "version": "1.0.0",
-  "type": "module",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,6 +17,9 @@
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "multer": "^1.4.5-lts.1",
+    "pg": "^8.13.1",
+    "sequelize": "^6.37.5",
+    "sequelize-cli": "^6.6.2",
     "whatsapp": "^0.0.5-Alpha",
     "whatsapp-web.js": "^1.26.0"
   }
