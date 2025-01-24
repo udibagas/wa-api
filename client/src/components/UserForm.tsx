@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Form, Input, Button, FormInstance } from "antd";
+import { SaveOutlined, CloseCircleOutlined } from "@ant-design/icons";
 
 type UserType = {
   id: number;
@@ -26,10 +27,10 @@ const UserForm: React.FC<UserFormProps> = ({ visible, isEditing, onCancel, onOk,
       open={visible}
       onCancel={onCancel}
       footer={[
-        <Button key="back" onClick={onCancel}>
+        <Button icon={<CloseCircleOutlined />} key="back" onClick={onCancel}>
           Cancel
         </Button>,
-        <Button key="submit" type="primary" form="userForm" htmlType="submit">
+        <Button icon={<SaveOutlined />} key="submit" type="primary" form="userForm" htmlType="submit">
           {isEditing ? "Update" : "Add"}
         </Button>,
       ]}

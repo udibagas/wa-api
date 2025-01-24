@@ -3,6 +3,7 @@ import { Table, Button, Form } from "antd";
 import useCrud from "../hooks/useCrud";
 import UserForm from "../components/UserForm";
 import PageHeader from "../components/PageHeader";
+import { EditOutlined, DeleteOutlined, SettingOutlined, PlusOutlined } from "@ant-design/icons";
 
 type UserType = {
   id: number;
@@ -52,14 +53,14 @@ const User: React.FC = () => {
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Email", dataIndex: "email", key: "email" },
     {
-      title: "Action",
+      title: <SettingOutlined />,
       key: "action",
-      width: 200,
+      width: 80,
       align: "center",
       render: (text, record: UserType) => (
         <>
-          <Button type="link" onClick={() => handleEditUser(record)}>Edit</Button>
-          <Button type="link" danger onClick={() => showDeleteConfirm(record.id)}>Delete</Button>
+          <Button type="link" icon={<EditOutlined />} onClick={() => handleEditUser(record)} />
+          <Button type="link" icon={<DeleteOutlined />} danger onClick={() => showDeleteConfirm(record.id)} />
         </>
       ),
     },
@@ -72,7 +73,11 @@ const User: React.FC = () => {
         subtitle="Manage your users"
         buttonText="Add User"
         onButtonClick={handleAddUser}
-      />
+      >
+        <Button type="primary" icon={<PlusOutlined />} onClick={handleAddUser}>
+          Add User
+        </Button>
+      </PageHeader>
 
       <Table size="small" columns={columns} dataSource={users} rowKey="id" pagination={false} />
 
