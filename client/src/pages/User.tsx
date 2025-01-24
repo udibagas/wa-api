@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { Table, Button, Form } from "antd";
+import { Table, Button, Form, Space, Typography } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import useCrud from "../hooks/useCrud";
 import UserForm from "../components/UserForm";
+import Title from "antd/es/typography/Title";
+import PageHeader from "../components/PageHeader";
+const { Text } = Typography;
 
 type UserType = {
   id: number;
@@ -10,7 +14,7 @@ type UserType = {
 }
 
 const User: React.FC = () => {
-  const { data: users, errors, addItem, updateItem, showDeleteConfirm } = useCrud<UserType>("/users");
+  const { data: users, errors, setErrors, addItem, updateItem, showDeleteConfirm } = useCrud<UserType>("/users");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm();
@@ -36,14 +40,14 @@ const User: React.FC = () => {
       }
       handleModalClose();
     } catch (error: any) {
-      console.log("Error");
+      console.log(error.message);
     }
 
 
   };
 
   const handleModalClose = () => {
-    form.resetFields();
+    setErrors({});
     setIsModalVisible(false);
   };
 
@@ -66,9 +70,15 @@ const User: React.FC = () => {
 
   return (
     <div>
-      <h1>User Management</h1>
-      <Button style={{ marginBottom: 20 }} type="primary" onClick={handleAddUser}>Add User</Button>
-      <Table columns={columns} dataSource={users} rowKey="id" pagination={false} />
+      <PageHeader
+        title="User Management"
+        subtitle="Manage your users"
+        buttonText="Add User"
+        onButtonClick={handleAddUser}
+      />
+
+      <Table size="small" columns={columns} dataSource={users} rowKey="id" pagination={false} />
+
 
       <UserForm
         visible={isModalVisible}
