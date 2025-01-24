@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { Table, Button, Form, Space, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Table, Button, Form } from "antd";
 import useCrud from "../hooks/useCrud";
 import UserForm from "../components/UserForm";
-import Title from "antd/es/typography/Title";
 import PageHeader from "../components/PageHeader";
-const { Text } = Typography;
 
 type UserType = {
   id: number;
