@@ -37,11 +37,9 @@ const User: React.FC = () => {
         await addItem(values);
       }
       handleModalClose();
-    } catch (error: any) {
-      console.log(error.message);
+    } catch (error) {
+      console.log((error as Error).message);
     }
-
-
   };
 
   const handleModalClose = () => {
@@ -50,14 +48,19 @@ const User: React.FC = () => {
   };
 
   const columns = [
+    {
+      title: "No",
+      width: 60,
+      render: (_: string, __: UserType, index: number) => index + 1
+    },
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Email", dataIndex: "email", key: "email" },
     {
       title: <SettingOutlined />,
       key: "action",
+      align: "center" as const,
       width: 80,
-      align: "center",
-      render: (text, record: UserType) => (
+      render: (_: string, record: UserType) => (
         <>
           <Button type="link" icon={<EditOutlined />} onClick={() => handleEditUser(record)} />
           <Button type="link" icon={<DeleteOutlined />} danger onClick={() => showDeleteConfirm(record.id)} />
@@ -68,18 +71,24 @@ const User: React.FC = () => {
 
   return (
     <div>
-      <PageHeader
-        title="User Management"
-        subtitle="Manage your users"
-        buttonText="Add User"
-        onButtonClick={handleAddUser}
-      >
+      <PageHeader title="User Management" subtitle="Manage your users">
         <Button type="primary" icon={<PlusOutlined />} onClick={handleAddUser}>
           Add User
         </Button>
       </PageHeader>
 
-      <Table size="small" columns={columns} dataSource={users} rowKey="id" pagination={false} />
+      <Table
+        size="small"
+        columns={columns}
+        dataSource={users}
+        rowKey="id"
+        pagination={false}
+        onRow={(record: UserType) => {
+          return {
+            onDoubleClick: () => handleEditUser(record),
+          };
+        }}
+      />
 
 
       <UserForm

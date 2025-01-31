@@ -22,7 +22,7 @@ const UserForm: React.FC<UserFormProps> = ({ visible, isEditing, onCancel, onOk,
 
   return (
     <Modal
-      width={400}
+      width={450}
       title={isEditing ? "Edit User" : "Add User"}
       open={visible}
       onCancel={onCancel}
@@ -41,8 +41,8 @@ const UserForm: React.FC<UserFormProps> = ({ visible, isEditing, onCancel, onOk,
         form={form}
         initialValues={initialValues}
         onFinish={onOk}
-        layout="vertical"
         requiredMark={false}
+        labelCol={{ span: 8 }}
       >
         <Form.Item
           label="Name"
@@ -70,7 +70,7 @@ const UserForm: React.FC<UserFormProps> = ({ visible, isEditing, onCancel, onOk,
           <Input.Password />
         </Form.Item>
       </Form>
-    </Modal>
+    </Modal >
   );
 };
 
