@@ -6,12 +6,7 @@ import AppForm from "../components/AppForm";
 import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
-
-type AppType = {
-  id: number;
-  name: string;
-  description: string;
-};
+import { AppType } from "../types";
 
 const App: React.FC = () => {
   const { data: apps, errors, setErrors, addItem, updateItem, showDeleteConfirm } = useCrud<AppType>("/apps");

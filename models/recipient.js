@@ -4,9 +4,10 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Recipient extends Model {
     static associate(models) {
-      Recipient.belongsTo(models.RecipientGroup, {
-        foreignKey: "GroupId",
-        as: "group",
+      Recipient.belongsToMany(models.Group, {
+        through: models.RecipientGroup,
+        foreignKey: "RecipientId",
+        as: "groups",
       });
     }
   }
@@ -37,18 +38,6 @@ module.exports = (sequelize, DataTypes) => {
           },
           notEmpty: {
             msg: "Phone number is required",
-          },
-        },
-      },
-      GroupId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: "Group is required",
-          },
-          notEmpty: {
-            msg: "Group is required",
           },
         },
       },

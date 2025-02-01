@@ -9,6 +9,7 @@ import AppPage from "./pages/App";
 import Template from "./pages/Template";
 import Log from "./pages/Log";
 import PrivateRoute from "./components/PrivateRoute";
+import Group from "./pages/Group";
 
 const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<PrivateRoute><MainLayout /></PrivateRoute>} >
           <Route index element={<Home />} />
+          <Route path="groups" element={<Group />} />
           <Route path="recipients" element={<Recipient />} />
           <Route path="apps" element={<AppPage />} />
           <Route path="users" element={<User />} />

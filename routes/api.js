@@ -10,6 +10,7 @@ router.post("/sendMessage", upload.single("image"), sendMessage);
 
 router.use("/users", require("./users"));
 router.use("/apps", require("./apps"));
+router.use("/groups", require("./groups"));
 router.use("/recipients", require("./recipients"));
 
 module.exports = router;

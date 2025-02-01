@@ -1,32 +1,33 @@
 import React, { useState } from "react";
 import { Table, Form } from "antd";
-import useCrud from "../hooks/useCrud";
-import UserForm from "../components/UserForm";
-import PageHeader from "../components/PageHeader";
 import { SettingOutlined } from "@ant-design/icons";
-import ActionButton from "../components/buttons/ActionButton";
+import useCrud from "../hooks/useCrud";
+import GroupForm from "../components/GroupForm";
+import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
-import { UserType } from "../types";
+import ActionButton from "../components/buttons/ActionButton";
+import { GroupType } from "../types";
 
-const User: React.FC = () => {
-  const { data: users, errors, setErrors, addItem, updateItem, showDeleteConfirm } = useCrud<UserType>("/users");
+const Group: React.FC = () => {
+  const { data: apps, errors, setErrors, addItem, updateItem, showDeleteConfirm } = useCrud<GroupType>("/apps");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm();
 
-  const handleAddUser = () => {
+  const handleAddGroup = () => {
     setIsEditing(false);
-    form.setFieldsValue({ name: "", email: "", password: "" });
+    form.setFieldsValue({ name: "", description: "" });
     setIsModalVisible(true);
   };
 
-  const handleEditUser = (user: UserType) => {
+  const handleEditGroup = (app: GroupType) => {
     setIsEditing(true);
-    form.setFieldsValue(user);
+    form.setFieldsValue(app);
     setIsModalVisible(true);
   };
 
-  const handleModalOk = async (values: UserType) => {
+  const handleModalOk = async (values: GroupType) => {
+    console.log(values)
     try {
       if (values.id) {
         await updateItem(values.id, values);
@@ -46,56 +47,56 @@ const User: React.FC = () => {
 
   const columns = [
     {
-      title: "No",
-      width: 60,
-      render: (_: string, __: UserType, index: number) => index + 1
+      title: "No.",
+      dataIndex: "id",
+      key: "id",
+      render: (_: string, __: GroupType, index: number) => index + 1,
     },
     { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Email", dataIndex: "email", key: "email" },
+    { title: "Description", dataIndex: "description", key: "description" },
     {
       title: <SettingOutlined />,
       key: "action",
-      align: "center" as const,
       width: 80,
-      render: (_: string, record: UserType) => (
-        <ActionButton
-          onEdit={() => handleEditUser(record)}
-          onDelete={() => showDeleteConfirm(record.id)}
-        />
+      align: "center" as const,
+      render: (_: string, record: GroupType) => (
+        <ActionButton onEdit={() => handleEditGroup(record)} onDelete={() => showDeleteConfirm(record.id)} />
       ),
     },
   ];
 
   return (
     <div>
-      <PageHeader title="User Management" subtitle="Manage your users">
-        <AddButton label="Create New User" onClick={handleAddUser} />
+      <PageHeader
+        title="Group Management"
+        subtitle="Manage your group"
+      >
+        <AddButton label="Create New Group" onClick={handleAddGroup} />
       </PageHeader>
-
       <Table
         size="small"
         columns={columns}
-        dataSource={users}
+        dataSource={apps}
         rowKey="id"
         pagination={false}
-        onRow={(record: UserType) => {
+        onRow={(record: GroupType) => {
           return {
-            onDoubleClick: () => handleEditUser(record),
+            onDoubleClick: () => handleEditGroup(record),
           };
         }}
       />
 
-      <UserForm
+      <GroupForm
         visible={isModalVisible}
         isEditing={isEditing}
         onCancel={handleModalClose}
         onOk={handleModalOk}
-        initialValues={{ name: "", email: "" } as UserType}
         errors={errors}
         form={form}
+        initialValues={{ name: "", description: "" } as GroupType}
       />
     </div>
   );
 };
 
-export default User;
+export default Group;

@@ -3,6 +3,7 @@ import {
   BarsOutlined,
   DashboardOutlined,
   FileTextOutlined,
+  ProfileOutlined,
   SettingFilled,
   TeamOutlined,
   UserOutlined,
@@ -32,6 +33,7 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem(<Link to="/">Dashboard</Link>, 'home', <DashboardOutlined />),
+  getItem(<Link to="/groups">Groups</Link>, 'groups', <ProfileOutlined />),
   getItem(<Link to="/recipients">Recipients</Link>, 'recipients', <TeamOutlined />),
   getItem(<Link to="/apps">Apps</Link>, 'apps', <SettingFilled />),
   getItem(<Link to="/templates">Templates</Link>, 'templates', <FileTextOutlined />),

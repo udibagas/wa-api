@@ -3,26 +3,28 @@ const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class RecipientGroup extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      RecipientGroup.hasMany(models.Recipient, {
+      RecipientGroup.belongsTo(models.Recipient, {
+        foreignKey: "RecipientId",
+        as: "recipient",
+      });
+
+      RecipientGroup.belongsTo(models.Group, {
         foreignKey: "GroupId",
-        as: "recipients",
+        as: "group",
       });
     }
   }
 
   RecipientGroup.init(
     {
-      name: DataTypes.STRING,
+      RecipientId: DataTypes.INTEGER,
+      GroupId: DataTypes.INTEGER,
     },
     {
       sequelize,
       modelName: "RecipientGroup",
+      timestamps: false,
     }
   );
 

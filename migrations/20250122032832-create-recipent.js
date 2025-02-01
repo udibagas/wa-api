@@ -18,14 +18,6 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      GroupId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "RecipientGroups",
-          key: "id",
-        },
-      },
       dateOfBirth: {
         type: Sequelize.DATEONLY,
         allowNull: true,
