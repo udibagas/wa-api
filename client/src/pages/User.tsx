@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Table, Button, Form } from "antd";
+import { Table, Form } from "antd";
 import useCrud from "../hooks/useCrud";
 import UserForm from "../components/UserForm";
 import PageHeader from "../components/PageHeader";
-import { EditOutlined, DeleteOutlined, SettingOutlined, PlusOutlined } from "@ant-design/icons";
+import { SettingOutlined } from "@ant-design/icons";
+import ActionButton from "../components/buttons/ActionButton";
+import AddButton from "../components/buttons/AddButton";
 
 type UserType = {
   id: number;
@@ -61,10 +63,10 @@ const User: React.FC = () => {
       align: "center" as const,
       width: 80,
       render: (_: string, record: UserType) => (
-        <>
-          <Button type="link" icon={<EditOutlined />} onClick={() => handleEditUser(record)} />
-          <Button type="link" icon={<DeleteOutlined />} danger onClick={() => showDeleteConfirm(record.id)} />
-        </>
+        <ActionButton
+          onEdit={() => handleEditUser(record)}
+          onDelete={() => showDeleteConfirm(record.id)}
+        />
       ),
     },
   ];
@@ -72,9 +74,7 @@ const User: React.FC = () => {
   return (
     <div>
       <PageHeader title="User Management" subtitle="Manage your users">
-        <Button type="primary" icon={<PlusOutlined />} onClick={handleAddUser}>
-          Add User
-        </Button>
+        <AddButton label="Create New User" onClick={handleAddUser} />
       </PageHeader>
 
       <Table
@@ -89,7 +89,6 @@ const User: React.FC = () => {
           };
         }}
       />
-
 
       <UserForm
         visible={isModalVisible}

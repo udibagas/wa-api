@@ -13,9 +13,45 @@ module.exports = (sequelize, DataTypes) => {
 
   Recipient.init(
     {
-      name: DataTypes.STRING,
-      phoneNumber: DataTypes.STRING,
-      GroupId: DataTypes.INTEGER,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "Name is required",
+          },
+          notEmpty: {
+            msg: "Name is required",
+          },
+        },
+      },
+      phoneNumber: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+          msg: "Phone number already exists",
+        },
+        validate: {
+          notNull: {
+            msg: "Phone number is required",
+          },
+          notEmpty: {
+            msg: "Phone number is required",
+          },
+        },
+      },
+      GroupId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "Group is required",
+          },
+          notEmpty: {
+            msg: "Group is required",
+          },
+        },
+      },
       dateOfBirth: DataTypes.DATEONLY,
     },
     {

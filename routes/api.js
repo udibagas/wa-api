@@ -9,5 +9,7 @@ router.post("/logout", logout);
 router.post("/sendMessage", upload.single("image"), sendMessage);
 
 router.use("/users", require("./users"));
+router.use("/apps", require("./apps"));
+router.use("/recipients", require("./recipients"));
 
 module.exports = router;

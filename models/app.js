@@ -18,7 +18,19 @@ module.exports = (sequelize, DataTypes) => {
 
   App.init(
     {
-      name: DataTypes.STRING,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          notNull: {
+            msg: "Name is required",
+          },
+          notEmpty: {
+            msg: "Name is required",
+          },
+        },
+      },
       description: DataTypes.TEXT,
       token: DataTypes.TEXT,
       status: DataTypes.BOOLEAN,

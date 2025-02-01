@@ -3,39 +3,37 @@ import { Modal, Form, Input, FormInstance } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
 
-type UserType = {
+type AppType = {
   id: number;
   name: string;
-  email: string;
+  description: string;
 };
 
-type UserFormProps = {
+type AppFormProps = {
   visible: boolean;
   isEditing: boolean;
   onCancel: () => void;
-  onOk: (values: UserType) => void;
-  initialValues: UserType;
+  onOk: (values: AppType) => void;
+  initialValues: AppType;
   errors: { [key: string]: string[] };
-  form: FormInstance<UserType>;
+  form: FormInstance<AppType>;
 };
 
-const UserForm: React.FC<UserFormProps> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
-
+const AppForm: React.FC<AppFormProps> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
   return (
     <Modal
       width={450}
-      title={isEditing ? "Edit User" : "Add User"}
+      title={isEditing ? "Edit App" : "Create New App"}
       open={visible}
       onCancel={onCancel}
       footer={[
         <CancelButton label="Cancel" onCancel={onCancel} key='back' />,
-        <SaveButton label={isEditing ? "Update" : "Add"} form="userForm" key='submit' />,
+        <SaveButton label={isEditing ? "Update" : "Add"} form="appForm" key='submit' />,
       ]}
     >
       <Form
-        variant="filled"
-        id="userForm"
         form={form}
+        id="appForm"
         initialValues={initialValues}
         onFinish={onOk}
         requiredMark={false}
@@ -53,26 +51,18 @@ const UserForm: React.FC<UserFormProps> = ({ visible, isEditing, onCancel, onOk,
         >
           <Input />
         </Form.Item>
+
         <Form.Item
-          label="Email"
-          name="email"
-          validateStatus={errors.email ? "error" : ""}
-          help={errors.email?.join(", ")}
+          label="Description"
+          name="description"
+          validateStatus={errors.description ? "error" : ""}
+          help={errors.description?.join(", ")}
         >
           <Input />
         </Form.Item>
-
-        <Form.Item
-          label="Password"
-          name="password"
-          validateStatus={errors.password ? "error" : ""}
-          help={errors.password?.join(", ")}
-        >
-          <Input.Password />
-        </Form.Item>
       </Form>
-    </Modal >
+    </Modal>
   );
 };
 
-export default UserForm;
+export default AppForm;
