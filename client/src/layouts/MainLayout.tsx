@@ -57,7 +57,6 @@ const MainLayout: React.FC = () => {
 
   function logout() {
     axiosInstance.post('/logout').then(() => {
-      localStorage.removeItem('token');
       navigate('/login');
     });
   }

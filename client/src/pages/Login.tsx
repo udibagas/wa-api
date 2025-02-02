@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Form, Input, Button, Card, message, FormProps } from "antd";
 import styles from '../css/Login.module.css'; // Import the CSS file for custom styles
-import { useNavigate, Navigate } from "react-router";
+import { useNavigate } from "react-router";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { AxiosError } from "axios";
 import { AxiosErrorResponseType } from "../types";
@@ -15,15 +15,13 @@ type LoginValues = {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { setToken, setUser } = useContext(AuthContext)
+  const { setUser } = useContext(AuthContext)
 
   const onFinish: FormProps<LoginValues>['onFinish'] = async (values) => {
     console.log("Success:", values);
     try {
       const { data } = await axiosInstance.post("/login", values);
       message.success("Login successful!");
-      localStorage.setItem("token", data.token);
-      setToken(data.token);
       setUser(data.user);
       navigate("/", { replace: true });
     } catch (error) {
@@ -38,10 +36,6 @@ const Login: React.FC = () => {
   const onFinishFailed: FormProps<LoginValues>['onFinishFailed'] = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-
-  if (localStorage.getItem("token")) {
-    return <Navigate to="/" />;
-  }
 
   return (
     <div className={styles.loginContainer}>

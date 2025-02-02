@@ -7,8 +7,11 @@ const errorHandlerMiddleware = require("./middlewares/errorHandler.middleware");
 const port = process.env.PORT || 3000;
 
 // Middleware
+const origin = process.env.CLIENT_URL?.split(",") ?? [];
+console.log(origin);
+
+app.use(cors({ origin, credentials: true }));
 app.use(cookieParser());
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
