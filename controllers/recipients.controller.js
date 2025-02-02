@@ -3,6 +3,7 @@ const { Recipient } = require("../models");
 exports.index = async (req, res, next) => {
   try {
     const recipients = await Recipient.findAll({
+      order: [["name", "asc"]],
       include: {
         association: "groups",
         attributes: ["id", "name", "description"],

@@ -2,7 +2,9 @@ const { App } = require("../models");
 
 exports.index = async (req, res, next) => {
   try {
-    const apps = await App.findAll();
+    const apps = await App.findAll({
+      order: [["name", "asc"]],
+    });
     res.status(200).json(apps);
   } catch (error) {
     next(error);

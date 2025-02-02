@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Table, Form } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
+import React from "react";
+import { Table } from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
 import useCrud from "../hooks/useCrud";
 import AppForm from "../components/AppForm";
 import PageHeader from "../components/PageHeader";
@@ -9,41 +9,20 @@ import ActionButton from "../components/buttons/ActionButton";
 import { AppType } from "../types";
 
 const App: React.FC = () => {
-  const { data: apps, errors, setErrors, addItem, updateItem, showDeleteConfirm } = useCrud<AppType>("/apps");
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [form] = Form.useForm();
+  const {
+    data,
+    form,
+    errors,
+    showDeleteConfirm,
+    fetchData,
+    handleAdd,
+    handleEdit,
+    handleModalOk,
+    handleModalClose,
+    isEditing,
+    isModalVisible
+  } = useCrud<AppType>("/apps");
 
-  const handleAddApp = () => {
-    setIsEditing(false);
-    form.setFieldsValue({ name: "", description: "" });
-    setIsModalVisible(true);
-  };
-
-  const handleEditApp = (app: AppType) => {
-    setIsEditing(true);
-    form.setFieldsValue(app);
-    setIsModalVisible(true);
-  };
-
-  const handleModalOk = async (values: AppType) => {
-    console.log(values)
-    try {
-      if (values.id) {
-        await updateItem(values.id, values);
-      } else {
-        await addItem(values);
-      }
-      handleModalClose();
-    } catch (error) {
-      console.log((error as Error).message);
-    }
-  };
-
-  const handleModalClose = () => {
-    setErrors({});
-    setIsModalVisible(false);
-  };
 
   const columns = [
     {
@@ -55,12 +34,12 @@ const App: React.FC = () => {
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Description", dataIndex: "description", key: "description" },
     {
-      title: <SettingOutlined />,
+      title: <ReloadOutlined onClick={fetchData} />,
       key: "action",
       width: 80,
       align: "center" as const,
       render: (_: string, record: AppType) => (
-        <ActionButton onEdit={() => handleEditApp(record)} onDelete={() => showDeleteConfirm(record.id)} />
+        <ActionButton onEdit={() => handleEdit(record)} onDelete={() => showDeleteConfirm(record.id)} />
       ),
     },
   ];
@@ -71,17 +50,17 @@ const App: React.FC = () => {
         title="App Management"
         subtitle="Manage your apps"
       >
-        <AddButton label="Create New App" onClick={handleAddApp} />
+        <AddButton label="Create New App" onClick={handleAdd} />
       </PageHeader>
       <Table
         size="small"
         columns={columns}
-        dataSource={apps}
+        dataSource={data}
         rowKey="id"
         pagination={false}
         onRow={(record: AppType) => {
           return {
-            onDoubleClick: () => handleEditApp(record),
+            onDoubleClick: () => handleEdit(record),
           };
         }}
       />

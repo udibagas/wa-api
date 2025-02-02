@@ -1,25 +1,11 @@
 import React from "react";
-import { Modal, Form, Input, FormInstance } from "antd";
+import { Modal, Form, Input } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
+import { AppType, CustomFormProps } from "../types";
 
-type AppType = {
-  id: number;
-  name: string;
-  description: string;
-};
 
-type AppFormProps = {
-  visible: boolean;
-  isEditing: boolean;
-  onCancel: () => void;
-  onOk: (values: AppType) => void;
-  initialValues: AppType;
-  errors: { [key: string]: string[] };
-  form: FormInstance<AppType>;
-};
-
-const AppForm: React.FC<AppFormProps> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
+const AppForm: React.FC<CustomFormProps<AppType>> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
   return (
     <Modal
       width={450}
@@ -28,12 +14,12 @@ const AppForm: React.FC<AppFormProps> = ({ visible, isEditing, onCancel, onOk, i
       onCancel={onCancel}
       footer={[
         <CancelButton label="Cancel" onCancel={onCancel} key='back' />,
-        <SaveButton label={isEditing ? "Update" : "Add"} form="appForm" key='submit' />,
+        <SaveButton label={isEditing ? "Update" : "Add"} key='submit' />,
       ]}
     >
       <Form
         form={form}
-        id="appForm"
+        id="form"
         initialValues={initialValues}
         onFinish={onOk}
         requiredMark={false}

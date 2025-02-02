@@ -1,3 +1,5 @@
+import { FormInstance } from "antd";
+
 export type AppType = {
   id: number;
   name: string;
@@ -37,3 +39,13 @@ export type RecursivePartial<T> = NonNullable<T> extends object
         : T[P];
     }
   : T;
+
+export type CustomFormProps<T> = {
+  visible: boolean;
+  isEditing: boolean;
+  onCancel: () => void;
+  onOk: (values: T) => void;
+  initialValues: T;
+  errors: { [key: string]: string[] };
+  form: FormInstance<T>;
+};

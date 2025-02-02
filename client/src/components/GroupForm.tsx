@@ -1,25 +1,10 @@
 import React from "react";
-import { Modal, Form, Input, FormInstance } from "antd";
+import { Modal, Form, Input } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
+import { CustomFormProps, GroupType } from "../types";
 
-type GroupType = {
-  id: number;
-  name: string;
-  description: string;
-};
-
-type GroupFormProps = {
-  visible: boolean;
-  isEditing: boolean;
-  onCancel: () => void;
-  onOk: (values: GroupType) => void;
-  initialValues: GroupType;
-  errors: { [key: string]: string[] };
-  form: FormInstance<GroupType>;
-};
-
-const GroupForm: React.FC<GroupFormProps> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
+const GroupForm: React.FC<CustomFormProps<GroupType>> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
   return (
     <Modal
       width={450}
@@ -28,12 +13,12 @@ const GroupForm: React.FC<GroupFormProps> = ({ visible, isEditing, onCancel, onO
       onCancel={onCancel}
       footer={[
         <CancelButton label="Cancel" onCancel={onCancel} key='back' />,
-        <SaveButton label={isEditing ? "Update" : "Add"} form="appForm" key='submit' />,
+        <SaveButton label={isEditing ? "Update" : "Add"} key='submit' />,
       ]}
     >
       <Form
         form={form}
-        id="appForm"
+        id="form"
         initialValues={initialValues}
         onFinish={onOk}
         requiredMark={false}

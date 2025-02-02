@@ -4,12 +4,11 @@ import { SaveOutlined } from "@ant-design/icons";
 
 type SaveButtonProps = {
   label: string;
-  form: string;
 };
 
-const SaveButton: React.FC<SaveButtonProps> = ({ label, form }) => {
+const SaveButton: React.FC<SaveButtonProps> = ({ label }) => {
   return (
-    <Button icon={<SaveOutlined />} type="primary" form={form} htmlType="submit">
+    <Button icon={<SaveOutlined />} type="primary" form='form' htmlType="submit">
       {label || 'Save'}
     </Button>
   );

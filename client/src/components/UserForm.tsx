@@ -1,25 +1,10 @@
 import React from "react";
-import { Modal, Form, Input, FormInstance } from "antd";
+import { Modal, Form, Input } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
+import { CustomFormProps, UserType } from "../types";
 
-type UserType = {
-  id: number;
-  name: string;
-  email: string;
-};
-
-type UserFormProps = {
-  visible: boolean;
-  isEditing: boolean;
-  onCancel: () => void;
-  onOk: (values: UserType) => void;
-  initialValues: UserType;
-  errors: { [key: string]: string[] };
-  form: FormInstance<UserType>;
-};
-
-const UserForm: React.FC<UserFormProps> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
+const UserForm: React.FC<CustomFormProps<UserType>> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
 
   return (
     <Modal
@@ -29,12 +14,12 @@ const UserForm: React.FC<UserFormProps> = ({ visible, isEditing, onCancel, onOk,
       onCancel={onCancel}
       footer={[
         <CancelButton label="Cancel" onCancel={onCancel} key='back' />,
-        <SaveButton label={isEditing ? "Update" : "Add"} form="userForm" key='submit' />,
+        <SaveButton label={isEditing ? "Update" : "Add"} key='submit' />,
       ]}
     >
       <Form
         variant="filled"
-        id="userForm"
+        id="form"
         form={form}
         initialValues={initialValues}
         onFinish={onOk}

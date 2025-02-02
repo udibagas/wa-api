@@ -1,23 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Input, FormInstance, Select } from "antd";
+import { Modal, Form, Input, Select } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
 import axiosInstance from "../utils/axiosInstance";
-import { GroupType, RecipientType } from "../types";
+import { CustomFormProps, GroupType, RecipientType } from "../types";
 
-
-type RecipientFormProps = {
-  visible: boolean;
-  isEditing: boolean;
-  onCancel: () => void;
-  onOk: (values: RecipientType) => void;
-  initialValues: RecipientType;
-  errors: { [key: string]: string[] };
-  form: FormInstance<RecipientType>;
-};
-
-const RecipientForm: React.FC<RecipientFormProps> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
-
+const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {

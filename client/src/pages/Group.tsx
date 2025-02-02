@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Table, Form } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
+import React from "react";
+import { Table } from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
 import useCrud from "../hooks/useCrud";
 import GroupForm from "../components/GroupForm";
 import PageHeader from "../components/PageHeader";
@@ -9,41 +9,21 @@ import ActionButton from "../components/buttons/ActionButton";
 import { GroupType } from "../types";
 
 const Group: React.FC = () => {
-  const { data: apps, errors, setErrors, addItem, updateItem, showDeleteConfirm } = useCrud<GroupType>("/apps");
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [form] = Form.useForm();
+  const {
+    data,
+    form,
+    errors,
+    showDeleteConfirm,
+    fetchData,
+    handleAdd,
+    handleEdit,
+    handleModalOk,
+    handleModalClose,
+    isEditing,
+    isModalVisible
+  } = useCrud<GroupType>("/groups");
 
-  const handleAddGroup = () => {
-    setIsEditing(false);
-    form.setFieldsValue({ name: "", description: "" });
-    setIsModalVisible(true);
-  };
 
-  const handleEditGroup = (app: GroupType) => {
-    setIsEditing(true);
-    form.setFieldsValue(app);
-    setIsModalVisible(true);
-  };
-
-  const handleModalOk = async (values: GroupType) => {
-    console.log(values)
-    try {
-      if (values.id) {
-        await updateItem(values.id, values);
-      } else {
-        await addItem(values);
-      }
-      handleModalClose();
-    } catch (error) {
-      console.log((error as Error).message);
-    }
-  };
-
-  const handleModalClose = () => {
-    setErrors({});
-    setIsModalVisible(false);
-  };
 
   const columns = [
     {
@@ -55,12 +35,12 @@ const Group: React.FC = () => {
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Description", dataIndex: "description", key: "description" },
     {
-      title: <SettingOutlined />,
+      title: <ReloadOutlined onClick={fetchData} />,
       key: "action",
       width: 80,
       align: "center" as const,
       render: (_: string, record: GroupType) => (
-        <ActionButton onEdit={() => handleEditGroup(record)} onDelete={() => showDeleteConfirm(record.id)} />
+        <ActionButton onEdit={() => handleEdit(record)} onDelete={() => showDeleteConfirm(record.id)} />
       ),
     },
   ];
@@ -71,17 +51,17 @@ const Group: React.FC = () => {
         title="Group Management"
         subtitle="Manage your group"
       >
-        <AddButton label="Create New Group" onClick={handleAddGroup} />
+        <AddButton label="Create New Group" onClick={handleAdd} />
       </PageHeader>
       <Table
         size="small"
         columns={columns}
-        dataSource={apps}
+        dataSource={data}
         rowKey="id"
         pagination={false}
         onRow={(record: GroupType) => {
           return {
-            onDoubleClick: () => handleEditGroup(record),
+            onDoubleClick: () => handleEdit(record),
           };
         }}
       />
