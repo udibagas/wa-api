@@ -28,7 +28,7 @@ const Group: React.FC = () => {
   const columns = [
     {
       title: "No.",
-      dataIndex: "id",
+      width: 60,
       key: "id",
       render: (_: string, __: GroupType, index: number) => index + 1,
     },

@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Dropdown, MenuProps } from "antd";
+import { EditOutlined, DeleteOutlined, EllipsisOutlined } from "@ant-design/icons";
 
 type ActionButtonProps = {
   onEdit: () => void;
@@ -8,12 +8,17 @@ type ActionButtonProps = {
 };
 
 const ActionButton: React.FC<ActionButtonProps> = ({ onEdit, onDelete }) => {
+  const items: MenuProps['items'] = [
+    { key: "edit", label: 'Edit', icon: <EditOutlined />, onClick: onEdit },
+    { key: "delete", label: 'Delete', icon: <DeleteOutlined />, onClick: onDelete }
+  ];
+
   return (
-    <>
-      <Button type="link" icon={<EditOutlined />} onClick={onEdit} />
-      <Button type="link" icon={<DeleteOutlined />} danger onClick={onDelete} />
-    </>
-  );
+    <Dropdown menu={{ items }} placement="bottomCenter" arrow>
+      <EllipsisOutlined />
+    </Dropdown>
+
+  )
 };
 
 export default ActionButton;

@@ -27,7 +27,7 @@ const App: React.FC = () => {
   const columns = [
     {
       title: "No.",
-      dataIndex: "id",
+      width: 60,
       key: "id",
       render: (_: string, __: AppType, index: number) => index + 1,
     },
