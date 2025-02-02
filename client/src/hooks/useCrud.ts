@@ -1,3 +1,4 @@
+import { RecipientType } from "./../types/index";
 import { useState, useEffect } from "react";
 import { FormInstance, message, Modal } from "antd";
 import axiosInstance from "../utils/axiosInstance";
@@ -20,7 +21,7 @@ type CrudHook<T> = {
   setIsEditing: (isEditing: boolean) => void;
   setIsModalVisible: (isVisible: boolean) => void;
   handleAdd: () => void;
-  handleEdit: (data: T) => void;
+  handleEdit: (data: RecursivePartial<T>) => void;
   handleModalOk: (values: T) => void;
   handleModalClose: () => void;
 };
@@ -101,9 +102,16 @@ const useCrud = <T extends { id?: number }>(endpoint: string): CrudHook<T> => {
     setIsModalVisible(true);
   };
 
-  const handleEdit = (data: T) => {
+  const handleEdit = (data: RecursivePartial<T>) => {
     setIsEditing(true);
-    form.setFieldsValue(data as RecursivePartial<T>);
+    form.setFieldsValue(data);
+
+    // handle logic untuk masing-masing form
+    if ((data as RecipientType).groups) {
+      const groups = (data as RecipientType).groups.map((group) => group.id);
+      form.setFieldsValue({ ...data, groups });
+    }
+
     setIsModalVisible(true);
   };
 

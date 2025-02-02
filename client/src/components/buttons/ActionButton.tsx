@@ -14,7 +14,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onEdit, onDelete }) => {
   ];
 
   return (
-    <Dropdown menu={{ items }} placement="bottomCenter" arrow>
+    <Dropdown menu={{ items }} placement="bottom" arrow>
       <EllipsisOutlined />
     </Dropdown>
 
