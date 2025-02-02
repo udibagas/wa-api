@@ -12,14 +12,14 @@ const {
 
 const wa = new WhatsApp();
 
-wa.uploadImage = async (imagePath) => {
+wa.uploadImage = async (imagePath, type = "image/jpeg") => {
   const data = new FormData();
   data.append("messaging_product", "whatsapp");
   data.append("file", fs.createReadStream(imagePath), {
-    contentType: "image/png",
+    contentType: type,
   });
 
-  data.append("type", "image/png");
+  data.append("type", type);
 
   const response = await axios({
     url: `https://${WA_BASE_URL}/${CLOUD_API_VERSION}/${WA_PHONE_NUMBER_ID}/media`,

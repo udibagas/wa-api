@@ -20,7 +20,9 @@ const NewMessage: React.FC = () => {
   const [templates, setTemplates] = useState([]);
   const [groups, setGroups] = useState([]);
   const [body, setBody] = useState('')
-  const [imageUrl, setImageUrl] = useState<string | undefined>();
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [filePath, setFilePath] = useState<string>('');
+  const [fileType, setFileType] = useState<string>('');
 
   const [form] = Form.useForm();
   const templateId = Form.useWatch('MessageTemplateId', form);
@@ -55,28 +57,9 @@ const NewMessage: React.FC = () => {
 
   function sendMessage(values: MessageType) {
     if (!values) return;
+    const payload = { ...values, message: body, caption: body, filePath, fileType };
 
-    if (values.type === 'image') {
-      const formData = new FormData();
-      formData.append('AppId', values.AppId.toString());
-      formData.append('MessageTemplateId', values.MessageTemplateId.toString());
-      formData.append('GroupId', values.GroupId.toString());
-      formData.append('type', values.type);
-      formData.append('caption', body);
-
-      // TODO: ambil image dari form
-      // formData.append('image', 'https://via.placeholder.com/150');
-
-      axiosInstance.post('sendImage', formData)
-        .then(res => {
-          message.success(res.data.message);
-        }).catch(err => {
-          message.error(err.response.data.message);
-        });
-      return;
-    }
-
-    axiosInstance.post('sendTemplate', { ...values, message: body })
+    axiosInstance.post('sendTemplate', payload)
       .then(res => {
         message.success(res.data.message);
       }).catch(err => {
@@ -178,12 +161,17 @@ const NewMessage: React.FC = () => {
                 withCredentials
                 onChange={({ file }) => {
                   if (file.status === 'done') {
+                    console.log(file.response.file)
+                    setFilePath(file.response.file.path);
+                    setFileType(file.response.file.mimetype);
                     setImageUrl(file.response.url);
                   }
                 }}
                 onRemove={(file) => {
-                  console.log(file);
-                  axiosInstance.post('/delete-image', { path: file.response.file.path });
+                  axiosInstance.post('/delete-image', { path: file.response.file.path })
+                  setFilePath('');
+                  setFileType('');
+                  setImageUrl('');
                 }}
               >
                 <Button icon={<UploadOutlined />}>Click to upload</Button>

@@ -1,4 +1,4 @@
-const { Group, MessageTemplate } = require("../models");
+const { Group } = require("../models");
 const sendWhatsAppMessage = require("../utils/sendWhatsAppMessage");
 
 exports.sendMessage = async (req, res, next) => {
@@ -23,6 +23,7 @@ exports.sendMessage = async (req, res, next) => {
 
     if (type === "image") {
       payload.filePath = req.file.path;
+      payload.fileType = req.file.mimetype;
     }
 
     const body = await sendWhatsAppMessage(payload);
@@ -34,10 +35,8 @@ exports.sendMessage = async (req, res, next) => {
 
 exports.sendTemplate = async (req, res, next) => {
   try {
-    const { GroupId, message, caption, type } = req.body;
-
-    const payload = { message, caption, type };
-    if (type === "image") payload.filePath = req.file.path;
+    const { GroupId, message, caption, type, filePath, fileType } = req.body;
+    const payload = { message, caption, type, filePath, fileType };
 
     const group = await Group.findByPk(GroupId, {
       include: "recipients",
