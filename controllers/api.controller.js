@@ -1,4 +1,5 @@
-const wa = require("../services/wa.service");
+const { Group, MessageTemplate } = require("../models");
+const sendWhatsAppMessage = require("../utils/sendWhatsAppMessage");
 
 exports.sendMessage = async (req, res, next) => {
   try {
@@ -11,36 +12,68 @@ exports.sendMessage = async (req, res, next) => {
       components = [],
     } = req.body;
 
-    let response;
+    const body = await sendWhatsAppMessage({
+      message,
+      caption,
+      phoneNumber,
+      type,
+      templateName,
+      components,
+    });
+    res.status(200).json(body);
+  } catch (error) {
+    next(error);
+  }
+};
 
-    switch (type) {
-      case "text":
-        response = await wa.messages.text({ body: message }, phoneNumber);
-        break;
+exports.sendTemplate = async (req, res, next) => {
+  try {
+    const { GroupId, MessageTemplateId } = req.body;
 
-      case "image":
-        const { id } = await wa.uploadImage(req.file.path);
-        response = await wa.messages.image({ id, caption }, phoneNumber);
-        break;
+    const group = await Group.findByPk(GroupId, {
+      include: "recipients",
+    });
 
-      case "template":
-        const payload = {
-          name: templateName,
-          language: { code: "en_US" },
-          components,
-        };
-
-        response = await wa.messages.template(payload, phoneNumber);
-        break;
-
-      default:
-        const error = new Error("Invalid message type");
-        error.status = 400;
-        throw error;
+    if (!group) {
+      const error = new Error("Group not found");
+      error.status = 404;
+      throw error;
     }
 
-    const body = await response.responseBodyToJSON();
-    res.status(200).json(body);
+    if (!group.recipients.length) {
+      const error = new Error("Group has no recipients");
+      error.status = 400;
+      throw error;
+    }
+
+    const messageTemplate = await MessageTemplate.findByPk(MessageTemplateId);
+
+    if (!messageTemplate) {
+      const error = new Error("Message Template not found");
+      error.status = 404;
+      throw error;
+    }
+
+    const { body } = messageTemplate;
+
+    group.recipients.forEach(async (recipient) => {
+      sendWhatsAppMessage({
+        message: body,
+        phoneNumber: recipient.phoneNumber,
+      })
+        .then(() => {
+          console.log("Message sent to", recipient.phoneNumber);
+        })
+        .catch((error) => {
+          console.error(
+            "Error sending message to",
+            recipient.phoneNumber,
+            error
+          );
+        });
+    });
+
+    res.status(200).json({ message: "Message has been sent" });
   } catch (error) {
     next(error);
   }

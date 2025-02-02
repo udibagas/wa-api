@@ -5,10 +5,12 @@ import SaveButton from "./buttons/SaveButton";
 import { AppType, CustomFormProps, TemplateType } from "../types";
 import TextArea from "antd/es/input/TextArea";
 import axiosInstance from "../utils/axiosInstance";
+import WhatsAppChatBubble from "./WhatsAppChatBubble";
 
 
 const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
   const [apps, setApps] = useState([]);
+  const message = Form.useWatch('body', form);
 
   useEffect(() => {
     axiosInstance.get("/apps").then((response) => {
@@ -22,7 +24,7 @@ const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEdit
 
   return (
     <Modal
-      width={450}
+      width={800}
       title={isEditing ? "Edit Template" : "Create New Template"}
       open={visible}
       onCancel={onCancel}
@@ -31,58 +33,64 @@ const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEdit
         <SaveButton label={isEditing ? "Update" : "Add"} key='submit' />,
       ]}
     >
-      <Form
-        form={form}
-        id="form"
-        onFinish={onOk}
-        requiredMark={false}
-        labelCol={{ span: 8 }}
-      >
-        <Form.Item name="id" hidden>
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          name="appId"
-          label="App"
-          validateStatus={errors.appId ? "error" : ""}
-          help={errors.appId?.join(", ")}
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Form
+          style={{ width: 400 }}
+          form={form}
+          id="form"
+          onFinish={onOk}
+          requiredMark={false}
+          labelCol={{ span: 8 }}
         >
-          <Select
-            placeholder="Select App"
-            allowClear
-            options={apps.map((group: AppType) => ({ label: group.name, value: group.id }))}
+          <Form.Item name="id" hidden>
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="appId"
+            label="App"
+            validateStatus={errors.appId ? "error" : ""}
+            help={errors.appId?.join(", ")}
           >
-          </Select>
-        </Form.Item>
+            <Select
+              placeholder="Select App"
+              allowClear
+              options={apps.map((group: AppType) => ({ label: group.name, value: group.id }))}
+            >
+            </Select>
+          </Form.Item>
 
-        <Form.Item
-          label="Name"
-          name="name"
-          validateStatus={errors.name ? "error" : ""}
-          help={errors.name?.join(", ")}
-        >
-          <Input />
-        </Form.Item>
+          <Form.Item
+            label="Name"
+            name="name"
+            validateStatus={errors.name ? "error" : ""}
+            help={errors.name?.join(", ")}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item
-          label="Body"
-          name="body"
-          validateStatus={errors.body ? "error" : ""}
-          help={errors.body?.join(", ")}
-        >
-          <TextArea rows={3} />
-        </Form.Item>
+          <Form.Item
+            label="Body"
+            name="body"
+            validateStatus={errors.body ? "error" : ""}
+            help={errors.body?.join(", ")}
+          >
+            <TextArea rows={3} autoSize />
+          </Form.Item>
 
-        <Form.Item
-          label="Components"
-          name="components"
-          validateStatus={errors.components ? "error" : ""}
-          help={errors.components?.join(", ")}
-        >
-          <TextArea rows={3} />
-        </Form.Item>
-      </Form>
+          <Form.Item
+            label="Components"
+            name="components"
+            validateStatus={errors.components ? "error" : ""}
+            help={errors.components?.join(", ")}
+          >
+            <TextArea rows={3} />
+          </Form.Item>
+        </Form>
+
+        <WhatsAppChatBubble sender="PELINDO" message={message} />
+      </div>
+
     </Modal>
   );
 };

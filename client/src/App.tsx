@@ -11,6 +11,7 @@ import Log from "./pages/Log";
 // import PrivateRoute from "./components/PrivateRoute";
 import Group from "./pages/Group";
 import { AuthProvider } from "./context/AuthContext";
+import NewMessage from "./pages/NewMessage";
 
 const App: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<MainLayout />} >
             <Route index element={<Home />} />
+            <Route path="new-message" element={<NewMessage />} />
             <Route path="groups" element={<Group />} />
             <Route path="recipients" element={<Recipient />} />
             <Route path="apps" element={<AppPage />} />

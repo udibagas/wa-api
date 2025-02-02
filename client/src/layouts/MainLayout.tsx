@@ -4,6 +4,7 @@ import {
   DashboardOutlined,
   FileTextOutlined,
   LogoutOutlined,
+  MessageOutlined,
   ProfileOutlined,
   SettingFilled,
   TeamOutlined,
@@ -37,6 +38,7 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem(<Link to="/">Dashboard</Link>, 'home', <DashboardOutlined />),
+  getItem(<Link to="/new-message">New Message</Link>, 'new-message', <MessageOutlined />),
   getItem(<Link to="/groups">Groups</Link>, 'groups', <ProfileOutlined />),
   getItem(<Link to="/recipients">Recipients</Link>, 'recipients', <TeamOutlined />),
   getItem(<Link to="/apps">Apps</Link>, 'apps', <SettingFilled />),
@@ -84,6 +86,7 @@ const MainLayout: React.FC = () => {
         <div className="logo" >
           {user?.name[0]}
         </div>
+
         <Menu theme="dark" defaultSelectedKeys={[selectedKey]} mode="inline" items={items} />
       </Sider>
       <Layout>
