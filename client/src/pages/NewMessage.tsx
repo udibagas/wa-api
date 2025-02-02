@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SendOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
-import { Button, Form, Select } from "antd";
+import { Button, Form, message, Select } from "antd";
 import { AppType, GroupType, TemplateType } from "../types";
 import axiosInstance from "../utils/axiosInstance";
 import WhatsAppChatBubble from "../components/WhatsAppChatBubble";
@@ -12,12 +12,12 @@ const NewMessage: React.FC = () => {
   const [groups, setGroups] = useState([]);
   const [form] = Form.useForm();
   const templateId = Form.useWatch('MessageTemplateId', form);
-  const [message, setMessage] = useState('')
+  const [body, setBody] = useState('')
 
   useEffect(() => {
     if (templateId) {
-      const m = templates.find((t: TemplateType) => t.id === templateId)?.body;
-      setMessage(m);
+      const m = templates.find((t: TemplateType) => t.id === templateId)
+      setBody(m ? (m as TemplateType).body : '');
     }
   }, [templateId, templates]);
 
@@ -41,6 +41,15 @@ const NewMessage: React.FC = () => {
     };
   }, [])
 
+  function handleSend(values: object) {
+    axiosInstance.post('sendTemplate', values)
+      .then(res => {
+        message.success(res.data.message);
+      }).catch(err => {
+        message.error(err.response.data.message);
+      });
+  }
+
   return (
     <>
       <PageHeader
@@ -54,6 +63,7 @@ const NewMessage: React.FC = () => {
           form={form}
           labelCol={{ span: 8 }}
           style={{ width: 450 }}
+          onFinish={handleSend}
         >
 
           <Form.Item name="AppId" label="App" rules={[{ required: true }]}>
@@ -74,7 +84,7 @@ const NewMessage: React.FC = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item name="groups" label="Group" rules={[{ required: true }]}>
+          <Form.Item name="GroupId" label="Group" rules={[{ required: true }]}>
             <Select
               placeholder="Select group"
               allowClear
@@ -90,7 +100,7 @@ const NewMessage: React.FC = () => {
           </Form.Item>
         </Form>
 
-        <WhatsAppChatBubble sender="PELINDO" message={message} />
+        <WhatsAppChatBubble sender="PELINDO" message={body} />
       </div>
     </>
   );
