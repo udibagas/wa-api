@@ -25,7 +25,7 @@ type CrudHook<T> = {
   handleModalClose: () => void;
 };
 
-const useCrud = <T extends { id: number }>(endpoint: string): CrudHook<T> => {
+const useCrud = <T extends { id?: number }>(endpoint: string): CrudHook<T> => {
   const [data, setData] = useState<T[]>([]);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [form] = Form.useForm<T>();

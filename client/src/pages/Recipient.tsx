@@ -43,7 +43,7 @@ const App: React.FC = () => {
       width: 80,
       align: "center" as const,
       render: (_: string, record: RecipientType) => (
-        <ActionButton onEdit={() => handleEdit(record)} onDelete={() => showDeleteConfirm(record.id)} />
+        <ActionButton onEdit={() => handleEdit(record)} onDelete={() => showDeleteConfirm(record.id as number)} />
       ),
     },
   ];
@@ -76,7 +76,6 @@ const App: React.FC = () => {
         onOk={handleModalOk}
         errors={errors}
         form={form}
-        initialValues={{ id: 0, name: "", phoneNumber: "", groups: [] }}
       />
     </div>
   );

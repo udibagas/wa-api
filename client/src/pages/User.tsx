@@ -90,7 +90,6 @@ const User: React.FC = () => {
         isEditing={isEditing}
         onCancel={handleModalClose}
         onOk={handleModalOk}
-        initialValues={{ id: 0, name: "", email: "" }}
         errors={errors}
         form={form}
       />

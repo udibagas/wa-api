@@ -4,7 +4,7 @@ import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
 import { CustomFormProps, UserType } from "../types";
 
-const UserForm: React.FC<CustomFormProps<UserType>> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
+const UserForm: React.FC<CustomFormProps<UserType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
 
   return (
     <Modal
@@ -21,7 +21,6 @@ const UserForm: React.FC<CustomFormProps<UserType>> = ({ visible, isEditing, onC
         variant="filled"
         id="form"
         form={form}
-        initialValues={initialValues}
         onFinish={onOk}
         requiredMark={false}
         labelCol={{ span: 8 }}

@@ -5,7 +5,7 @@ import SaveButton from "./buttons/SaveButton";
 import { AppType, CustomFormProps } from "../types";
 
 
-const AppForm: React.FC<CustomFormProps<AppType>> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
+const AppForm: React.FC<CustomFormProps<AppType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
   return (
     <Modal
       width={450}
@@ -20,7 +20,6 @@ const AppForm: React.FC<CustomFormProps<AppType>> = ({ visible, isEditing, onCan
       <Form
         form={form}
         id="form"
-        initialValues={initialValues}
         onFinish={onOk}
         requiredMark={false}
         labelCol={{ span: 8 }}

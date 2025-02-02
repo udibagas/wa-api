@@ -73,7 +73,6 @@ const Group: React.FC = () => {
         onOk={handleModalOk}
         errors={errors}
         form={form}
-        initialValues={{ name: "", description: "" } as GroupType}
       />
     </div>
   );

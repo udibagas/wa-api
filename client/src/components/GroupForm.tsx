@@ -4,7 +4,7 @@ import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
 import { CustomFormProps, GroupType } from "../types";
 
-const GroupForm: React.FC<CustomFormProps<GroupType>> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
+const GroupForm: React.FC<CustomFormProps<GroupType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
   return (
     <Modal
       width={450}
@@ -19,7 +19,6 @@ const GroupForm: React.FC<CustomFormProps<GroupType>> = ({ visible, isEditing, o
       <Form
         form={form}
         id="form"
-        initialValues={initialValues}
         onFinish={onOk}
         requiredMark={false}
         labelCol={{ span: 8 }}

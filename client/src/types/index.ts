@@ -45,7 +45,6 @@ export type CustomFormProps<T> = {
   isEditing: boolean;
   onCancel: () => void;
   onOk: (values: T) => void;
-  initialValues: T;
   errors: { [key: string]: string[] };
   form: FormInstance<T>;
 };

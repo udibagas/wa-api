@@ -5,7 +5,7 @@ import SaveButton from "./buttons/SaveButton";
 import axiosInstance from "../utils/axiosInstance";
 import { CustomFormProps, GroupType, RecipientType } from "../types";
 
-const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
+const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
@@ -33,7 +33,6 @@ const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEd
         variant="filled"
         id="form"
         form={form}
-        initialValues={initialValues}
         onFinish={onOk}
         requiredMark={false}
         labelCol={{ span: 8 }}
