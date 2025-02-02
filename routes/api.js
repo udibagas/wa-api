@@ -15,5 +15,6 @@ router.use("/users", require("./users"));
 router.use("/apps", require("./apps"));
 router.use("/groups", require("./groups"));
 router.use("/recipients", require("./recipients"));
+router.use("/message-templates", require("./message-templates"));
 
 module.exports = router;

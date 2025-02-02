@@ -20,7 +20,8 @@ const App: React.FC = () => {
     handleModalOk,
     handleModalClose,
     isEditing,
-    isModalVisible
+    isModalVisible,
+    isLoading
   } = useCrud<RecipientType>("/recipients");
 
   const columns = [
@@ -56,7 +57,9 @@ const App: React.FC = () => {
       >
         <AddButton label="Add New Recipient" onClick={handleAdd} />
       </PageHeader>
+
       <Table
+        loading={isLoading}
         size="small"
         columns={columns}
         dataSource={data}

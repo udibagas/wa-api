@@ -12,6 +12,7 @@ type CrudHook<T> = {
   errors: Record<string, string[]>;
   isEditing: boolean;
   isModalVisible: boolean;
+  isLoading: boolean;
   setErrors: (errors: Record<string, string[]>) => void;
   fetchData: () => void;
   addItem: (item: T) => Promise<void>;
@@ -32,13 +33,17 @@ const useCrud = <T extends { id?: number }>(endpoint: string): CrudHook<T> => {
   const [form] = Form.useForm<T>();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
+    setIsLoading(true);
     try {
       const response = await axiosInstance.get(endpoint);
       setData(response.data);
     } catch (error) {
       message.error((error as AxiosError).message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -135,6 +140,7 @@ const useCrud = <T extends { id?: number }>(endpoint: string): CrudHook<T> => {
 
   useEffect(() => {
     let ignore = false;
+    setIsLoading(true);
 
     axiosInstance
       .get(endpoint)
@@ -145,6 +151,9 @@ const useCrud = <T extends { id?: number }>(endpoint: string): CrudHook<T> => {
       .catch((error) => {
         if (ignore) return;
         message.error((error as AxiosError).message);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
 
     return () => {
@@ -158,6 +167,7 @@ const useCrud = <T extends { id?: number }>(endpoint: string): CrudHook<T> => {
     form,
     isModalVisible,
     isEditing,
+    isLoading,
     setErrors,
     fetchData,
     addItem,

@@ -25,6 +25,18 @@ export type UserType = {
   email: string;
 };
 
+export type TemplateType = {
+  id: number;
+  name: string;
+  body: string;
+  components: object;
+  appId: number;
+};
+
+export type AxiosResponseType<T> = {
+  data: T;
+};
+
 export type AxiosErrorResponseType = {
   message: string;
   errors?: Record<string, string[]>;

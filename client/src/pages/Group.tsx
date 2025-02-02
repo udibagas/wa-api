@@ -20,10 +20,9 @@ const Group: React.FC = () => {
     handleModalOk,
     handleModalClose,
     isEditing,
-    isModalVisible
+    isModalVisible,
+    isLoading
   } = useCrud<GroupType>("/groups");
-
-
 
   const columns = [
     {
@@ -53,7 +52,9 @@ const Group: React.FC = () => {
       >
         <AddButton label="Create New Group" onClick={handleAdd} />
       </PageHeader>
+
       <Table
+        loading={isLoading}
         size="small"
         columns={columns}
         dataSource={data}

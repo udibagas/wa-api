@@ -20,7 +20,8 @@ const User: React.FC = () => {
     handleModalOk,
     handleModalClose,
     isEditing,
-    isModalVisible
+    isModalVisible,
+    isLoading
   } = useCrud<UserType>("/users");
 
 
@@ -53,6 +54,7 @@ const User: React.FC = () => {
       </PageHeader>
 
       <Table
+        loading={isLoading}
         size="small"
         columns={columns}
         dataSource={data}

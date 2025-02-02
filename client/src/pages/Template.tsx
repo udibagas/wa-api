@@ -1,11 +1,81 @@
 import React from "react";
+import { Table } from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
+import useCrud from "../hooks/useCrud";
+import PageHeader from "../components/PageHeader";
+import AddButton from "../components/buttons/AddButton";
+import ActionButton from "../components/buttons/ActionButton";
+import { TemplateType } from "../types";
+import TemplateForm from "../components/TemplateForm";
 
-const Template: React.FC = () => {
+const App: React.FC = () => {
+  const {
+    data,
+    form,
+    errors,
+    showDeleteConfirm,
+    fetchData,
+    handleAdd,
+    handleEdit,
+    handleModalOk,
+    handleModalClose,
+    isEditing,
+    isModalVisible,
+    isLoading
+  } = useCrud<TemplateType>("/message-templates");
+
+  const columns = [
+    {
+      title: "No.",
+      width: 60,
+      key: "id",
+      render: (_: string, __: TemplateType, index: number) => index + 1,
+    },
+    { title: "Name", dataIndex: "name", key: "name" },
+    {
+      title: <ReloadOutlined onClick={fetchData} />,
+      key: "action",
+      width: 80,
+      align: "center" as const,
+      render: (_: string, record: TemplateType) => (
+        <ActionButton onEdit={() => handleEdit(record)} onDelete={() => showDeleteConfirm(record.id)} />
+      ),
+    },
+  ];
+
   return (
     <div>
-      <h1>Template</h1>
-    </div>
-  )
-}
+      <PageHeader
+        title="Template Management"
+        subtitle="Manage your templates"
+      >
+        <AddButton label="Create New Template" onClick={handleAdd} />
+      </PageHeader>
 
-export default Template;
+      <Table
+        loading={isLoading}
+        size="small"
+        columns={columns}
+        dataSource={data}
+        rowKey="id"
+        pagination={false}
+        onRow={(record: TemplateType) => {
+          return {
+            onDoubleClick: () => handleEdit(record),
+          };
+        }}
+      />
+
+      <TemplateForm
+        visible={isModalVisible}
+        isEditing={isEditing}
+        onCancel={handleModalClose}
+        onOk={handleModalOk}
+        errors={errors}
+        form={form}
+      />
+    </div>
+  );
+};
+
+export default App;

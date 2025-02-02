@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 const { Text } = Typography;
 import type { MenuProps } from 'antd';
-import { Dropdown, Layout, Menu, Space, theme, Typography } from 'antd';
+import { Dropdown, Layout, Menu, Modal, Space, theme, Typography } from 'antd';
 import '../css/App.css';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import axiosInstance from '../utils/axiosInstance';
@@ -58,10 +58,19 @@ const MainLayout: React.FC = () => {
   const selectedKey = location.pathname.split('/')[1] || 'home';
 
   function logout() {
-    console.log('logout');
-    axiosInstance.post('/logout').then(() => {
-      navigate('/login');
-    });
+    Modal.confirm({
+      title: 'Confirmation',
+      content: 'Are you sure you want to logout?',
+      icon: <LogoutOutlined />,
+      okText: 'Yes',
+      cancelText: 'No',
+      onOk: () => {
+        axiosInstance.post('/logout').then(() => {
+          navigate('/login');
+        });
+      },
+    })
+
   }
 
   const menuItems: MenuProps['items'] = [
@@ -82,7 +91,7 @@ const MainLayout: React.FC = () => {
           <div>WhatsApp Gateway</div>
           <Dropdown menu={{ items: menuItems }} placement="bottom" arrow>
             <Space>
-              <Text strong>Welcome, Username</Text>
+              <Text strong>Welcome, {user?.name}!</Text>
             </Space>
           </Dropdown>
         </Header>

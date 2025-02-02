@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown, MenuProps } from "antd";
+import { Button, Dropdown, MenuProps } from "antd";
 import { EditOutlined, DeleteOutlined, EllipsisOutlined } from "@ant-design/icons";
 
 type ActionButtonProps = {
@@ -15,7 +15,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onEdit, onDelete }) => {
 
   return (
     <Dropdown menu={{ items }} placement="bottom" arrow>
-      <EllipsisOutlined />
+      <Button type="link" icon={<EllipsisOutlined />} />
     </Dropdown>
 
   )
