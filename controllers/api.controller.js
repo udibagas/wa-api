@@ -58,6 +58,7 @@ exports.sendTemplate = async (req, res, next) => {
 
     group.recipients.forEach(async (recipient) => {
       sendWhatsAppMessage({
+        type: "text",
         message: body,
         phoneNumber: recipient.phoneNumber,
       })
@@ -68,7 +69,7 @@ exports.sendTemplate = async (req, res, next) => {
           console.error(
             "Error sending message to",
             recipient.phoneNumber,
-            error
+            error.message
           );
         });
     });
