@@ -21,6 +21,7 @@ exports.login = async (req, res, next) => {
     }
 
     const token = await user.generateAuthToken();
+    res.cookie("token", token, { httpOnly: true });
     res.status(200).json({ user, token });
   } catch (error) {
     next(error);
@@ -28,5 +29,9 @@ exports.login = async (req, res, next) => {
 };
 
 exports.logout = async (req, res) => {
-  res.status(200).json({ message: "Logged out" });
+  res.clearCookie("token").status(200).json({ message: "See you!" });
+};
+
+exports.me = async (req, res) => {
+  res.status(200).json(req.user);
 };

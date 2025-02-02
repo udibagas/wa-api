@@ -134,12 +134,23 @@ const useCrud = <T extends { id?: number }>(endpoint: string): CrudHook<T> => {
   };
 
   useEffect(() => {
-    fetchData();
+    let ignore = false;
+
+    axiosInstance
+      .get(endpoint)
+      .then((response) => {
+        if (ignore) return;
+        setData(response.data);
+      })
+      .catch((error) => {
+        if (ignore) return;
+        message.error((error as AxiosError).message);
+      });
 
     return () => {
-      setData([]);
+      ignore = true;
     };
-  }, []);
+  }, [endpoint]);
 
   return {
     data,

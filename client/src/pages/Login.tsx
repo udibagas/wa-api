@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Form, Input, Button, Card, message, FormProps } from "antd";
 import styles from '../css/Login.module.css'; // Import the CSS file for custom styles
 import { useNavigate, Navigate } from "react-router";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import axios from "axios";
+import { AxiosError } from "axios";
+import { AxiosErrorResponseType } from "../types";
+import axiosInstance from "../utils/axiosInstance";
+import AuthContext from "../context/AuthContext";
 
 type LoginValues = {
   email?: string;
@@ -12,16 +15,23 @@ type LoginValues = {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { setToken, setUser } = useContext(AuthContext)
 
   const onFinish: FormProps<LoginValues>['onFinish'] = async (values) => {
     console.log("Success:", values);
     try {
-      const { data } = await axios.post("http://localhost:3000/api/login", values);
-      localStorage.setItem("token", data.token);
+      const { data } = await axiosInstance.post("/login", values);
       message.success("Login successful!");
-      navigate("/");
-    } catch (error: any) {
-      message.error(error.response?.data?.message ?? error.message);
+      localStorage.setItem("token", data.token);
+      setToken(data.token);
+      setUser(data.user);
+      navigate("/", { replace: true });
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const axiosErrorResponse = axiosError.response
+        ?.data as AxiosErrorResponseType;
+
+      message.error(axiosErrorResponse.message ?? axiosError.message);
     }
   };
 

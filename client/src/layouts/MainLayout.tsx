@@ -3,15 +3,18 @@ import {
   BarsOutlined,
   DashboardOutlined,
   FileTextOutlined,
+  LogoutOutlined,
   ProfileOutlined,
   SettingFilled,
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+const { Text } = Typography;
 import type { MenuProps } from 'antd';
-import { Layout, Menu, theme } from 'antd';
+import { Dropdown, Layout, Menu, Space, theme, Typography } from 'antd';
 import '../css/App.css';
-import { Link, Outlet, useLocation } from 'react-router';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router';
+import axiosInstance from '../utils/axiosInstance';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -43,6 +46,8 @@ const items: MenuItem[] = [
 
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -50,6 +55,17 @@ const MainLayout: React.FC = () => {
   const location = useLocation();
   const selectedKey = location.pathname.split('/')[1] || 'home';
 
+  function logout() {
+    axiosInstance.post('/logout').then(() => {
+      localStorage.removeItem('token');
+      navigate('/login');
+    });
+  }
+
+  const menuItems: MenuProps['items'] = [
+    { key: "profile", label: 'Profile', icon: <UserOutlined /> },
+    { key: "logout", label: 'Logout', icon: <LogoutOutlined onClick={logout} /> },
+  ]
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -60,8 +76,13 @@ const MainLayout: React.FC = () => {
         <Menu theme="dark" defaultSelectedKeys={[selectedKey]} mode="inline" items={items} />
       </Sider>
       <Layout>
-        <Header style={{ padding: '0 20px', background: colorBgContainer, fontWeight: 'bold', fontSize: '1.5rem' }}>
-          WhatsApp Gateway
+        <Header style={{ padding: '0 20px', background: '#fff', fontWeight: 'bold', fontSize: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>WhatsApp Gateway</div>
+          <Dropdown menu={{ items: menuItems }} placement="bottom" arrow>
+            <Space>
+              <Text strong>Welcome, Username</Text>
+            </Space>
+          </Dropdown>
         </Header>
 
         <Content style={{ margin: '16px' }}>
