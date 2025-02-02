@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   BarsOutlined,
   DashboardOutlined,
@@ -15,6 +15,7 @@ import { Dropdown, Layout, Menu, Space, theme, Typography } from 'antd';
 import '../css/App.css';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import axiosInstance from '../utils/axiosInstance';
+import AuthContext from '../context/AuthContext';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -47,6 +48,7 @@ const items: MenuItem[] = [
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -56,6 +58,7 @@ const MainLayout: React.FC = () => {
   const selectedKey = location.pathname.split('/')[1] || 'home';
 
   function logout() {
+    console.log('logout');
     axiosInstance.post('/logout').then(() => {
       navigate('/login');
     });
@@ -63,14 +66,14 @@ const MainLayout: React.FC = () => {
 
   const menuItems: MenuProps['items'] = [
     { key: "profile", label: 'Profile', icon: <UserOutlined /> },
-    { key: "logout", label: 'Logout', icon: <LogoutOutlined onClick={logout} /> },
+    { key: "logout", label: 'Logout', icon: <LogoutOutlined />, onClick: logout },
   ]
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="logo" >
-          A
+          {user?.name[0]}
         </div>
         <Menu theme="dark" defaultSelectedKeys={[selectedKey]} mode="inline" items={items} />
       </Sider>
