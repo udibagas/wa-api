@@ -12,14 +12,20 @@ exports.sendMessage = async (req, res, next) => {
       components = [],
     } = req.body;
 
-    const body = await sendWhatsAppMessage({
+    const payload = {
       message,
       caption,
       phoneNumber,
       type,
       templateName,
       components,
-    });
+    };
+
+    if (type === "image") {
+      payload.filePath = req.file.path;
+    }
+
+    const body = await sendWhatsAppMessage(payload);
     res.status(200).json(body);
   } catch (error) {
     next(error);
@@ -28,7 +34,10 @@ exports.sendMessage = async (req, res, next) => {
 
 exports.sendTemplate = async (req, res, next) => {
   try {
-    const { GroupId, MessageTemplateId } = req.body;
+    const { GroupId, message, caption, type } = req.body;
+
+    const payload = { message, caption, type };
+    if (type === "image") payload.filePath = req.file.path;
 
     const group = await Group.findByPk(GroupId, {
       include: "recipients",
@@ -46,33 +55,19 @@ exports.sendTemplate = async (req, res, next) => {
       throw error;
     }
 
-    const messageTemplate = await MessageTemplate.findByPk(MessageTemplateId);
-
-    if (!messageTemplate) {
-      const error = new Error("Message Template not found");
-      error.status = 404;
-      throw error;
-    }
-
-    const { body } = messageTemplate;
-
-    group.recipients.forEach(async (recipient) => {
-      sendWhatsAppMessage({
-        type: "text",
-        message: body,
-        phoneNumber: recipient.phoneNumber,
-      })
-        .then(() => {
-          console.log("Message sent to", recipient.phoneNumber);
-        })
-        .catch((error) => {
-          console.error(
-            "Error sending message to",
-            recipient.phoneNumber,
-            error.message
-          );
+    for (const r of group.recipients) {
+      console.log("Send to", r.phoneNumber);
+      try {
+        const res = await sendWhatsAppMessage({
+          ...payload,
+          phoneNumber: r.phoneNumber,
         });
-    });
+
+        console.log("Res =", res);
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     res.status(200).json({ message: "Message has been sent" });
   } catch (error) {

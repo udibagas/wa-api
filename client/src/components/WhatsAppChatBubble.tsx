@@ -4,6 +4,7 @@ import "../css/WhatsAppChatBubble.css";
 type WhatsAppChatBubbleProps = {
   sender: string;
   message: string;
+  imageUrl?: string;
 };
 
 function format(message: string) {
@@ -17,13 +18,14 @@ function format(message: string) {
     .replace(/~(.*?)~/g, "<s>$1</s>");
 }
 
-const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ sender, message }) => {
+const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ sender, message, imageUrl }) => {
   return (
     <div style={{ background: "url('http://forums.crackberry.com/attachments/blackberry-10-wallpapers-f308/137432d1361639896t-z10-wallpaper-set-z10-music.jpg')" }}>
       <div className="speech-wrapper">
         <div className="bubble">
           <div className="txt">
             <p className="name">{sender}</p>
+            <img src={imageUrl} alt="" style={{ width: '100%' }} />
             <p className="message" dangerouslySetInnerHTML={{ __html: format(message) }} />
             <span className="timestamp">now</span>
           </div>

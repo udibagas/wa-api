@@ -59,7 +59,7 @@
 
       &.alt {
         right: -2px;
-        bottom: 40px;
+        top: 40px;
         left: auto;
       }
     }
