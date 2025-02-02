@@ -1,14 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Form, Input, FormInstance, Select } from "antd";
-const { Option } = Select;
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
+import axiosInstance from "../utils/axiosInstance";
+import { GroupType, RecipientType } from "../types";
 
-type RecipientType = {
-  id: number;
-  name: string;
-  phoneNumber: string;
-};
 
 type RecipientFormProps = {
   visible: boolean;
@@ -22,6 +18,18 @@ type RecipientFormProps = {
 
 const RecipientForm: React.FC<RecipientFormProps> = ({ visible, isEditing, onCancel, onOk, initialValues, errors, form }) => {
 
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    axiosInstance.get("/groups").then((response) => {
+      setGroups(response.data);
+    });
+
+    return () => {
+      setGroups([]);
+    };
+  }, [])
+
   return (
     <Modal
       width={450}
@@ -30,12 +38,12 @@ const RecipientForm: React.FC<RecipientFormProps> = ({ visible, isEditing, onCan
       onCancel={onCancel}
       footer={[
         <CancelButton label="Cancel" onCancel={onCancel} key='back' />,
-        <SaveButton label={isEditing ? "Update" : "Add"} form="userForm" key='submit' />,
+        <SaveButton label={isEditing ? "Update" : "Add"} key='submit' />,
       ]}
     >
       <Form
         variant="filled"
-        id="userForm"
+        id="form"
         form={form}
         initialValues={initialValues}
         onFinish={onOk}
@@ -64,7 +72,7 @@ const RecipientForm: React.FC<RecipientFormProps> = ({ visible, isEditing, onCan
         </Form.Item>
 
         <Form.Item
-          name="gender"
+          name="groups"
           label="Group"
           validateStatus={errors.groups ? "error" : ""}
           help={errors.groups?.join(", ")}
@@ -73,10 +81,11 @@ const RecipientForm: React.FC<RecipientFormProps> = ({ visible, isEditing, onCan
             mode="multiple"
             placeholder="Select group(s)"
             allowClear
+            options={groups.map((group: GroupType) => ({ label: group.name, value: group.id }))}
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
           >
-            <Option value="male">male</Option>
-            <Option value="female">female</Option>
-            <Option value="other">other</Option>
           </Select>
         </Form.Item>
 

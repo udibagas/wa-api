@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Table, Form } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
+import React from "react";
+import { Table } from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
 import useCrud from "../hooks/useCrud";
 import RecipientForm from "../components/RecipientForm";
 import PageHeader from "../components/PageHeader";
@@ -9,40 +9,19 @@ import ActionButton from "../components/buttons/ActionButton";
 import { RecipientType } from "../types";
 
 const App: React.FC = () => {
-  const { data: apps, errors, setErrors, addItem, updateItem, showDeleteConfirm } = useCrud<RecipientType>("/recipients");
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [form] = Form.useForm();
-
-  const handleAddData = () => {
-    setIsEditing(false);
-    form.setFieldsValue({ name: "", phoneNumber: "" });
-    setIsModalVisible(true);
-  };
-
-  const handleEditApp = (data: RecipientType) => {
-    setIsEditing(true);
-    form.setFieldsValue(data);
-    setIsModalVisible(true);
-  };
-
-  const handleModalOk = async (values: RecipientType) => {
-    try {
-      if (values.id) {
-        await updateItem(values.id, values);
-      } else {
-        await addItem(values);
-      }
-      handleModalClose();
-    } catch (error) {
-      console.log((error as Error).message);
-    }
-  };
-
-  const handleModalClose = () => {
-    setErrors({});
-    setIsModalVisible(false);
-  };
+  const {
+    data,
+    form,
+    errors,
+    showDeleteConfirm,
+    fetchData,
+    handleAdd,
+    handleEdit,
+    handleModalOk,
+    handleModalClose,
+    isEditing,
+    isModalVisible
+  } = useCrud<RecipientType>("/recipients");
 
   const columns = [
     {
@@ -54,12 +33,17 @@ const App: React.FC = () => {
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber" },
     {
-      title: <SettingOutlined />,
+      title: "Group", key: "groups", render: (_: string, record: RecipientType) => {
+        return record.groups.map((group) => group.name).join(", ");
+      }
+    },
+    {
+      title: <ReloadOutlined onClick={fetchData} />,
       key: "action",
       width: 80,
       align: "center" as const,
       render: (_: string, record: RecipientType) => (
-        <ActionButton onEdit={() => handleEditApp(record)} onDelete={() => showDeleteConfirm(record.id)} />
+        <ActionButton onEdit={() => handleEdit(record)} onDelete={() => showDeleteConfirm(record.id)} />
       ),
     },
   ];
@@ -70,17 +54,17 @@ const App: React.FC = () => {
         title="Recipient Management"
         subtitle="Manage recipients"
       >
-        <AddButton label="Add New Recipient" onClick={handleAddData} />
+        <AddButton label="Add New Recipient" onClick={handleAdd} />
       </PageHeader>
       <Table
         size="small"
         columns={columns}
-        dataSource={apps}
+        dataSource={data}
         rowKey="id"
         pagination={false}
         onRow={(record: RecipientType) => {
           return {
-            onDoubleClick: () => handleEditApp(record),
+            onDoubleClick: () => handleEdit(record),
           };
         }}
       />
@@ -92,7 +76,7 @@ const App: React.FC = () => {
         onOk={handleModalOk}
         errors={errors}
         form={form}
-        initialValues={{ name: "", phoneNumber: "" } as RecipientType}
+        initialValues={{ id: 0, name: "", phoneNumber: "", groups: [] }}
       />
     </div>
   );
