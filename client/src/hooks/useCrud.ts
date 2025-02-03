@@ -1,5 +1,5 @@
 import { PaginatedData, RecipientType } from "./../types/index";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { FormInstance, message, Modal } from "antd";
 import axiosInstance from "../utils/axiosInstance";
 import { AxiosError } from "axios";
@@ -18,7 +18,7 @@ export type CrudHook<T> = {
   isModalVisible: boolean;
   isLoading: boolean;
   setErrors: (errors: Record<string, string[]>) => void;
-  fetchData: () => void;
+  fetchData: (query?: Record<string, number | string>) => void;
   addItem: (item: T) => Promise<void>;
   updateItem: (id: number, item: T) => Promise<void>;
   deleteItem: (id: number) => Promise<void>;
@@ -50,12 +50,17 @@ const useCrud = <T extends { id?: number }>(
   const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState("");
 
-  const fetchData = async () => {
+  const params = useMemo(
+    () => ({ page: currentPage, limit: pageSize, search }),
+    [currentPage, pageSize, search]
+  );
+
+  const fetchData = async (query = {}) => {
     setIsLoading(true);
 
     try {
       const response = await axiosInstance.get(endpoint, {
-        params: { page: currentPage, limit: pageSize, search },
+        params: { ...params, ...query },
       });
 
       if (paginated) {
@@ -169,7 +174,7 @@ const useCrud = <T extends { id?: number }>(
     setIsLoading(true);
 
     axiosInstance
-      .get(endpoint)
+      .get(endpoint, { params })
       .then((response) => {
         if (ignore) return;
         if (paginated) {
@@ -191,7 +196,7 @@ const useCrud = <T extends { id?: number }>(
     return () => {
       ignore = true;
     };
-  }, [endpoint]);
+  }, [endpoint, params, paginated]);
 
   return {
     data,

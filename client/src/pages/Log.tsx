@@ -9,7 +9,7 @@ import StatusTag from "../components/StatusTag";
 
 const Log: React.FC = () => {
 
-  const { data, isLoading, fetchData } = useCrud<LogType>("/logs", true);
+  const { data, isLoading, currentPage, total, fetchData, setCurrentPage, setPageSize } = useCrud<LogType>("/logs", true);
 
   const columns = [
     {
@@ -100,7 +100,7 @@ const Log: React.FC = () => {
         title="Logs"
         subtitle="Message logs"
       >
-        <Button onClick={fetchData} type="primary" icon={<ReloadOutlined />}>
+        <Button onClick={() => fetchData()} type="primary" icon={<ReloadOutlined />}>
           Refresh
         </Button>
       </PageHeader>
@@ -111,13 +111,18 @@ const Log: React.FC = () => {
         columns={columns}
         dataSource={data}
         rowKey="id"
-        pagination={false}
-        // pagination={{
-        // current: currentPage,
-        // total: total,
-        // showSizeChanger: true,
-        // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-        // }}
+        pagination={{
+          size: "small",
+          current: currentPage,
+          total: total,
+          showSizeChanger: true,
+          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+          onChange: (page, pageSize) => {
+            // gak perlu fetch ulang karena sudah dihandle oleh useCrud
+            setPageSize(pageSize);
+            setCurrentPage(page);
+          },
+        }}
         onRow={(record: LogType) => {
           return {
             onClick: () => showDetails(record),

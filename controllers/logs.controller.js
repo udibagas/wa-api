@@ -29,7 +29,7 @@ exports.index = async (req, res, next) => {
     const { count: total, rows } = await Log.findAndCountAll(options);
     res.status(200).json({
       total,
-      page,
+      page: +page,
       rows,
       from: offset + 1,
       to: offset + rows.length,
