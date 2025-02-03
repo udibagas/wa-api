@@ -5,6 +5,20 @@ exports.index = async (req, res, next) => {
   try {
     // TODO: pagination
     const apps = await Log.findAll({
+      include: [
+        {
+          association: "recipient",
+          attributes: ["name", "phoneNumber"],
+        },
+        {
+          association: "app",
+          attributes: ["name"],
+        },
+        {
+          association: "messageTemplate",
+          attributes: ["name"],
+        },
+      ],
       order: [["createdAt", "desc"]],
     });
     res.status(200).json(apps);

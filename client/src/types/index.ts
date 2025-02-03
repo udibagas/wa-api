@@ -41,6 +41,9 @@ export type LogType = {
   MessageTemplateId: number;
   response: object;
   status: string;
+  messageTemplate: { name: string };
+  app: { name: string };
+  recipient: { name: string; phoneNumber: string };
 };
 
 export type AxiosResponseType<T> = {
