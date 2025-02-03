@@ -1,16 +1,38 @@
+const { Op } = require("sequelize");
 const { Recipient } = require("../models");
 
 exports.index = async (req, res, next) => {
+  const { page = 1, limit = 10, search } = req.query;
+  const offset = (page - 1) * limit;
+
+  const options = {
+    distinct: true,
+    order: [["name", "asc"]],
+    include: {
+      association: "groups",
+      attributes: ["id", "name", "description"],
+      through: { attributes: [] },
+    },
+  };
+
+  if (search) {
+    options.where = {
+      [Op.or]: [
+        { name: { [Op.iLike]: `%${search}%` } },
+        { phoneNumber: { [Op.iLike]: `%${search}%` } },
+      ],
+    };
+  }
+
   try {
-    const recipients = await Recipient.findAll({
-      order: [["name", "asc"]],
-      include: {
-        association: "groups",
-        attributes: ["id", "name", "description"],
-        through: { attributes: [] },
-      },
+    const { count: total, rows } = await Recipient.findAndCountAll(options);
+    res.status(200).json({
+      total,
+      page: +page,
+      rows,
+      from: offset + 1,
+      to: offset + rows.length,
     });
-    res.status(200).json(recipients);
   } catch (error) {
     next(error);
   }

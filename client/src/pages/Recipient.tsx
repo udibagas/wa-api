@@ -1,5 +1,5 @@
 import React from "react";
-import { Table } from "antd";
+import { Input, Table } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 import useCrud from "../hooks/useCrud";
 import RecipientForm from "../components/RecipientForm";
@@ -11,25 +11,30 @@ import { RecipientType } from "../types";
 const App: React.FC = () => {
   const {
     data,
+    total,
+    currentPage,
     form,
     errors,
+    isEditing,
+    isModalVisible,
+    isLoading,
     showDeleteConfirm,
     fetchData,
     handleAdd,
     handleEdit,
     handleModalOk,
     handleModalClose,
-    isEditing,
-    isModalVisible,
-    isLoading
-  } = useCrud<RecipientType>("/recipients");
+    setCurrentPage,
+    setPageSize,
+    setSearch
+  } = useCrud<RecipientType>("/recipients", true);
 
   const columns = [
     {
       title: "No.",
       width: 60,
       key: "id",
-      render: (_: string, __: RecipientType, index: number) => index + 1,
+      render: (_: string, __: RecipientType, index: number) => currentPage > 1 ? (currentPage - 1) * 10 + index + 1 : index + 1,
     },
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber" },
@@ -39,7 +44,7 @@ const App: React.FC = () => {
       }
     },
     {
-      title: <ReloadOutlined onClick={fetchData} />,
+      title: <ReloadOutlined onClick={() => fetchData()} />,
       key: "action",
       width: 80,
       align: "center" as const,
@@ -55,7 +60,16 @@ const App: React.FC = () => {
         title="Recipient Management"
         subtitle="Manage recipients"
       >
-        <AddButton label="Add New Recipient" onClick={handleAdd} />
+        <div style={{ display: "flex", justifyContent: "space-between", gap: '1em' }}>
+          <AddButton label="Add New Recipient" onClick={handleAdd} />
+          <Input.Search
+            placeholder="Search recipient..."
+            onSearch={(value) => setSearch(value)}
+            style={{ width: 200 }}
+            allowClear
+          />
+        </div>
+
       </PageHeader>
 
       <Table
@@ -64,7 +78,18 @@ const App: React.FC = () => {
         columns={columns}
         dataSource={data}
         rowKey="id"
-        pagination={false}
+        pagination={{
+          size: "small",
+          current: currentPage,
+          total: total,
+          showSizeChanger: true,
+          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+          onChange: (page, pageSize) => {
+            // gak perlu fetch ulang karena sudah dihandle oleh useCrud
+            setPageSize(pageSize);
+            setCurrentPage(page);
+          },
+        }}
         onRow={(record: RecipientType) => {
           return {
             onDoubleClick: () => handleEdit(record),

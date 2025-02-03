@@ -63,14 +63,14 @@ const useCrud = <T extends { id?: number }>(
         params: { ...params, ...query },
       });
 
-      if (paginated) {
-        const data = response.data as PaginatedData<T>;
-        setData(data.rows);
-        setTotal(data.total);
+      if (!paginated) {
+        setData(response.data);
         return;
       }
 
-      setData(response.data);
+      const data = response.data as PaginatedData<T>;
+      setData(data.rows);
+      setTotal(data.total);
     } catch (error) {
       message.error((error as AxiosError).message);
     } finally {
@@ -177,13 +177,15 @@ const useCrud = <T extends { id?: number }>(
       .get(endpoint, { params })
       .then((response) => {
         if (ignore) return;
-        if (paginated) {
-          const data = response.data as PaginatedData<T>;
-          setData(data.rows);
-          setTotal(data.total);
+
+        if (!paginated) {
+          setData(response.data);
           return;
         }
-        setData(response.data);
+
+        const data = response.data as PaginatedData<T>;
+        setData(data.rows);
+        setTotal(data.total);
       })
       .catch((error) => {
         if (ignore) return;
