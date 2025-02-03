@@ -58,8 +58,6 @@ exports.sendTemplate = async (req, res, next) => {
       },
     });
 
-    console.log(recipients);
-
     if (!recipients.length) {
       const error = new Error("Group(s) has no recipients");
       error.status = 400;
@@ -71,6 +69,8 @@ exports.sendTemplate = async (req, res, next) => {
       try {
         const res = await sendWhatsAppMessage({
           ...payload,
+          message: message.replaceAll("{{name}}", r.name),
+          caption: caption.replaceAll("{{name}}", r.name),
           phoneNumber: r.phoneNumber,
         });
 

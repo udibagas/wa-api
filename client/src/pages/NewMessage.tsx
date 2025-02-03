@@ -79,8 +79,12 @@ const NewMessage: React.FC = () => {
     });
   }
 
-  const normFile = () => {
-    return 'OK';
+  const normFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+
+    return e && e.fileList;
   };
 
   return (
@@ -102,7 +106,11 @@ const NewMessage: React.FC = () => {
             rules={[{ required: true, message: 'Mohon pilih jenis' }]}
             initialValue={'text'}
           >
-            <Radio.Group>
+            <Radio.Group onChange={(e) => {
+              if (e.target.value === 'image') {
+                setImageUrl('');
+              }
+            }}>
               <Radio.Button value="text">Text</Radio.Button>
               <Radio.Button value="image">Image</Radio.Button>
             </Radio.Group>

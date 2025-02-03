@@ -5,9 +5,10 @@ import useCrud from "../hooks/useCrud";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import moment from "moment";
 
-const colors: { [key in 'success' | 'error' | 'warning' | 'info']: string } = {
+const colors: { [key in StatusType]: string } = {
   success: "green",
   error: "red",
+  failed: "red",
   warning: "orange",
   info: "blue",
 }
@@ -56,6 +57,7 @@ const LogTable: React.FC = () => {
             bordered={false}
             color={colors[status]}
             icon={status === 'error' ? <CloseCircleOutlined /> : <CheckCircleOutlined />}
+            style={{ width: "100%", textAlign: "center" }}
           >
             {status}
           </Tag>

@@ -33,7 +33,7 @@ export type TemplateType = {
   appId: number;
 };
 
-export type StatusType = "success" | "error" | "warning" | "info";
+export type StatusType = "success" | "error" | "warning" | "info" | "failed";
 
 export type LogType = {
   id: number;
