@@ -27,6 +27,7 @@ const NewMessage: React.FC = () => {
   const [form] = Form.useForm();
   const templateId = Form.useWatch('MessageTemplateId', form);
   const type = Form.useWatch('type', form);
+  const AppId = Form.useWatch('AppId', form);
 
   useEffect(() => {
     if (templateId) {
@@ -78,21 +79,9 @@ const NewMessage: React.FC = () => {
     });
   }
 
-  // const normFile = (e) => {
-  //   if (Array.isArray(e)) {
-  //     return e;
-  //   }
-
-  //   return e?.fileList;
-  // };
-
   return (
     <>
-      <PageHeader
-        title="New Message"
-        subtitle="Create new message"
-      >
-      </PageHeader>
+      <PageHeader title="New Message" subtitle="Create new message" />
 
       <div style={{ display: "flex", gap: 20 }}>
         <Form
@@ -103,23 +92,57 @@ const NewMessage: React.FC = () => {
           onFinish={handleSend}
         >
 
-          <Form.Item label="Type" name="type" rules={[{ required: true, message: 'Mohon pilih jenis' }]} initialValue={'text'}>
+          <Form.Item
+            label="Type"
+            name="type"
+            rules={[{ required: true, message: 'Mohon pilih jenis' }]}
+            initialValue={'text'}
+          >
             <Radio.Group>
               <Radio.Button value="text">Text</Radio.Button>
               <Radio.Button value="image">Image</Radio.Button>
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item name="AppId" label="App" rules={[{ required: true, message: 'Mohon pilih App' }]}>
+          <Form.Item
+            name="AppId"
+            label="App"
+            rules={[{ required: true, message: 'Mohon pilih App' }]}
+          >
             <Select
               placeholder="Select App"
               allowClear
               options={apps.map((a: AppType) => ({ label: a.name, value: a.id }))}
+              onChange={(appId: number) => {
+                console.log(appId)
+                form.setFieldValue('MessageTemplateId', undefined);
+              }}
             >
             </Select>
           </Form.Item>
 
-          <Form.Item name="groups" label="Group" rules={[{ required: true, message: 'Mohon pilih group' }]}>
+          <Form.Item
+            name="MessageTemplateId"
+            label="Message Template"
+            rules={[{ required: true, message: 'Mohon pilih template' }]}
+          >
+            <Select
+              placeholder="Select template"
+              allowClear
+              options={
+                templates
+                  .filter((t: TemplateType) => t.appId === AppId)
+                  .map((t: TemplateType) => ({ label: t.name, value: t.id }))
+              }
+            >
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="groups"
+            label="Group"
+            rules={[{ required: true, message: 'Mohon pilih group' }]}
+          >
             <Select
               mode="multiple"
               placeholder="Select group(s)"
@@ -128,15 +151,6 @@ const NewMessage: React.FC = () => {
               filterOption={(input, option) =>
                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
               }
-            >
-            </Select>
-          </Form.Item>
-
-          <Form.Item name="MessageTemplateId" label="Message Template" rules={[{ required: true, message: 'Mohon pilih template' }]}>
-            <Select
-              placeholder="Select template"
-              allowClear
-              options={templates.map((t: TemplateType) => ({ label: t.name, value: t.id }))}
             >
             </Select>
           </Form.Item>
@@ -150,12 +164,7 @@ const NewMessage: React.FC = () => {
           />
 
           {type === 'image' && (
-            <Form.Item
-              name="image"
-              label="Image"
-            // valuePropName="fileList"
-            // getValueFromEvent={normFile}
-            >
+            <Form.Item name="image" label="Image">
               <Upload
                 maxCount={1}
                 name="image"
@@ -191,7 +200,7 @@ const NewMessage: React.FC = () => {
         </Form>
 
         <WhatsAppChatBubble sender="PELINDO" message={body} imageUrl={imageUrl} />
-      </div>
+      </div >
     </>
   );
 }
