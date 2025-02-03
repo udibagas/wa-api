@@ -103,14 +103,14 @@ const NewMessage: React.FC = () => {
           onFinish={handleSend}
         >
 
-          <Form.Item label="Type" name="type" rules={[{ required: true }]} initialValue={'text'}>
+          <Form.Item label="Type" name="type" rules={[{ required: true, message: 'Mohon pilih jenis' }]} initialValue={'text'}>
             <Radio.Group>
               <Radio.Button value="text">Text</Radio.Button>
               <Radio.Button value="image">Image</Radio.Button>
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item name="AppId" label="App" rules={[{ required: true }]}>
+          <Form.Item name="AppId" label="App" rules={[{ required: true, message: 'Mohon pilih App' }]}>
             <Select
               placeholder="Select App"
               allowClear
@@ -119,7 +119,7 @@ const NewMessage: React.FC = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item name="groups" label="Group" rules={[{ required: true }]}>
+          <Form.Item name="groups" label="Group" rules={[{ required: true, message: 'Mohon pilih group' }]}>
             <Select
               mode="multiple"
               placeholder="Select group(s)"
@@ -132,7 +132,7 @@ const NewMessage: React.FC = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item name="MessageTemplateId" label="Message Template" rules={[{ required: true }]}>
+          <Form.Item name="MessageTemplateId" label="Message Template" rules={[{ required: true, message: 'Mohon pilih template' }]}>
             <Select
               placeholder="Select template"
               allowClear

@@ -33,6 +33,8 @@ export type TemplateType = {
   appId: number;
 };
 
+export type StatusType = "success" | "error" | "warning" | "info";
+
 export type LogType = {
   id: number;
   createdAt: Date;
@@ -40,7 +42,7 @@ export type LogType = {
   RecipientId: number;
   MessageTemplateId: number;
   response: object;
-  status: string;
+  status: StatusType;
   messageTemplate: { name: string };
   app: { name: string };
   recipient: { name: string; phoneNumber: string };

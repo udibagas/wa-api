@@ -25,7 +25,7 @@ const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ sender, message
         <div className="bubble">
           <div className="txt">
             <p className="name">{sender}</p>
-            <img src={imageUrl} alt="" style={{ width: '100%' }} />
+            {imageUrl && <img src={imageUrl} alt="" style={{ width: '100%' }} />}
             <p className="message" dangerouslySetInnerHTML={{ __html: format(message) }} />
             <span className="timestamp">now</span>
           </div>

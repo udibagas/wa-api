@@ -1,9 +1,9 @@
 import React from "react";
 import PageHeader from "../components/PageHeader";
 import { Button, Descriptions, Modal, Table, Tag } from "antd";
-import { LogType } from "../types";
+import { LogType, StatusType } from "../types";
 import useCrud from "../hooks/useCrud";
-import { ReloadOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, CloseCircleOutlined, ReloadOutlined } from "@ant-design/icons";
 import moment from "moment";
 
 const colors: { [key in 'success' | 'error' | 'warning' | 'info']: string } = {
@@ -51,9 +51,13 @@ const Log: React.FC = () => {
       width: 150,
       align: "center" as const,
       render: (_: string, record: LogType) => {
-        const status = record.status as 'success' | 'error' | 'warning' | 'info';
+        const status = record.status as StatusType;
         return (
-          <Tag color={colors[status]}>
+          <Tag
+            bordered={false}
+            color={colors[status]}
+            icon={status === 'error' ? <CloseCircleOutlined /> : <CheckCircleOutlined />}
+          >
             {status}
           </Tag>
         )
@@ -108,7 +112,11 @@ const Log: React.FC = () => {
                     </Descriptions.Item>
 
                     <Descriptions.Item label="Status">
-                      <Tag color={colors[record.status as 'success' | 'error' | 'warning' | 'info']}>
+                      <Tag
+                        bordered={false}
+                        color={colors[record.status]}
+                        icon={record.status === 'error' ? <CloseCircleOutlined /> : <CheckCircleOutlined />}
+                      >
                         {record.status}
                       </Tag>
                     </Descriptions.Item>
