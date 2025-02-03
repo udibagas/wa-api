@@ -33,6 +33,16 @@ export type TemplateType = {
   appId: number;
 };
 
+export type LogType = {
+  id: number;
+  createdAt: Date;
+  AppId: number;
+  RecipientId: number;
+  MessageTemplateId: number;
+  response: object;
+  status: string;
+};
+
 export type AxiosResponseType<T> = {
   data: T;
 };

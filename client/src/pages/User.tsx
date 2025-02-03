@@ -48,7 +48,7 @@ const User: React.FC = () => {
   ];
 
   return (
-    <div>
+    <>
       <PageHeader title="User Management" subtitle="Manage your users">
         <AddButton label="Create New User" onClick={handleAdd} />
       </PageHeader>
@@ -75,7 +75,7 @@ const User: React.FC = () => {
         onCancel={handleModalClose}
         onOk={handleModalOk}
       />
-    </div>
+    </>
   );
 };
 

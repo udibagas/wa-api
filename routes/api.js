@@ -6,6 +6,7 @@ const multer = require("multer");
 const moment = require("moment");
 const { login, logout, me } = require("../controllers/auth.controller");
 const { auth } = require("../middlewares/auth.middleware");
+const { index } = require("../controllers/logs.controller");
 
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
@@ -52,5 +53,6 @@ router.use("/apps", require("./apps"));
 router.use("/groups", require("./groups"));
 router.use("/recipients", require("./recipients"));
 router.use("/message-templates", require("./message-templates"));
+router.get("/logs", index);
 
 module.exports = router;

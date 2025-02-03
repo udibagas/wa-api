@@ -78,13 +78,13 @@ const NewMessage: React.FC = () => {
     });
   }
 
-  const normFile = (e) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
+  // const normFile = (e) => {
+  //   if (Array.isArray(e)) {
+  //     return e;
+  //   }
 
-    return e?.fileList;
-  };
+  //   return e?.fileList;
+  // };
 
   return (
     <>
@@ -103,7 +103,7 @@ const NewMessage: React.FC = () => {
           onFinish={handleSend}
         >
 
-          <Form.Item label="Type" name="type" rules={[{ required: true }]}>
+          <Form.Item label="Type" name="type" rules={[{ required: true }]} initialValue={'text'}>
             <Radio.Group>
               <Radio.Button value="text">Text</Radio.Button>
               <Radio.Button value="image">Image</Radio.Button>
@@ -119,11 +119,15 @@ const NewMessage: React.FC = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item name="GroupId" label="Group" rules={[{ required: true }]}>
+          <Form.Item name="groups" label="Group" rules={[{ required: true }]}>
             <Select
-              placeholder="Select group"
+              mode="multiple"
+              placeholder="Select group(s)"
               allowClear
-              options={groups.map((g: GroupType) => ({ label: g.name, value: g.id }))}
+              options={groups.map((group: GroupType) => ({ label: group.name, value: group.id }))}
+              filterOption={(input, option) =>
+                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
             >
             </Select>
           </Form.Item>
@@ -149,8 +153,8 @@ const NewMessage: React.FC = () => {
             <Form.Item
               name="image"
               label="Image"
-              valuePropName="fileList"
-              getValueFromEvent={normFile}
+            // valuePropName="fileList"
+            // getValueFromEvent={normFile}
             >
               <Upload
                 maxCount={1}

@@ -44,7 +44,7 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div>
+    <>
       <PageHeader
         title="Template Management"
         subtitle="Manage your templates"
@@ -74,7 +74,7 @@ const App: React.FC = () => {
         errors={errors}
         form={form}
       />
-    </div>
+    </>
   );
 };
 

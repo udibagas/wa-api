@@ -1,4 +1,5 @@
-const { Group } = require("../models");
+const { Op } = require("sequelize");
+const { Group, Recipient, Log } = require("../models");
 const sendWhatsAppMessage = require("../utils/sendWhatsAppMessage");
 
 exports.sendMessage = async (req, res, next) => {
@@ -35,26 +36,37 @@ exports.sendMessage = async (req, res, next) => {
 
 exports.sendTemplate = async (req, res, next) => {
   try {
-    const { GroupId, message, caption, type, filePath, fileType } = req.body;
+    const {
+      groups = [],
+      message,
+      caption,
+      type,
+      filePath,
+      fileType,
+      AppId,
+      MessageTemplateId,
+    } = req.body;
+
     const payload = { message, caption, type, filePath, fileType };
 
-    const group = await Group.findByPk(GroupId, {
-      include: "recipients",
+    const recipients = await Recipient.findAll({
+      include: {
+        association: "groups",
+        where: {
+          id: { [Op.in]: groups },
+        },
+      },
     });
 
-    if (!group) {
-      const error = new Error("Group not found");
-      error.status = 404;
-      throw error;
-    }
+    console.log(recipients);
 
-    if (!group.recipients.length) {
-      const error = new Error("Group has no recipients");
+    if (!recipients.length) {
+      const error = new Error("Group(s) has no recipients");
       error.status = 400;
       throw error;
     }
 
-    for (const r of group.recipients) {
+    for (const r of recipients) {
       console.log("Send to", r.phoneNumber);
       try {
         const res = await sendWhatsAppMessage({
@@ -63,8 +75,24 @@ exports.sendTemplate = async (req, res, next) => {
         });
 
         console.log("Res =", res);
+
+        Log.create({
+          AppId,
+          MessageTemplateId,
+          RecipientId: r.id,
+          response: res,
+          status: "success",
+        });
       } catch (error) {
-        console.error(error);
+        console.error("INI ERROR", error);
+
+        Log.create({
+          AppId,
+          MessageTemplateId,
+          RecipientId: r.id,
+          response: error,
+          status: "failed",
+        });
       }
     }
 

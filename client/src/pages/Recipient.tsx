@@ -50,7 +50,7 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div>
+    <>
       <PageHeader
         title="Recipient Management"
         subtitle="Manage recipients"
@@ -80,7 +80,7 @@ const App: React.FC = () => {
         errors={errors}
         form={form}
       />
-    </div>
+    </>
   );
 };
 

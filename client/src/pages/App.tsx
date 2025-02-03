@@ -46,7 +46,7 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div>
+    <>
       <PageHeader
         title="App Management"
         subtitle="Manage your apps"
@@ -76,7 +76,7 @@ const App: React.FC = () => {
         errors={errors}
         form={form}
       />
-    </div>
+    </>
   );
 };
 

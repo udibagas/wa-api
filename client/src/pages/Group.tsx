@@ -45,7 +45,7 @@ const Group: React.FC = () => {
   ];
 
   return (
-    <div>
+    <>
       <PageHeader
         title="Group Management"
         subtitle="Manage your group"
@@ -75,7 +75,7 @@ const Group: React.FC = () => {
         errors={errors}
         form={form}
       />
-    </div>
+    </>
   );
 };
 
