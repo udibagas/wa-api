@@ -7,8 +7,27 @@ import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
 import { RecipientType } from "../types";
+import { createStyles } from 'antd-style';
 
-const App: React.FC = () => {
+const useStyle = createStyles(({ css, token }) => {
+  const { antCls } = token;
+  return {
+    customTable: css`
+      ${antCls}-table {
+        ${antCls}-table-container {
+          ${antCls}-table-body,
+          ${antCls}-table-content {
+            scrollbar-width: thin;
+            scrollbar-color: #eaeaea transparent;
+            scrollbar-gutter: stable;
+          }
+        }
+      }
+    `,
+  };
+});
+
+const Recipient: React.FC = () => {
   const {
     data,
     total,
@@ -28,6 +47,8 @@ const App: React.FC = () => {
     setPageSize,
     setSearch
   } = useCrud<RecipientType>("/recipients", true);
+
+  const { styles } = useStyle();
 
   const columns = [
     {
@@ -73,6 +94,8 @@ const App: React.FC = () => {
       </PageHeader>
 
       <Table
+        className={styles.customTable}
+        scroll={{ y: 49 * 10 }}
         loading={isLoading}
         size="small"
         columns={columns}
@@ -109,4 +132,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Recipient;
