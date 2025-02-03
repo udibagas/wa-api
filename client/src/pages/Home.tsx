@@ -26,12 +26,14 @@ const Home: React.FC = () => {
   useEffect(() => {
     let ignore = false;
 
-    const interval = setInterval(() => {
-      axiosInstance.get('/stats').then(({ data }) => {
-        if (ignore) return;
-        setData(data);
-      })
-    }, 3000);
+    const getData = (): Promise<void> => axiosInstance.get('/stats').then(({ data }) => {
+      if (ignore) return;
+      setData(data);
+    })
+
+    getData();
+
+    const interval = setInterval(getData, 3000);
 
     return () => {
       ignore = true;

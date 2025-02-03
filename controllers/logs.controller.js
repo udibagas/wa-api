@@ -1,27 +1,39 @@
 const { Log } = require("../models");
 
 exports.index = async (req, res, next) => {
-  const { page = 1 } = req.query;
+  const { page = 1, limit = 10 } = req.query;
+  const offset = (page - 1) * limit;
+
+  const options = {
+    distinct: true,
+    order: [["createdAt", "desc"]],
+    limit,
+    offset,
+    include: [
+      {
+        association: "recipient",
+        attributes: ["name", "phoneNumber"],
+      },
+      {
+        association: "app",
+        attributes: ["name"],
+      },
+      {
+        association: "messageTemplate",
+        attributes: ["name"],
+      },
+    ],
+  };
+
   try {
-    // TODO: pagination
-    const apps = await Log.findAll({
-      include: [
-        {
-          association: "recipient",
-          attributes: ["name", "phoneNumber"],
-        },
-        {
-          association: "app",
-          attributes: ["name"],
-        },
-        {
-          association: "messageTemplate",
-          attributes: ["name"],
-        },
-      ],
-      order: [["createdAt", "desc"]],
+    const { count: total, rows } = await Log.findAndCountAll(options);
+    res.status(200).json({
+      total,
+      page,
+      rows,
+      from: offset + 1,
+      to: offset + rows.length,
     });
-    res.status(200).json(apps);
   } catch (error) {
     next(error);
   }

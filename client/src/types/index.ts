@@ -48,8 +48,12 @@ export type LogType = {
   recipient: { name: string; phoneNumber: string };
 };
 
-export type AxiosResponseType<T> = {
-  data: T;
+export type PaginatedData<T> = {
+  from: number;
+  to: number;
+  page: number;
+  rows: T[];
+  total: number;
 };
 
 export type AxiosErrorResponseType = {

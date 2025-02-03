@@ -63,7 +63,8 @@ const MainLayout: React.FC = () => {
           <div
             style={{
               padding: 24,
-              minHeight: 'calc(100vh - 165px)',
+              height: 'calc(100vh - 165px)',
+              overflow: 'auto',
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}

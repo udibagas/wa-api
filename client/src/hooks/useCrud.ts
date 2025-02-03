@@ -1,4 +1,4 @@
-import { RecipientType } from "./../types/index";
+import { PaginatedData, RecipientType } from "./../types/index";
 import { useState, useEffect } from "react";
 import { FormInstance, message, Modal } from "antd";
 import axiosInstance from "../utils/axiosInstance";
@@ -6,8 +6,12 @@ import { AxiosError } from "axios";
 import { Form } from "antd";
 import { AxiosErrorResponseType, RecursivePartial } from "../types";
 
-type CrudHook<T> = {
+export type CrudHook<T> = {
   data: T[];
+  total: number;
+  currentPage: number;
+  pageSize: number;
+  search: string;
   form: FormInstance<T>;
   errors: Record<string, string[]>;
   isEditing: boolean;
@@ -25,20 +29,42 @@ type CrudHook<T> = {
   handleEdit: (data: RecursivePartial<T>) => void;
   handleModalOk: (values: T) => void;
   handleModalClose: () => void;
+  setCurrentPage: (page: number) => void;
+  setPageSize: (size: number) => void;
+  setSearch: (search: string) => void;
 };
 
-const useCrud = <T extends { id?: number }>(endpoint: string): CrudHook<T> => {
+const useCrud = <T extends { id?: number }>(
+  endpoint: string,
+  paginated: boolean = false
+): CrudHook<T> => {
   const [data, setData] = useState<T[]>([]);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [form] = Form.useForm<T>();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  // pagination
+  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [search, setSearch] = useState("");
 
   const fetchData = async () => {
     setIsLoading(true);
+
     try {
-      const response = await axiosInstance.get(endpoint);
+      const response = await axiosInstance.get(endpoint, {
+        params: { page: currentPage, limit: pageSize, search },
+      });
+
+      if (paginated) {
+        const data = response.data as PaginatedData<T>;
+        setData(data.rows);
+        setTotal(data.total);
+        return;
+      }
+
       setData(response.data);
     } catch (error) {
       message.error((error as AxiosError).message);
@@ -146,6 +172,12 @@ const useCrud = <T extends { id?: number }>(endpoint: string): CrudHook<T> => {
       .get(endpoint)
       .then((response) => {
         if (ignore) return;
+        if (paginated) {
+          const data = response.data as PaginatedData<T>;
+          setData(data.rows);
+          setTotal(data.total);
+          return;
+        }
         setData(response.data);
       })
       .catch((error) => {
@@ -163,6 +195,10 @@ const useCrud = <T extends { id?: number }>(endpoint: string): CrudHook<T> => {
 
   return {
     data,
+    total,
+    currentPage,
+    pageSize,
+    search,
     errors,
     form,
     isModalVisible,
@@ -180,6 +216,9 @@ const useCrud = <T extends { id?: number }>(endpoint: string): CrudHook<T> => {
     handleEdit,
     handleModalOk,
     handleModalClose,
+    setCurrentPage,
+    setPageSize,
+    setSearch,
   };
 };
 
