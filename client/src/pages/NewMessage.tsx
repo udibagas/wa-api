@@ -79,6 +79,10 @@ const NewMessage: React.FC = () => {
     });
   }
 
+  const normFile = () => {
+    return 'OK';
+  };
+
   return (
     <>
       <PageHeader title="New Message" subtitle="Create new message" />
@@ -164,7 +168,7 @@ const NewMessage: React.FC = () => {
           />
 
           {type === 'image' && (
-            <Form.Item name="image" label="Image">
+            <Form.Item name="image" label="Image" valuePropName="fileList" getValueFromEvent={normFile}>
               <Upload
                 maxCount={1}
                 name="image"

@@ -1,51 +1,15 @@
 import React, { useContext, useState } from 'react';
-import {
-  BarsOutlined,
-  DashboardOutlined,
-  FileTextOutlined,
-  LogoutOutlined,
-  MessageOutlined,
-  ProfileOutlined,
-  SettingFilled,
-  TeamOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-const { Text } = Typography;
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Dropdown, Layout, Menu, Modal, Space, theme, Typography } from 'antd';
+import { Dropdown, Layout, Modal, Space, theme, Typography } from 'antd';
 import '../css/App.css';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 import axiosInstance from '../utils/axiosInstance';
 import AuthContext from '../context/AuthContext';
+import NavMenu from '../components/NavMenu';
 
+const { Text } = Typography;
 const { Header, Content, Footer, Sider } = Layout;
-
-type MenuItem = Required<MenuProps>['items'][number];
-
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  } as MenuItem;
-}
-
-const items: MenuItem[] = [
-  getItem(<Link to="/">Dashboard</Link>, 'home', <DashboardOutlined />),
-  getItem(<Link to="/new-message">New Message</Link>, 'new-message', <MessageOutlined />),
-  getItem(<Link to="/groups">Groups</Link>, 'groups', <ProfileOutlined />),
-  getItem(<Link to="/recipients">Recipients</Link>, 'recipients', <TeamOutlined />),
-  getItem(<Link to="/apps">Apps</Link>, 'apps', <SettingFilled />),
-  getItem(<Link to="/templates">Templates</Link>, 'templates', <FileTextOutlined />),
-  getItem(<Link to="/logs">Logs</Link>, 'logs', <BarsOutlined />),
-  getItem(<Link to="/users">Users</Link>, 'users', <UserOutlined />),
-];
 
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -55,9 +19,6 @@ const MainLayout: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
-  const location = useLocation();
-  const selectedKey = location.pathname.split('/')[1] || 'home';
 
   function logout() {
     Modal.confirm({
@@ -72,7 +33,6 @@ const MainLayout: React.FC = () => {
         });
       },
     })
-
   }
 
   const menuItems: MenuProps['items'] = [
@@ -87,7 +47,7 @@ const MainLayout: React.FC = () => {
           {user?.name[0]}
         </div>
 
-        <Menu theme="dark" defaultSelectedKeys={[selectedKey]} mode="inline" items={items} />
+        <NavMenu />
       </Sider>
       <Layout>
         <Header style={{ padding: '0 20px', background: '#fff', fontWeight: 'bold', fontSize: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
