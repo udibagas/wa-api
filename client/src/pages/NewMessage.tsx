@@ -144,7 +144,7 @@ const NewMessage: React.FC = () => {
 
           <Form.Item
             name="groups"
-            label="Group"
+            label="Recipient Group"
             rules={[{ required: true, message: 'Mohon pilih group' }]}
           >
             <Select
