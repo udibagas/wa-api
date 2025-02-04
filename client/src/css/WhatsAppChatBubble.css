@@ -83,4 +83,8 @@
       transform: rotate(45deg) scaleY(-1);
     }
   }
+
+  img {
+    border-radius: 5px;
+  }
 }
