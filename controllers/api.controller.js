@@ -67,21 +67,21 @@ exports.sendTemplate = async (req, res, next) => {
     for (const r of recipients) {
       console.log("Send to", r.phoneNumber);
       try {
-        const res = await sendWhatsAppMessage({
+        sendWhatsAppMessage({
           ...payload,
           message: message.replaceAll("{{name}}", r.name),
           caption: caption.replaceAll("{{name}}", r.name),
           phoneNumber: r.phoneNumber,
-        });
+        }).then((res) => {
+          console.log("Res =", res);
 
-        console.log("Res =", res);
-
-        Log.create({
-          AppId,
-          MessageTemplateId,
-          RecipientId: r.id,
-          response: res,
-          status: "success",
+          Log.create({
+            AppId,
+            MessageTemplateId,
+            RecipientId: r.id,
+            response: res,
+            status: "success",
+          });
         });
       } catch (error) {
         console.error("INI ERROR", error);
