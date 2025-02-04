@@ -1,6 +1,6 @@
 import React from "react";
 import PageHeader from "../components/PageHeader";
-import { Button, Descriptions, Modal, Table } from "antd";
+import { Button, Descriptions, Input, Modal, Radio, Table } from "antd";
 import { LogType, StatusType } from "../types";
 import useCrud from "../hooks/useCrud";
 import { ReloadOutlined } from "@ant-design/icons";
@@ -9,7 +9,18 @@ import StatusTag from "../components/StatusTag";
 
 const Log: React.FC = () => {
 
-  const { data, isLoading, currentPage, total, fetchData, setCurrentPage, setPageSize } = useCrud<LogType>("/logs", true);
+  const {
+    data,
+    isLoading,
+    currentPage,
+    total,
+    filter,
+    setCurrentPage,
+    setPageSize,
+    setSearch,
+    setFilter,
+    refreshData
+  } = useCrud<LogType>("/logs", true);
 
   const columns = [
     {
@@ -40,7 +51,7 @@ const Log: React.FC = () => {
       render: (_: string, record: LogType) => record.messageTemplate.name
     },
     {
-      title: "Status",
+      title: <ReloadOutlined onClick={refreshData} />,
       key: "status",
       width: 150,
       align: "center" as const,
@@ -100,10 +111,23 @@ const Log: React.FC = () => {
         title="Logs"
         subtitle="Message logs"
       >
-        <Button onClick={() => fetchData()} type="primary" icon={<ReloadOutlined />}>
-          Refresh
-        </Button>
-      </PageHeader>
+        <Radio.Group defaultValue='all' value={filter.status} onChange={(e) => {
+          if (e.target.value) {
+            setFilter({ status: e.target.value });
+          }
+        }}>
+          <Radio.Button value="all">All</Radio.Button>
+          <Radio.Button value="success">Success</Radio.Button>
+          <Radio.Button value="failed">Failed</Radio.Button>
+        </Radio.Group>
+
+        <Input.Search
+          placeholder="Search recipient..."
+          onSearch={(value) => setSearch(value)}
+          style={{ width: 200 }}
+          allowClear
+        />
+      </PageHeader >
 
       <Table
         loading={isLoading}

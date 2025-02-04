@@ -81,16 +81,13 @@ const Recipient: React.FC = () => {
         title="Recipient Management"
         subtitle="Manage recipients"
       >
-        <div style={{ display: "flex", justifyContent: "space-between", gap: '1em' }}>
-          <AddButton label="Add New Recipient" onClick={handleAdd} />
-          <Input.Search
-            placeholder="Search recipient..."
-            onSearch={(value) => setSearch(value)}
-            style={{ width: 200 }}
-            allowClear
-          />
-        </div>
-
+        <AddButton label="Add New Recipient" onClick={handleAdd} />
+        <Input.Search
+          placeholder="Search recipient..."
+          onSearch={(value) => setSearch(value)}
+          style={{ width: 200 }}
+          allowClear
+        />
       </PageHeader>
 
       <Table

@@ -12,6 +12,7 @@ export type CrudHook<T> = {
   currentPage: number;
   pageSize: number;
   search: string;
+  filter: Record<string, number | string>;
   form: FormInstance<T>;
   errors: Record<string, string[]>;
   isEditing: boolean;
@@ -32,6 +33,8 @@ export type CrudHook<T> = {
   setCurrentPage: (page: number) => void;
   setPageSize: (size: number) => void;
   setSearch: (search: string) => void;
+  setFilter: (filter: Record<string, number | string>) => void;
+  refreshData: () => void;
 };
 
 const useCrud = <T extends { id?: number }>(
@@ -49,11 +52,19 @@ const useCrud = <T extends { id?: number }>(
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<Record<string, number | string>>({});
 
   const params = useMemo(
-    () => ({ page: currentPage, limit: pageSize, search }),
-    [currentPage, pageSize, search]
+    () => ({ page: currentPage, limit: pageSize, search, ...filter }),
+    [currentPage, pageSize, search, filter]
   );
+
+  const refreshData = () => {
+    setCurrentPage(1);
+    setSearch("");
+    setFilter({});
+    // no need to call fetchData here because useEffect will take care of it
+  };
 
   const fetchData = async (query = {}) => {
     setIsLoading(true);
@@ -206,6 +217,7 @@ const useCrud = <T extends { id?: number }>(
     currentPage,
     pageSize,
     search,
+    filter,
     errors,
     form,
     isModalVisible,
@@ -226,6 +238,8 @@ const useCrud = <T extends { id?: number }>(
     setCurrentPage,
     setPageSize,
     setSearch,
+    setFilter,
+    refreshData,
   };
 };
 

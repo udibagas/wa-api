@@ -49,11 +49,21 @@ const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEd
         >
           <Input />
         </Form.Item>
+
         <Form.Item
           label="Phone Number"
           name="phoneNumber"
           validateStatus={errors.phoneNumber ? "error" : ""}
           help={errors.phoneNumber?.join(", ")}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Date of Birth"
+          name="dateOfBirth"
+          validateStatus={errors.dateOfBirth ? "error" : ""}
+          help={errors.dateOfBirth?.join(", ")}
         >
           <Input />
         </Form.Item>

@@ -16,7 +16,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, children }) =>
         <Title level={2} style={{ marginBottom: 0 }}>{title}</Title>
         <Text type="secondary">{subtitle}</Text>
       </div>
-      {children}
+      <div style={{ display: "flex", justifyContent: "space-between", gap: '1em' }}>
+        {children}
+      </div>
     </Space>
   );
 };

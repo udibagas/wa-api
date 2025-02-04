@@ -1,10 +1,12 @@
+const { Op } = require("sequelize");
 const { Log } = require("../models");
 
 exports.index = async (req, res, next) => {
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 10, search, status } = req.query;
   const offset = (page - 1) * limit;
 
   const options = {
+    where: {},
     distinct: true,
     order: [["createdAt", "desc"]],
     limit,
@@ -24,6 +26,24 @@ exports.index = async (req, res, next) => {
       },
     ],
   };
+
+  if (search) {
+    options.where = {
+      ...options.where,
+      [Op.or]: {
+        "$messageTemplate.name$": { [Op.iLike]: `%${search}%` },
+        "$recipient.name$": { [Op.iLike]: `%${search}%` },
+        "$recipient.phoneNumber$": { [Op.iLike]: `%${search}%` },
+      },
+    };
+  }
+
+  if (status && status !== "all") {
+    options.where = {
+      ...options.where,
+      status,
+    };
+  }
 
   try {
     const { count: total, rows } = await Log.findAndCountAll(options);
