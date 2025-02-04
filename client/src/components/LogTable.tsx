@@ -19,24 +19,23 @@ const LogTable: React.FC = () => {
     },
     {
       title: "App",
-      dataIndex: "AppId",
       key: "AppId",
-      render: (_: string, record: LogType) => record.app.name
+      dataIndex: ["app", 'name'],
     },
     {
       title: "Recipient",
       key: "recipient",
-      render: (_: string, record: LogType) => record.recipient.name
+      dataIndex: ["recipient", 'name'],
     },
     {
       title: "Phone Number",
       key: "phoneNumber",
-      render: (_: string, record: LogType) => record.recipient.phoneNumber
+      dataIndex: ["recipient", 'phoneNumber'],
     },
     {
       title: "Template",
       key: "messageTemplate",
-      render: (_: string, record: LogType) => record.messageTemplate.name
+      dataIndex: ["messageTemplate", 'name'],
     },
     {
       title: <ReloadOutlined onClick={refreshData} />,

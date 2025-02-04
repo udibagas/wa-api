@@ -98,7 +98,6 @@ const useCrud = <T extends { id?: number }>(
       setErrors(axiosErrorResponse.errors ?? {});
     }
 
-    message.error(axiosErrorResponse.message ?? axiosError.message);
     throw error; // rethrow the error so that the caller can handle it
   };
 

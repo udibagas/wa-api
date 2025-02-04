@@ -1,9 +1,13 @@
-const { MessageTemplate } = require("../models");
+const { MessageTemplate, App } = require("../models");
 
 exports.index = async (req, res, next) => {
   try {
     const messageTemplates = await MessageTemplate.findAll({
       order: [["name", "asc"]],
+      include: {
+        model: App,
+        attributes: ["id", "name"],
+      },
     });
     res.status(200).json(messageTemplates);
   } catch (error) {

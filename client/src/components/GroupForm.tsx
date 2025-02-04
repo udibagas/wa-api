@@ -17,6 +17,7 @@ const GroupForm: React.FC<CustomFormProps<GroupType>> = ({ visible, isEditing, o
       ]}
     >
       <Form
+        variant="filled"
         form={form}
         id="form"
         onFinish={onOk}

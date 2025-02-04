@@ -23,6 +23,7 @@ export type UserType = {
   id: number;
   name: string;
   email: string;
+  role: "admin" | "user";
 };
 
 export type TemplateType = {
@@ -31,6 +32,7 @@ export type TemplateType = {
   body: string;
   components: object;
   appId: number;
+  App: AppType;
 };
 
 export type StatusType = "success" | "error" | "warning" | "info" | "failed";

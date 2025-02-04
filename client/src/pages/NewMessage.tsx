@@ -173,6 +173,8 @@ const NewMessage: React.FC = () => {
             onChange={(e) => setBody(e.target.value)}
             placeholder="Message body"
             style={{ marginBottom: 20 }}
+            maxLength={4096}
+            showCount
           />
 
           {type === 'image' && (
@@ -182,7 +184,7 @@ const NewMessage: React.FC = () => {
                 name="image"
                 listType="picture"
                 action={axiosInstance.defaults.baseURL + '/upload'}
-                accept="image/*"
+                // accept="image/*"
                 withCredentials
                 onChange={({ file }) => {
                   if (file.status === 'done') {

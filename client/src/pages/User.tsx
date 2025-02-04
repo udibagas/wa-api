@@ -13,15 +13,15 @@ const User: React.FC = () => {
     data,
     form,
     errors,
+    isEditing,
+    isModalVisible,
+    isLoading,
     showDeleteConfirm,
-    fetchData,
     handleAdd,
     handleEdit,
     handleModalOk,
     handleModalClose,
-    isEditing,
-    isModalVisible,
-    isLoading
+    refreshData,
   } = useCrud<UserType>("/users");
 
 
@@ -33,8 +33,9 @@ const User: React.FC = () => {
     },
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Email", dataIndex: "email", key: "email" },
+    { title: "Role", dataIndex: "role", key: "role" },
     {
-      title: <ReloadOutlined onClick={fetchData} />,
+      title: <ReloadOutlined onClick={refreshData} />,
       key: "action",
       align: "center" as const,
       width: 80,

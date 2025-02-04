@@ -12,6 +12,7 @@ import Log from "./pages/Log";
 import Group from "./pages/Group";
 import { AuthProvider } from "./context/AuthContext";
 import NewMessage from "./pages/NewMessage";
+import Profile from "./pages/Profile";
 
 const App: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const App: React.FC = () => {
             <Route path="users" element={<User />} />
             <Route path="templates" element={<Template />} />
             <Route path="logs" element={<Log />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
         </Routes>
       </AuthProvider>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Form, Input } from "antd";
+import { Modal, Form, Input, Select } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
 import { CustomFormProps, UserType } from "../types";
@@ -44,6 +44,18 @@ const UserForm: React.FC<CustomFormProps<UserType>> = ({ visible, isEditing, onC
           help={errors.email?.join(", ")}
         >
           <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Role"
+          name="role"
+          validateStatus={errors.role ? "error" : ""}
+          help={errors.role?.join(", ")}
+        >
+          <Select>
+            <Select.Option value="admin">Admin</Select.Option>
+            <Select.Option value="user">User</Select.Option>
+          </Select>
         </Form.Item>
 
         <Form.Item

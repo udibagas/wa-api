@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "AppId",
         onDelete: "SET NULL",
       });
+
+      App.belongsTo(models.User, {
+        foreignKey: "UserId",
+        onDelete: "CASCADE",
+      });
     }
   }
 
@@ -29,6 +34,14 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: {
             msg: "Name is required",
           },
+        },
+      },
+      UserId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "User is required" },
+          notEmpty: { msg: "User is required" },
         },
       },
       description: DataTypes.TEXT,

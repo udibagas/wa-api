@@ -66,13 +66,14 @@ exports.sendTemplate = async (req, res, next) => {
 
     for (const r of recipients) {
       console.log("Send to", r.phoneNumber);
-      try {
-        sendWhatsAppMessage({
-          ...payload,
-          message: message.replaceAll("{{name}}", r.name),
-          caption: caption.replaceAll("{{name}}", r.name),
-          phoneNumber: r.phoneNumber,
-        }).then((res) => {
+
+      sendWhatsAppMessage({
+        ...payload,
+        message: message.replaceAll("{{name}}", r.name),
+        caption: caption.replaceAll("{{name}}", r.name),
+        phoneNumber: r.phoneNumber,
+      })
+        .then((res) => {
           console.log("Res =", res);
 
           Log.create({
@@ -82,18 +83,18 @@ exports.sendTemplate = async (req, res, next) => {
             response: res,
             status: "success",
           });
-        });
-      } catch (error) {
-        console.error("INI ERROR", error);
+        })
+        .catch((error) => {
+          console.error("INI ERROR", error);
 
-        Log.create({
-          AppId,
-          MessageTemplateId,
-          RecipientId: r.id,
-          response: error,
-          status: "failed",
+          Log.create({
+            AppId,
+            MessageTemplateId,
+            RecipientId: r.id,
+            response: error,
+            status: "failed",
+          });
         });
-      }
     }
 
     res.status(200).json({ message: "Message has been sent" });

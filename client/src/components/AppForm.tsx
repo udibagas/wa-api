@@ -18,6 +18,7 @@ const AppForm: React.FC<CustomFormProps<AppType>> = ({ visible, isEditing, onCan
       ]}
     >
       <Form
+        variant="filled"
         form={form}
         id="form"
         onFinish={onOk}

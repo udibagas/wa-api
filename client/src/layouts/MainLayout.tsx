@@ -36,7 +36,7 @@ const MainLayout: React.FC = () => {
   }
 
   const menuItems: MenuProps['items'] = [
-    { key: "profile", label: 'Profile', icon: <UserOutlined /> },
+    { key: "profile", label: 'Profile', icon: <UserOutlined />, onClick: () => navigate('/profile') },
     { key: "logout", label: 'Logout', icon: <LogoutOutlined />, onClick: logout },
   ]
 

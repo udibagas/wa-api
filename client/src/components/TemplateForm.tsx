@@ -36,6 +36,7 @@ const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEdit
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Form
           style={{ width: 400 }}
+          variant="filled"
           form={form}
           id="form"
           onFinish={onOk}
@@ -75,16 +76,10 @@ const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEdit
             validateStatus={errors.body ? "error" : ""}
             help={errors.body?.join(", ")}
           >
-            <TextArea rows={3} autoSize />
-          </Form.Item>
-
-          <Form.Item
-            label="Components"
-            name="components"
-            validateStatus={errors.components ? "error" : ""}
-            help={errors.components?.join(", ")}
-          >
-            <TextArea rows={3} />
+            <TextArea
+              autoSize={{ minRows: 3 }}
+              maxLength={4096}
+              showCount />
           </Form.Item>
         </Form>
 
