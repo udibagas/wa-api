@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const jwt = require("jsonwebtoken");
 
 module.exports = (sequelize, DataTypes) => {
   class App extends Model {
@@ -18,6 +19,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "UserId",
         onDelete: "CASCADE",
       });
+    }
+
+    async generateToken(user) {
+      const { id, name, email } = user;
+      return jwt.sign(
+        { id, name, email, appId: this.id },
+        process.env.JWT_SECRET
+      );
     }
   }
 

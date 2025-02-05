@@ -53,3 +53,20 @@ exports.destroy = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.generateToken = async (req, res, next) => {
+  try {
+    const app = await App.findByPk(req.params.id);
+
+    if (!app) {
+      const error = new Error("App not found");
+      error.status = 404;
+      throw error;
+    }
+
+    const token = await app.generateToken(req.user);
+    res.status(200).json({ token });
+  } catch (error) {
+    next(error);
+  }
+};
