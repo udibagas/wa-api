@@ -58,16 +58,20 @@ exports.sendTemplate = async (req, res, next) => {
     const AppId = template.appId;
     const payload = { message, caption, type, filePath, fileType };
 
-    let target = [];
+    const target = [];
 
     if (recipients.length) {
-      target = await Recipient.findAll({
+      const res = await Recipient.findAll({
         where: {
           id: { [Op.in]: recipients },
         },
       });
-    } else {
-      target = await Recipient.findAll({
+
+      target.push(...res);
+    }
+
+    if (groups.length) {
+      const res = await Recipient.findAll({
         include: {
           association: "groups",
           where: {
@@ -75,6 +79,8 @@ exports.sendTemplate = async (req, res, next) => {
           },
         },
       });
+
+      target.push(...res);
     }
 
     if (!target.length) {
@@ -83,7 +89,18 @@ exports.sendTemplate = async (req, res, next) => {
       throw error;
     }
 
-    for (const r of target) {
+    // slower method
+    // const uniqueRecipients = target.filter(
+    //   (r, i, self) => self.findIndex((t) => t.id === r.id) === i
+    // );
+
+    // faster method
+    // todo: handle in query
+    const uniqueRecipients = Array.from(
+      new Map(target.map((item) => [item.id, item])).values()
+    );
+
+    for (const r of uniqueRecipients) {
       console.log("Send to", r.phoneNumber);
 
       sendWhatsAppMessage({

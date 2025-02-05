@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
-import { Button, Divider, Form, message, Select, Upload } from "antd";
+import { Button, Form, message, Select, Upload } from "antd";
 import { GroupType, RecipientType, TemplateType } from "../types";
 import axiosInstance from "../utils/axiosInstance";
 import WhatsAppChatBubble from "../components/WhatsAppChatBubble";
@@ -124,9 +124,7 @@ const NewMessage: React.FC = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item
-            label="Body"
-          >
+          <Form.Item label="Body">
             <TextArea
               value={body}
               onChange={(e) => setBody(e.target.value)}
@@ -135,6 +133,38 @@ const NewMessage: React.FC = () => {
               maxLength={4096}
               showCount
             />
+          </Form.Item>
+
+          <Form.Item
+            name="groups"
+            label="Group"
+          >
+            <Select
+              mode="multiple"
+              placeholder="Select group(s)"
+              allowClear
+              options={groups.map((group) => ({ label: group.name, value: group.id }))}
+              filterOption={(input, option) =>
+                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+            >
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="recipients"
+            label="Recipients"
+          >
+            <Select
+              mode="multiple"
+              placeholder="Enter recipient name/phone number"
+              allowClear
+              options={recipients.map((t) => ({ label: `${t.name} <${t.phoneNumber}>`, value: t.id }))}
+              filterOption={(input, option) =>
+                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+            >
+            </Select>
           </Form.Item>
 
           <Form.Item name="image" label="Image" valuePropName="fileList" getValueFromEvent={normFile}>
@@ -162,40 +192,6 @@ const NewMessage: React.FC = () => {
             >
               <Button icon={<UploadOutlined />}>Select image</Button>
             </Upload>
-          </Form.Item>
-
-          <Form.Item
-            name="groups"
-            label="Group"
-          >
-            <Select
-              mode="multiple"
-              placeholder="Select group(s)"
-              allowClear
-              options={groups.map((group) => ({ label: group.name, value: group.id }))}
-              filterOption={(input, option) =>
-                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-              }
-            >
-            </Select>
-          </Form.Item>
-
-          <Divider plain>Or</Divider>
-
-          <Form.Item
-            name="recipients"
-            label="Recipients"
-          >
-            <Select
-              mode="multiple"
-              placeholder="Enter recipient name/phone number"
-              allowClear
-              options={recipients.map((t) => ({ label: `${t.name} <${t.phoneNumber}>`, value: t.id }))}
-              filterOption={(input, option) =>
-                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-              }
-            >
-            </Select>
           </Form.Item>
 
           <Form.Item label={null}>
