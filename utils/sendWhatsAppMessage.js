@@ -7,8 +7,7 @@ async function sendWhatsAppMessage({
   type,
   templateName,
   components = [],
-  filePath,
-  fileType,
+  file,
 }) {
   let response;
 
@@ -18,8 +17,16 @@ async function sendWhatsAppMessage({
       break;
 
     case "image":
-      const { id } = await wa.uploadImage(filePath, fileType);
+      const { id } = await wa.uploadFile(file.path, file.mimetype);
       response = await wa.messages.image({ id, caption }, phoneNumber);
+      break;
+
+    case "document":
+      const { id: documentId } = await wa.uploadFile(file.path, file.mimetype);
+      response = await wa.messages.document(
+        { id: documentId, caption, filename: file.originalname },
+        phoneNumber
+      );
       break;
 
     case "template":

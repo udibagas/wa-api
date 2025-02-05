@@ -1,11 +1,22 @@
 import React from "react";
 import "../css/WhatsAppChatBubble.css";
+import { FileType } from "../pages/NewMessage";
+import { FileTextTwoTone } from "@ant-design/icons";
 
 type WhatsAppChatBubbleProps = {
   sender: string;
   message: string;
-  imageUrl?: string;
+  file: FileType;
 };
+
+function readableSize(size: number): string {
+  if (size === 0) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(size) / Math.log(k));
+  return parseFloat((size / Math.pow(k, i)).toFixed(0)) + " " + sizes[i];
+}
+
 
 function format(message: string) {
   if (!message) return "";
@@ -18,14 +29,30 @@ function format(message: string) {
     .replace(/~(.*?)~/g, "<s>$1</s>");
 }
 
-const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ sender, message, imageUrl }) => {
+const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ sender, message, file }) => {
   return (
     <div className="chat-container">
       <div className="speech-wrapper">
         <div className="bubble">
           <div className="txt">
             <p className="name">{sender}</p>
-            {imageUrl && <img src={imageUrl} alt="" style={{ width: '100%' }} />}
+
+            {file.mimetype?.includes('image') && <img src={file.url} alt="" style={{ width: '100%' }} />}
+
+            <div style={{
+              border: '1px solid #ddd',
+              padding: '8px 4px',
+              borderRadius: 4,
+              marginBottom: 20,
+              display: 'flex',
+              gap: 5
+            }}>
+              <FileTextTwoTone style={{ fontSize: 50 }} />
+              <div>
+                <div style={{ fontWeight: 'bold', lineHeight: '1rem' }}> {file.originalname}</div>
+                <small>{readableSize(file.size)} &bull; {file.mimetype?.split('/').pop()}</small>
+              </div>
+            </div>
             <p className="message" dangerouslySetInnerHTML={{ __html: format(message) }} />
             <span className="timestamp">now</span>
           </div>

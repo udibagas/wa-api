@@ -41,10 +41,9 @@ exports.sendTemplate = async (req, res, next) => {
       message,
       caption,
       type,
-      filePath,
-      fileType,
       MessageTemplateId,
       recipients = [],
+      file,
     } = req.body;
 
     const template = await MessageTemplate.findByPk(MessageTemplateId);
@@ -56,7 +55,7 @@ exports.sendTemplate = async (req, res, next) => {
     }
 
     const AppId = template.appId;
-    const payload = { message, caption, type, filePath, fileType };
+    const payload = { message, caption, type, file };
 
     const target = [];
 
@@ -108,6 +107,7 @@ exports.sendTemplate = async (req, res, next) => {
         message: message.replaceAll("{{name}}", r.name),
         caption: caption.replaceAll("{{name}}", r.name),
         phoneNumber: r.phoneNumber,
+        fileName: fileName,
       })
         .then((res) => {
           Log.create({

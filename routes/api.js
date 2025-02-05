@@ -28,20 +28,21 @@ router.use(require("../middlewares/auth.middleware").auth);
 router.post("/logout", logout);
 router.get("/me", me);
 
-router.post("/upload", upload.single("image"), (req, res) => {
+router.post("/upload", upload.single("file"), (req, res) => {
   const protocol = req.protocol;
   const host = req.get("host");
-  res.json({ file: req.file, url: `${protocol}://${host}/${req.file.path}` });
+  req.file.url = `${protocol}://${host}/${req.file.path}`;
+  res.json({ file: req.file });
 });
 
-router.post("/delete-image", (req, res) => {
+router.post("/delete-file", (req, res) => {
   const { path } = req.body;
   fs.unlink(path, (err) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ message: "Failed to delete image" });
     }
-    res.json({ message: "Image deleted successfully" });
+    res.json({ message: "File deleted successfully" });
   });
 });
 

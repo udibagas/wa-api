@@ -14,15 +14,21 @@ type MessageType = {
   recipients: number[];
 };
 
+export type FileType = {
+  filename: string;
+  mimetype: string;
+  originalname: string;
+  path: string;
+  url: string;
+  size: number;
+}
+
 const NewMessage: React.FC = () => {
   const [templates, setTemplates] = useState<TemplateType[]>([]);
   const [groups, setGroups] = useState<GroupType[]>([]);
   const [recipients, setRecipients] = useState<RecipientType[]>([]);
   const [body, setBody] = useState<string>('')
-  const [imageUrl, setImageUrl] = useState<string>('');
-  const [filePath, setFilePath] = useState<string>('');
-  const [fileType, setFileType] = useState<string>('');
-
+  const [file, setFile] = useState<FileType>({} as FileType);
   const [form] = Form.useForm();
   const templateId = Form.useWatch('MessageTemplateId', form);
 
@@ -56,6 +62,8 @@ const NewMessage: React.FC = () => {
   function sendMessage(values: MessageType) {
     if (!values) return;
 
+    console.log(values);
+
     const { groups = [], recipients = [] } = values;
 
     if (!groups.length && !recipients.length) {
@@ -63,13 +71,22 @@ const NewMessage: React.FC = () => {
       return;
     }
 
+    let type = 'text';
+
+    if (file.mimetype.includes('image')) {
+      type = 'image';
+    }
+
+    if (file.mimetype.includes('application')) {
+      type = 'document';
+    }
+
     const payload = {
       ...values,
-      type: imageUrl ? 'image' : 'text',
+      type,
       message: body,
       caption: body,
-      filePath,
-      fileType
+      file
     };
 
     axiosInstance.post('sendTemplate', payload)
@@ -179,27 +196,22 @@ const NewMessage: React.FC = () => {
           <Form.Item name="image" label="Image" valuePropName="fileList" getValueFromEvent={normFile}>
             <Upload
               maxCount={1}
-              name="image"
+              name="file"
               listType="picture"
               action={axiosInstance.defaults.baseURL + '/upload'}
-              accept="image/*"
+              accept="image/*, application/*"
               withCredentials
               onChange={({ file }) => {
                 if (file.status === 'done') {
-                  console.log(file.response.file)
-                  setFilePath(file.response.file.path);
-                  setFileType(file.response.file.mimetype);
-                  setImageUrl(file.response.url);
+                  setFile(file.response.file);
                 }
               }}
               onRemove={(file) => {
-                axiosInstance.post('/delete-image', { path: file.response.file.path })
-                setFilePath('');
-                setFileType('');
-                setImageUrl('');
+                axiosInstance.post('/delete-file', { path: file.response.file.path })
+                setFile({} as FileType);
               }}
             >
-              <Button icon={<UploadOutlined />}>Select image</Button>
+              <Button icon={<UploadOutlined />}>Select file</Button>
             </Upload>
           </Form.Item>
 
@@ -210,7 +222,7 @@ const NewMessage: React.FC = () => {
           </Form.Item>
         </Form>
 
-        <WhatsAppChatBubble sender="PELINDO" message={body} imageUrl={imageUrl} />
+        <WhatsAppChatBubble sender="PELINDO" message={body} file={file} />
       </div >
     </>
   );

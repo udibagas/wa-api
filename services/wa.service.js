@@ -12,7 +12,7 @@ const {
 
 const wa = new WhatsApp();
 
-wa.uploadImage = async (imagePath, type = "image/jpeg") => {
+wa.uploadFile = async (imagePath, type = "image/jpeg") => {
   const data = new FormData();
   data.append("messaging_product", "whatsapp");
   data.append("file", fs.createReadStream(imagePath), {
