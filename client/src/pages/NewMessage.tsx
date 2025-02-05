@@ -146,6 +146,46 @@ const NewMessage: React.FC = () => {
           </Form.Item>
 
           <Form.Item
+            label="Body"
+          >
+            <TextArea
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              placeholder="Message body"
+              autoSize={{ minRows: 3, maxRows: 10 }}
+              maxLength={4096}
+              showCount
+            />
+          </Form.Item>
+
+          <Form.Item name="image" label="Image" valuePropName="fileList" getValueFromEvent={normFile}>
+            <Upload
+              maxCount={1}
+              name="image"
+              listType="picture"
+              action={axiosInstance.defaults.baseURL + '/upload'}
+              accept="image/*"
+              withCredentials
+              onChange={({ file }) => {
+                if (file.status === 'done') {
+                  console.log(file.response.file)
+                  setFilePath(file.response.file.path);
+                  setFileType(file.response.file.mimetype);
+                  setImageUrl(file.response.url);
+                }
+              }}
+              onRemove={(file) => {
+                axiosInstance.post('/delete-image', { path: file.response.file.path })
+                setFilePath('');
+                setFileType('');
+                setImageUrl('');
+              }}
+            >
+              <Button icon={<UploadOutlined />}>Select image</Button>
+            </Upload>
+          </Form.Item>
+
+          <Form.Item
             name="groups"
             label="Group"
           >
@@ -177,43 +217,6 @@ const NewMessage: React.FC = () => {
               }
             >
             </Select>
-          </Form.Item>
-
-          <TextArea
-            rows={10}
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            placeholder="Message body"
-            style={{ marginBottom: 20 }}
-            maxLength={4096}
-            showCount
-          />
-
-          <Form.Item name="image" label="Image" valuePropName="fileList" getValueFromEvent={normFile}>
-            <Upload
-              maxCount={1}
-              name="image"
-              listType="picture"
-              action={axiosInstance.defaults.baseURL + '/upload'}
-              accept="image/*"
-              withCredentials
-              onChange={({ file }) => {
-                if (file.status === 'done') {
-                  console.log(file.response.file)
-                  setFilePath(file.response.file.path);
-                  setFileType(file.response.file.mimetype);
-                  setImageUrl(file.response.url);
-                }
-              }}
-              onRemove={(file) => {
-                axiosInstance.post('/delete-image', { path: file.response.file.path })
-                setFilePath('');
-                setFileType('');
-                setImageUrl('');
-              }}
-            >
-              <Button icon={<UploadOutlined />}>Select image</Button>
-            </Upload>
           </Form.Item>
 
           <Form.Item label={null}>
