@@ -1,12 +1,14 @@
 import React from "react";
 import PageHeader from "../components/PageHeader";
-import { Input, Radio, Table } from "antd";
+import { Button, Input, Modal, Radio, Space, Table } from "antd";
 import { LogType, StatusType } from "../types";
 import useCrud from "../hooks/useCrud";
-import { ReloadOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
 import moment from "moment";
 import StatusTag from "../components/StatusTag";
 import { showDetailLog } from "../utils/showDetailLog";
+import axiosInstance from "../utils/axiosInstance";
+import { CheckCircleOutlined } from "@ant-design/icons";
 
 const Log: React.FC = () => {
 
@@ -22,6 +24,21 @@ const Log: React.FC = () => {
     setFilter,
     refreshData
   } = useCrud<LogType>("/logs", true);
+
+  function clearLog() {
+    Modal.confirm({
+      title: "Are you sure?",
+      content: "This action will delete all logs",
+      okText: "Yes",
+      cancelText: "No",
+      okButtonProps: { danger: true, type: "primary" },
+      onOk: () => {
+        axiosInstance.delete("/logs").then(() => {
+          refreshData();
+        });
+      },
+    });
+  }
 
   const columns = [
     {
@@ -65,14 +82,33 @@ const Log: React.FC = () => {
         title="Logs"
         subtitle="Message logs"
       >
+        <Button
+          onClick={clearLog}
+          color="danger"
+          variant="solid"
+          icon={<DeleteOutlined />}
+        >
+          Clear Logs
+        </Button>
+
         <Radio.Group defaultValue='all' value={filter.status} onChange={(e) => {
           if (e.target.value) {
             setFilter({ status: e.target.value });
           }
         }}>
           <Radio.Button value="all">All</Radio.Button>
-          <Radio.Button value="success">Success</Radio.Button>
-          <Radio.Button value="failed">Failed</Radio.Button>
+          <Radio.Button value="success" style={{ color: 'green' }}>
+            <Space>
+              <CheckCircleOutlined style={{ color: 'green' }} />
+              Success
+            </Space>
+          </Radio.Button>
+          <Radio.Button value="failed" style={{ color: 'red' }}>
+            <Space>
+              <CloseCircleOutlined style={{ color: 'red' }} />
+              Failed
+            </Space>
+          </Radio.Button>
         </Radio.Group>
 
         <Input.Search
@@ -81,7 +117,7 @@ const Log: React.FC = () => {
           style={{ width: 200 }}
           allowClear
         />
-      </PageHeader >
+      </PageHeader>
 
       <Table
         loading={isLoading}

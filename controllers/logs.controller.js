@@ -32,6 +32,7 @@ exports.index = async (req, res, next) => {
       ...options.where,
       [Op.or]: {
         "$messageTemplate.name$": { [Op.iLike]: `%${search}%` },
+        "$app.name$": { [Op.iLike]: `%${search}%` },
         "$recipient.name$": { [Op.iLike]: `%${search}%` },
         "$recipient.phoneNumber$": { [Op.iLike]: `%${search}%` },
       },
@@ -54,6 +55,15 @@ exports.index = async (req, res, next) => {
       from: offset + 1,
       to: offset + rows.length,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.clear = async (req, res, next) => {
+  try {
+    await Log.destroy({ where: {} });
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
