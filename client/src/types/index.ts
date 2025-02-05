@@ -4,6 +4,7 @@ export type AppType = {
   id: number;
   name: string;
   description: string;
+  token?: string;
 };
 
 export type GroupType = {

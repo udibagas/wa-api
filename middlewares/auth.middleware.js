@@ -15,7 +15,7 @@ exports.auth = async (req, res, next) => {
     }
 
     if (!token) throw new UnauthenticatedError();
-    const { id } = verify(token, process.env.JWT_SECRET);
+    const { id, appId } = verify(token, process.env.JWT_SECRET);
     const user = await User.findByPk(id);
     if (!user) throw new UnauthenticatedError("Unregistered user");
     req.user = user;

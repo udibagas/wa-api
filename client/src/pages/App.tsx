@@ -14,7 +14,7 @@ const App: React.FC = () => {
     form,
     errors,
     showDeleteConfirm,
-    fetchData,
+    refreshData,
     handleAdd,
     handleEdit,
     handleModalOk,
@@ -35,7 +35,7 @@ const App: React.FC = () => {
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Description", dataIndex: "description", key: "description" },
     {
-      title: <ReloadOutlined onClick={fetchData} />,
+      title: <ReloadOutlined onClick={refreshData} />,
       key: "action",
       width: 80,
       align: "center" as const,
