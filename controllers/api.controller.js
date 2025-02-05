@@ -55,8 +55,7 @@ exports.sendTemplate = async (req, res, next) => {
     }
 
     const AppId = template.appId;
-    const payload = { message, caption, type, file };
-
+    const payload = { type, file, message, caption };
     const target = [];
 
     if (recipients.length) {
@@ -99,36 +98,33 @@ exports.sendTemplate = async (req, res, next) => {
       new Map(target.map((item) => [item.id, item])).values()
     );
 
-    for (const r of uniqueRecipients) {
-      console.log("Send to", r.phoneNumber);
+    for (const { id, name, phoneNumber } of uniqueRecipients) {
+      console.log("Send to", phoneNumber);
+      let status = "success"; // default status
+      let response = null; // default response
 
       sendWhatsAppMessage({
         ...payload,
-        message: message.replaceAll("{{name}}", r.name),
-        caption: caption.replaceAll("{{name}}", r.name),
-        phoneNumber: r.phoneNumber,
-        fileName: fileName,
+        message: message.replaceAll("{{name}}", name),
+        caption: caption.replaceAll("{{name}}", name),
+        phoneNumber,
       })
         .then((res) => {
-          Log.create({
-            AppId,
-            MessageTemplateId,
-            RecipientId: r.id,
-            response: res,
-            status: "success",
-          }).catch((err) => {
-            console.error(err.message);
-          });
+          console.log(res);
+          response = res;
         })
         .catch((error) => {
+          console.error(error);
+          status = "failed";
+          response = error;
+        })
+        .finally(() => {
           Log.create({
             AppId,
             MessageTemplateId,
-            RecipientId: r.id,
-            response: error,
-            status: "failed",
-          }).catch((err) => {
-            console.error(err.message);
+            RecipientId: id,
+            response,
+            status,
           });
         });
     }

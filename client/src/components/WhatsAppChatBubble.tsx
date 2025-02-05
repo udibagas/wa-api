@@ -17,7 +17,6 @@ function readableSize(size: number): string {
   return parseFloat((size / Math.pow(k, i)).toFixed(0)) + " " + sizes[i];
 }
 
-
 function format(message: string) {
   if (!message) return "";
 
@@ -29,6 +28,29 @@ function format(message: string) {
     .replace(/~(.*?)~/g, "<s>$1</s>");
 }
 
+function FilePreview(file: FileType): React.ReactNode {
+  if (file.mimetype?.includes('image')) {
+    return <img src={file.url} alt="" style={{ width: '100%' }} />;
+  }
+
+  return (
+    <div style={{
+      border: '1px solid #ddd',
+      padding: '8px 4px',
+      borderRadius: 4,
+      marginBottom: 20,
+      display: 'flex',
+      gap: 5
+    }}>
+      <FileTextTwoTone style={{ fontSize: 50 }} />
+      <div>
+        <div style={{ fontWeight: 'bold', lineHeight: '1rem', overflow: 'clip' }}> {file.originalname}</div>
+        <small>{readableSize(file.size)} &bull; {file.originalname?.split('.').pop()}</small>
+      </div>
+    </div>
+  );
+}
+
 const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ sender, message, file }) => {
   return (
     <div className="chat-container">
@@ -37,22 +59,8 @@ const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ sender, message
           <div className="txt">
             <p className="name">{sender}</p>
 
-            {file.mimetype?.includes('image') && <img src={file.url} alt="" style={{ width: '100%' }} />}
+            {file.url && <FilePreview {...file} />}
 
-            <div style={{
-              border: '1px solid #ddd',
-              padding: '8px 4px',
-              borderRadius: 4,
-              marginBottom: 20,
-              display: 'flex',
-              gap: 5
-            }}>
-              <FileTextTwoTone style={{ fontSize: 50 }} />
-              <div>
-                <div style={{ fontWeight: 'bold', lineHeight: '1rem' }}> {file.originalname}</div>
-                <small>{readableSize(file.size)} &bull; {file.mimetype?.split('/').pop()}</small>
-              </div>
-            </div>
             <p className="message" dangerouslySetInnerHTML={{ __html: format(message) }} />
             <span className="timestamp">now</span>
           </div>
