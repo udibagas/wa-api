@@ -159,10 +159,19 @@ const NewMessage: React.FC = () => {
               mode="multiple"
               placeholder="Enter recipient name/phone number"
               allowClear
-              options={recipients.map((t) => ({ label: `${t.name} <${t.phoneNumber}>`, value: t.id }))}
+              options={recipients.map((t) => ({ label: `${t.name} - ${t.phoneNumber}`, value: t.id }))}
               filterOption={(input, option) =>
                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
               }
+              optionRender={({ label }) => {
+                const [name, phoneNumber] = (label as string)?.split(' - ') ?? [];
+                return (
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>{name}</span>
+                    <i style={{ color: '#999' }}>+{phoneNumber}</i>
+                  </div>
+                );
+              }}
             >
             </Select>
           </Form.Item>
