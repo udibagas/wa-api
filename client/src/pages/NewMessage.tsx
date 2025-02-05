@@ -2,37 +2,34 @@ import React, { useEffect, useState } from "react";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
 import { Button, Divider, Form, message, Select, Upload } from "antd";
-import { AppType, GroupType, RecipientType, TemplateType } from "../types";
+import { GroupType, RecipientType, TemplateType } from "../types";
 import axiosInstance from "../utils/axiosInstance";
 import WhatsAppChatBubble from "../components/WhatsAppChatBubble";
 import { Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
 
 type MessageType = {
-  type: string;
-  AppId: number;
   MessageTemplateId: number;
-  GroupId: number;
+  groups: number[];
+  recipients: number[];
 };
 
 const NewMessage: React.FC = () => {
-  const [apps, setApps] = useState([]);
-  const [templates, setTemplates] = useState([]);
-  const [groups, setGroups] = useState([]);
+  const [templates, setTemplates] = useState<TemplateType[]>([]);
+  const [groups, setGroups] = useState<GroupType[]>([]);
   const [recipients, setRecipients] = useState<RecipientType[]>([]);
-  const [body, setBody] = useState('')
+  const [body, setBody] = useState<string>('')
   const [imageUrl, setImageUrl] = useState<string>('');
   const [filePath, setFilePath] = useState<string>('');
   const [fileType, setFileType] = useState<string>('');
 
   const [form] = Form.useForm();
   const templateId = Form.useWatch('MessageTemplateId', form);
-  const AppId = Form.useWatch('AppId', form);
 
   useEffect(() => {
     if (templateId) {
-      const m = templates.find((t: TemplateType) => t.id === templateId)
-      setBody(m ? (m as TemplateType).body : '');
+      const m = templates.find((t) => t.id === templateId)
+      setBody(m?.body ?? '');
     }
   }, [templateId, templates]);
 
@@ -45,23 +42,26 @@ const NewMessage: React.FC = () => {
       setGroups(response.data);
     });
 
-    axiosInstance.get("/apps").then((response) => {
-      setApps(response.data);
-    });
-
     axiosInstance.get("/recipients", { params: { paginated: false } }).then((response) => {
       setRecipients(response.data);
     });
 
     return () => {
-      setApps([]);
       setTemplates([]);
       setGroups([]);
+      setRecipients([]);
     };
   }, [])
 
   function sendMessage(values: MessageType) {
     if (!values) return;
+
+    const { groups = [], recipients = [] } = values;
+
+    if (!groups.length && !recipients.length) {
+      message.error('Mohon pilih group atau penerima');
+      return;
+    }
 
     const payload = {
       ...values,
@@ -112,23 +112,6 @@ const NewMessage: React.FC = () => {
           onFinish={handleSend}
         >
           <Form.Item
-            name="AppId"
-            label="App"
-            rules={[{ required: true, message: 'Mohon pilih App' }]}
-          >
-            <Select
-              placeholder="Select App"
-              allowClear
-              options={apps.map((a: AppType) => ({ label: a.name, value: a.id }))}
-              onChange={(appId: number) => {
-                console.log(appId)
-                form.setFieldValue('MessageTemplateId', undefined);
-              }}
-            >
-            </Select>
-          </Form.Item>
-
-          <Form.Item
             name="MessageTemplateId"
             label="Message Template"
             rules={[{ required: true, message: 'Mohon pilih template' }]}
@@ -136,11 +119,7 @@ const NewMessage: React.FC = () => {
             <Select
               placeholder="Select template"
               allowClear
-              options={
-                templates
-                  .filter((t: TemplateType) => t.appId === AppId)
-                  .map((t: TemplateType) => ({ label: t.name, value: t.id }))
-              }
+              options={templates.map((t) => ({ label: t.name, value: t.id }))}
             >
             </Select>
           </Form.Item>
@@ -193,7 +172,7 @@ const NewMessage: React.FC = () => {
               mode="multiple"
               placeholder="Select group(s)"
               allowClear
-              options={groups.map((group: GroupType) => ({ label: group.name, value: group.id }))}
+              options={groups.map((group) => ({ label: group.name, value: group.id }))}
               filterOption={(input, option) =>
                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
               }
