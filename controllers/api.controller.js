@@ -93,25 +93,25 @@ exports.sendTemplate = async (req, res, next) => {
         phoneNumber: r.phoneNumber,
       })
         .then((res) => {
-          console.log("Res =", res);
-
           Log.create({
             AppId,
             MessageTemplateId,
             RecipientId: r.id,
             response: res,
             status: "success",
+          }).catch((err) => {
+            console.error(err.message);
           });
         })
         .catch((error) => {
-          console.error("INI ERROR", error);
-
           Log.create({
             AppId,
             MessageTemplateId,
             RecipientId: r.id,
             response: error,
             status: "failed",
+          }).catch((err) => {
+            console.error(err.message);
           });
         });
     }
