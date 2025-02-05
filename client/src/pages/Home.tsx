@@ -41,8 +41,24 @@ const Home: React.FC = () => {
     }
   }, []);
 
+  const successRateColors = {
+    0: '#cf1322',
+    25: '#cf1322',
+    50: '#faad14',
+    75: '#3f8600',
+    100: '#1890ff',
+  }
+
+  function getSuccessRateColor(rate: number): string {
+    if (rate < 25) return successRateColors[0];
+    if (rate < 50) return successRateColors[25];
+    if (rate < 75) return successRateColors[50];
+    if (rate < 100) return successRateColors[75];
+    return successRateColors[100];
+  }
+
   const statictics = [
-    { title: 'Success Rate', value: data.successRate, color: '#1890ff', prefix: <BarChartOutlined />, suffix: '%', precision: 2 },
+    { title: 'Success Rate', value: data.successRate, color: getSuccessRateColor(data.successRate), prefix: <BarChartOutlined />, suffix: '%', precision: 2 },
     { title: 'Total Messages', value: data.messageCount, color: '#faad14', prefix: <WhatsAppOutlined /> },
     { title: 'Successful Messages', value: data.successMessageCount, color: '#3f8600', prefix: <CheckSquareOutlined /> },
     { title: 'Failed Messages', value: data.failedMessageCount, color: '#cf1322', prefix: <CloseSquareOutlined /> },
@@ -69,7 +85,7 @@ const Home: React.FC = () => {
         marginBottom: '2rem'
       }}>
         {statictics.map((stat, index) => (
-          <Card key={index} bordered={true} style={{ flex: 1, minWidth: 250 }}>
+          <Card key={index} bordered={true} style={{ flex: 1, minWidth: 200 }}>
             <Statistic
               title={stat.title}
               value={stat.value}
