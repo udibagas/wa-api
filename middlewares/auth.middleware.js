@@ -19,6 +19,7 @@ exports.auth = async (req, res, next) => {
     const user = await User.findByPk(id);
     if (!user) throw new UnauthenticatedError("Unregistered user");
     req.user = user;
+    req.appId = appId;
   } catch (error) {
     return next(error);
   }
