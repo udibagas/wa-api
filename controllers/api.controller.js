@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Group, Recipient, Log } = require("../models");
+const { MessageTemplate, Recipient, Log } = require("../models");
 const sendWhatsAppMessage = require("../utils/sendWhatsAppMessage");
 
 exports.sendMessage = async (req, res, next) => {
@@ -43,28 +43,47 @@ exports.sendTemplate = async (req, res, next) => {
       type,
       filePath,
       fileType,
-      AppId,
       MessageTemplateId,
+      recipients = [],
     } = req.body;
 
+    const template = await MessageTemplate.findByPk(MessageTemplateId);
+
+    if (!template) {
+      const error = new Error("Template not found");
+      error.status = 404;
+      throw error;
+    }
+
+    const AppId = template.appId;
     const payload = { message, caption, type, filePath, fileType };
 
-    const recipients = await Recipient.findAll({
-      include: {
-        association: "groups",
-        where: {
-          id: { [Op.in]: groups },
-        },
-      },
-    });
+    let target = [];
 
-    if (!recipients.length) {
+    if (recipients.length) {
+      target = await Recipient.findAll({
+        where: {
+          id: { [Op.in]: recipients },
+        },
+      });
+    } else {
+      target = await Recipient.findAll({
+        include: {
+          association: "groups",
+          where: {
+            id: { [Op.in]: groups },
+          },
+        },
+      });
+    }
+
+    if (!target.length) {
       const error = new Error("Group(s) has no recipients");
       error.status = 400;
       throw error;
     }
 
-    for (const r of recipients) {
+    for (const r of target) {
       console.log("Send to", r.phoneNumber);
 
       sendWhatsAppMessage({
