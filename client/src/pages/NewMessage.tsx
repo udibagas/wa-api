@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
-import { Button, Form, message, Radio, Select, Upload } from "antd";
-import { AppType, GroupType, TemplateType } from "../types";
+import { Button, Divider, Form, message, Select, Upload } from "antd";
+import { AppType, GroupType, RecipientType, TemplateType } from "../types";
 import axiosInstance from "../utils/axiosInstance";
 import WhatsAppChatBubble from "../components/WhatsAppChatBubble";
 import { Modal } from "antd";
@@ -19,6 +19,7 @@ const NewMessage: React.FC = () => {
   const [apps, setApps] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [groups, setGroups] = useState([]);
+  const [recipients, setRecipients] = useState<RecipientType[]>([]);
   const [body, setBody] = useState('')
   const [imageUrl, setImageUrl] = useState<string>('');
   const [filePath, setFilePath] = useState<string>('');
@@ -26,7 +27,6 @@ const NewMessage: React.FC = () => {
 
   const [form] = Form.useForm();
   const templateId = Form.useWatch('MessageTemplateId', form);
-  const type = Form.useWatch('type', form);
   const AppId = Form.useWatch('AppId', form);
 
   useEffect(() => {
@@ -49,6 +49,10 @@ const NewMessage: React.FC = () => {
       setApps(response.data);
     });
 
+    axiosInstance.get("/recipients", { params: { paginated: false } }).then((response) => {
+      setRecipients(response.data);
+    });
+
     return () => {
       setApps([]);
       setTemplates([]);
@@ -58,7 +62,15 @@ const NewMessage: React.FC = () => {
 
   function sendMessage(values: MessageType) {
     if (!values) return;
-    const payload = { ...values, message: body, caption: body, filePath, fileType };
+
+    const payload = {
+      ...values,
+      type: imageUrl ? 'image' : 'text',
+      message: body,
+      caption: body,
+      filePath,
+      fileType
+    };
 
     axiosInstance.post('sendTemplate', payload)
       .then(res => {
@@ -96,26 +108,9 @@ const NewMessage: React.FC = () => {
           variant="filled"
           form={form}
           labelCol={{ span: 8 }}
-          style={{ minWidth: 450 }}
+          style={{ width: 500 }}
           onFinish={handleSend}
         >
-
-          <Form.Item
-            label="Type"
-            name="type"
-            rules={[{ required: true, message: 'Mohon pilih jenis' }]}
-            initialValue={'text'}
-          >
-            <Radio.Group onChange={(e) => {
-              if (e.target.value === 'image') {
-                setImageUrl('');
-              }
-            }}>
-              <Radio.Button value="text">Text</Radio.Button>
-              <Radio.Button value="image">Image</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-
           <Form.Item
             name="AppId"
             label="App"
@@ -152,14 +147,31 @@ const NewMessage: React.FC = () => {
 
           <Form.Item
             name="groups"
-            label="Recipient Group"
-            rules={[{ required: true, message: 'Mohon pilih group' }]}
+            label="Group"
           >
             <Select
               mode="multiple"
               placeholder="Select group(s)"
               allowClear
               options={groups.map((group: GroupType) => ({ label: group.name, value: group.id }))}
+              filterOption={(input, option) =>
+                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+            >
+            </Select>
+          </Form.Item>
+
+          <Divider plain>Or</Divider>
+
+          <Form.Item
+            name="recipients"
+            label="Recipients"
+          >
+            <Select
+              mode="multiple"
+              placeholder="Enter recipient name/phone number"
+              allowClear
+              options={recipients.map((t) => ({ label: `${t.name} <${t.phoneNumber}>`, value: t.id }))}
               filterOption={(input, option) =>
                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
               }
@@ -177,34 +189,32 @@ const NewMessage: React.FC = () => {
             showCount
           />
 
-          {type === 'image' && (
-            <Form.Item name="image" label="Image" valuePropName="fileList" getValueFromEvent={normFile}>
-              <Upload
-                maxCount={1}
-                name="image"
-                listType="picture"
-                action={axiosInstance.defaults.baseURL + '/upload'}
-                // accept="image/*"
-                withCredentials
-                onChange={({ file }) => {
-                  if (file.status === 'done') {
-                    console.log(file.response.file)
-                    setFilePath(file.response.file.path);
-                    setFileType(file.response.file.mimetype);
-                    setImageUrl(file.response.url);
-                  }
-                }}
-                onRemove={(file) => {
-                  axiosInstance.post('/delete-image', { path: file.response.file.path })
-                  setFilePath('');
-                  setFileType('');
-                  setImageUrl('');
-                }}
-              >
-                <Button icon={<UploadOutlined />}>Click to upload</Button>
-              </Upload>
-            </Form.Item>
-          )}
+          <Form.Item name="image" label="Image" valuePropName="fileList" getValueFromEvent={normFile}>
+            <Upload
+              maxCount={1}
+              name="image"
+              listType="picture"
+              action={axiosInstance.defaults.baseURL + '/upload'}
+              accept="image/*"
+              withCredentials
+              onChange={({ file }) => {
+                if (file.status === 'done') {
+                  console.log(file.response.file)
+                  setFilePath(file.response.file.path);
+                  setFileType(file.response.file.mimetype);
+                  setImageUrl(file.response.url);
+                }
+              }}
+              onRemove={(file) => {
+                axiosInstance.post('/delete-image', { path: file.response.file.path })
+                setFilePath('');
+                setFileType('');
+                setImageUrl('');
+              }}
+            >
+              <Button icon={<UploadOutlined />}>Select image</Button>
+            </Upload>
+          </Form.Item>
 
           <Form.Item label={null}>
             <Button block type="primary" htmlType="submit" icon={<SendOutlined />}>

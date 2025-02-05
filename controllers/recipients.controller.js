@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const { Recipient } = require("../models");
 
 exports.index = async (req, res, next) => {
-  const { page = 1, limit = 10, search } = req.query;
+  const { page = 1, limit = 10, search, paginated } = req.query;
   const offset = (page - 1) * limit;
 
   const options = {
@@ -25,6 +25,11 @@ exports.index = async (req, res, next) => {
   }
 
   try {
+    if (paginated === "false") {
+      const recipients = await Recipient.findAll(options);
+      return res.status(200).json(recipients);
+    }
+
     const { count: total, rows } = await Recipient.findAndCountAll(options);
     res.status(200).json({
       total,
