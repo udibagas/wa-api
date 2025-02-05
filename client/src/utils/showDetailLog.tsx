@@ -2,17 +2,19 @@ import { Descriptions, Modal } from "antd";
 import { LogType, StatusType } from "../types";
 import moment from "moment";
 import StatusTag from "../components/StatusTag";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
 export function showDetailLog(record: LogType) {
   Modal.info({
     title: "Log Details",
+    closable: true,
+    okText: "Close",
+    okButtonProps: {
+      icon: <CloseCircleOutlined />,
+    },
     width: '600px',
     content: (
-      <Descriptions
-        column={1}
-        size="small"
-        bordered
-      >
+      <Descriptions column={1} size="small" bordered>
         <Descriptions.Item label="Time">
           {moment(record.createdAt).format("DD-MMM-YYYY HH:mm:ss")}
         </Descriptions.Item>
@@ -36,6 +38,7 @@ export function showDetailLog(record: LogType) {
         <Descriptions.Item label="Response">
           <pre style={{
             whiteSpace: "pre-wrap",
+            wordWrap: "break-word",
             background: "black",
             color: 'lightgreen',
             padding: "20px",
