@@ -27,6 +27,13 @@ exports.index = async (req, res, next) => {
     ],
   };
 
+  if (req.user.role !== "admin") {
+    options.where = {
+      ...options.where,
+      "$app.UserId$": req.user.id,
+    };
+  }
+
   if (search) {
     options.where = {
       ...options.where,

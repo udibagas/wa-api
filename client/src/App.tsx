@@ -13,6 +13,7 @@ import Group from "./pages/Group";
 import { AuthProvider } from "./context/AuthContext";
 import NewMessage from "./pages/NewMessage";
 import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 
 const App: React.FC = () => {
   return (
@@ -31,6 +32,7 @@ const App: React.FC = () => {
             <Route path="logs" element={<Log />} />
             <Route path="profile" element={<Profile />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

@@ -5,6 +5,7 @@ import {
   BarChartOutlined,
   BarsOutlined,
   BlockOutlined,
+  CalendarOutlined,
   FileTextOutlined,
   SettingFilled,
   TeamOutlined,
@@ -31,6 +32,7 @@ function getItem(
 const items: MenuItem[] = [
   getItem(<Link to="/">Dashboard</Link>, 'home', <BarChartOutlined />),
   getItem(<Link to="/new-message">New Message</Link>, 'new-message', <WhatsAppOutlined />),
+  getItem(<Link to="/scheduled-message">Scheduled Message</Link>, 'scheduled-message', <CalendarOutlined />),
   getItem(<Link to="/groups">Groups</Link>, 'groups', <BlockOutlined />),
   getItem(<Link to="/recipients">Recipients</Link>, 'recipients', <TeamOutlined />),
   getItem(<Link to="/apps">Apps</Link>, 'apps', <SettingFilled />),

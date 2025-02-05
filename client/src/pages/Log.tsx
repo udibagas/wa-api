@@ -1,6 +1,6 @@
 import React from "react";
 import PageHeader from "../components/PageHeader";
-import { Button, Input, Modal, Radio, Space, Table } from "antd";
+import { Button, Input, Modal, Popconfirm, Radio, Space, Table } from "antd";
 import { LogType, StatusType } from "../types";
 import useCrud from "../hooks/useCrud";
 import { CloseCircleOutlined, DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
@@ -24,21 +24,6 @@ const Log: React.FC = () => {
     setFilter,
     refreshData
   } = useCrud<LogType>("/logs", true);
-
-  function clearLog() {
-    Modal.confirm({
-      title: "Are you sure?",
-      content: "This action will delete all logs",
-      okText: "Yes",
-      cancelText: "No",
-      okButtonProps: { danger: true, type: "primary" },
-      onOk: () => {
-        axiosInstance.delete("/logs").then(() => {
-          refreshData();
-        });
-      },
-    });
-  }
 
   const columns = [
     {
@@ -82,14 +67,26 @@ const Log: React.FC = () => {
         title="Logs"
         subtitle="Message logs"
       >
-        <Button
-          onClick={clearLog}
-          color="danger"
-          variant="solid"
-          icon={<DeleteOutlined />}
+        <Popconfirm
+          title="Clear Logs"
+          description="Are you sure to delete all logs?"
+          onConfirm={() => {
+            axiosInstance.delete("/logs").then(() => {
+              refreshData();
+            });
+          }}
+          onCancel={() => { }}
+          okText="Yes"
+          cancelText="No"
         >
-          Clear Logs
-        </Button>
+          <Button
+            color="danger"
+            variant="solid"
+            icon={<DeleteOutlined />}
+          >
+            Clear Logs
+          </Button>
+        </Popconfirm>
 
         <Radio.Group defaultValue='all' value={filter.status} onChange={(e) => {
           if (e.target.value) {

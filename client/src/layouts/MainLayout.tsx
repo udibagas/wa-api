@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Dropdown, Layout, Modal, Space, theme, Typography } from 'antd';
+import { Avatar, Dropdown, Layout, Modal, Space, theme, Typography } from 'antd';
 import '../css/App.css';
 import { Outlet, useNavigate } from 'react-router';
 import axiosInstance from '../utils/axiosInstance';
@@ -42,18 +42,24 @@ const MainLayout: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className="logo" >
+      <Sider
+        width={220}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
+        <div className="logo">
           {user?.name[0]}
         </div>
 
         <NavMenu />
       </Sider>
       <Layout>
-        <Header style={{ padding: '0 20px', background: '#fff', fontWeight: 'bold', fontSize: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>WhatsApp Gateway</div>
+        <Header style={{ padding: '0 20px', background: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ fontSize: 24 }}>WhatsApp Gateway</div>
           <Dropdown menu={{ items: menuItems }} placement="bottom" arrow>
             <Space>
+              <Avatar style={{ backgroundColor: '#87d068' }} size={25} icon={<UserOutlined />} />
               <Text strong>Welcome, {user?.name}!</Text>
             </Space>
           </Dropdown>
