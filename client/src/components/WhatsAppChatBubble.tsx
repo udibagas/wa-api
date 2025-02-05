@@ -1,13 +1,25 @@
 import React from "react";
 import "../css/WhatsAppChatBubble.css";
 import { FileType } from "../pages/NewMessage";
-import { FileTextTwoTone } from "@ant-design/icons";
+import {
+  AudioTwoTone,
+  FileExcelTwoTone,
+  FileImageTwoTone,
+  FilePdfTwoTone,
+  FilePptTwoTone,
+  FileTextTwoTone,
+  FileWordTwoTone,
+  FileZipTwoTone,
+  PlaySquareTwoTone
+} from "@ant-design/icons";
 
 type WhatsAppChatBubbleProps = {
   sender: string;
   message: string;
   file: FileType;
 };
+
+type FileTypes = "pdf" | "doc" | "docx" | "xls" | "xlsx" | "ppt" | "pptx" | "txt" | "zip" | "rar" | "csv" | "mp3" | "mp4" | "jpg" | "jpeg" | "png" | "gif";
 
 function readableSize(size: number): string {
   if (size === 0) return "0 B";
@@ -29,9 +41,32 @@ function format(message: string) {
 }
 
 function FilePreview(file: FileType): React.ReactNode {
+  const icons: Record<FileTypes, React.ReactNode> = {
+    pdf: <FilePdfTwoTone />,
+    doc: <FileWordTwoTone />,
+    docx: <FileWordTwoTone />,
+    xls: <FileExcelTwoTone />,
+    xlsx: <FileExcelTwoTone />,
+    ppt: <FilePptTwoTone />,
+    pptx: <FilePptTwoTone />,
+    txt: <FileTextTwoTone />,
+    zip: <FileZipTwoTone />,
+    rar: <FileZipTwoTone />,
+    csv: <FileExcelTwoTone />,
+    mp3: <AudioTwoTone />,
+    mp4: <PlaySquareTwoTone />,
+    jpg: <FileImageTwoTone />,
+    jpeg: <FileImageTwoTone />,
+    png: <FileImageTwoTone />,
+    gif: <FileImageTwoTone />,
+  }
+
   if (file.mimetype?.includes('image')) {
     return <img src={file.url} alt="" style={{ width: '100%' }} />;
   }
+
+  const fileExtension = file.originalname?.split('.').pop() as FileTypes ?? 'txt';
+  const fileIcon = icons[fileExtension];
 
   return (
     <div style={{
@@ -42,7 +77,9 @@ function FilePreview(file: FileType): React.ReactNode {
       display: 'flex',
       gap: 5
     }}>
-      <FileTextTwoTone style={{ fontSize: 50 }} />
+
+      {React.cloneElement(fileIcon as React.ReactElement, { style: { fontSize: 50 } })}
+
       <div>
         <div style={{ fontWeight: 'bold', lineHeight: '1rem', overflow: 'clip' }}> {file.originalname}</div>
         <small>{readableSize(file.size)} &bull; {file.originalname?.split('.').pop()}</small>
