@@ -1,5 +1,5 @@
-import React from "react";
-import { createBrowserRouter, LoaderFunctionArgs, redirect, RouterProvider } from "react-router";
+import React, { Suspense } from "react";
+import { createBrowserRouter, redirect, RouterProvider } from "react-router";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import User from "./pages/User";
@@ -14,13 +14,14 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import axiosInstance from "./utils/axiosInstance";
 import ErrorBoundary from "./components/ErrorBoundary";
+import Loading from "./pages/Loading";
 
-const authLoader = async ({ params, request, context }: LoaderFunctionArgs) => {
-  console.log({ params, request, context })
+const authLoader = async () => {
   try {
     const { data: user } = await axiosInstance.get('/me');
     return { user }
-  } catch (_) {
+  } catch (error: unknown) {
+    console.error(error);
     return redirect('/login');
   }
 }
@@ -55,7 +56,9 @@ const router = createBrowserRouter([
 const App: React.FC = () => {
   return (
     <ErrorBoundary>
-      <RouterProvider router={router} />
+      <Suspense fallback={<Loading />}>
+        <RouterProvider router={router} />
+      </Suspense>
     </ErrorBoundary>
   )
 };
