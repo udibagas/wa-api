@@ -19,10 +19,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
 
-app.all("/graphql", auth, createHandler({ schema, rootValue }));
+app.all("/api/graphql", auth, createHandler({ schema, rootValue }));
 app.get("/gql", (_req, res) => {
   res.type("html");
-  res.end(ruruHTML({ endpoint: "/graphql" }));
+  res.end(ruruHTML({ endpoint: "/api/graphql" }));
 });
 
 app.use(require("./routes"));

@@ -24,6 +24,7 @@ exports.schema = buildSchema(`
   type Template {
     id: Int!
     name: String!
+    body: String
   }
 
   type Group {
