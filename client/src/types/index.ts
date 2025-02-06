@@ -20,6 +20,7 @@ export type RecipientType = {
   phoneNumber: string;
   groups: GroupType[];
   dateOfBirth: string | null;
+  age: number | null;
 };
 
 export type UserType = {

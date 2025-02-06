@@ -69,6 +69,7 @@ const Recipient: React.FC = () => {
         return record.dateOfBirth ? dayjs(record.dateOfBirth).format("DD-MMM-YYYY") : "-";
       }
     },
+    { title: "Age", dataIndex: "age", key: "age" },
     {
       title: "Group",
       key: "groups",
