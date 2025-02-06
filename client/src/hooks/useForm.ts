@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createItem, deleteItem, getItems, updateItem } from "../api/client";
 import { AxiosError } from "axios";
 
-const useForm = <T extends { id: number }>(
+const useForm = <T extends { id?: number }>(
   endpoint: string,
   queryKey: string
 ) => {
@@ -15,10 +15,12 @@ const useForm = <T extends { id: number }>(
   const [showForm, setShowForm] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  function useFetch(params: Record<string, string | number | boolean> = {}) {
+  function useFetch<D = T[]>(
+    params: Record<string, string | number | boolean> = {}
+  ) {
     return useQuery({
       queryKey: [queryKey],
-      queryFn: () => getItems<T>(endpoint, params),
+      queryFn: () => getItems<D>(endpoint, params),
     });
   }
 

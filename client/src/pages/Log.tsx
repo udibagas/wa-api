@@ -1,29 +1,32 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import PageHeader from "../components/PageHeader";
-import { Button, Input, Modal, Popconfirm, Radio, Space, Table } from "antd";
-import { LogType, StatusType } from "../types";
-import useCrud from "../hooks/useCrud";
+import { Button, Input, Popconfirm, Radio, Space, Table } from "antd";
+import { LogType, PaginatedData, StatusType } from "../types";
 import { CloseCircleOutlined, DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
 import moment from "moment";
 import StatusTag from "../components/StatusTag";
 import { showDetailLog } from "../utils/showDetailLog";
-import axiosInstance from "../utils/axiosInstance";
 import { CheckCircleOutlined } from "@ant-design/icons";
+import useForm from "../hooks/useForm";
+import client from "../api/client";
 
 const Log: React.FC = () => {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(10);
+  const [search, setSearch] = React.useState("");
+  const [filter, setFilter] = React.useState({ status: 'all' });
+  const { useFetch, refreshData } = useForm<LogType>("/logs", "logs");
 
-  const {
-    data,
-    isLoading,
-    currentPage,
-    total,
-    filter,
-    setCurrentPage,
-    setPageSize,
-    setSearch,
-    setFilter,
-    refreshData
-  } = useCrud<LogType>("/logs", true);
+  const params = useMemo(
+    () => ({ page: currentPage, limit: pageSize, search, ...filter }),
+    [currentPage, pageSize, search, filter]
+  );
+
+  const { data, isPending } = useFetch<PaginatedData<LogType>>(params);
+
+  useEffect(() => {
+    refreshData();
+  }, [params]);
 
   const columns = [
     {
@@ -71,9 +74,7 @@ const Log: React.FC = () => {
           title="Clear Logs"
           description="Are you sure to delete all logs?"
           onConfirm={() => {
-            axiosInstance.delete("/logs").then(() => {
-              refreshData();
-            });
+            client.delete("/logs").then(() => refreshData());
           }}
           onCancel={() => { }}
           okText="Yes"
@@ -114,22 +115,21 @@ const Log: React.FC = () => {
           style={{ width: 200 }}
           allowClear
         />
-      </PageHeader>
+      </PageHeader >
 
       <Table
-        loading={isLoading}
+        loading={isPending}
         size="small"
         columns={columns}
-        dataSource={data}
+        dataSource={data?.rows ?? []}
         rowKey="id"
         pagination={{
           size: "small",
           current: currentPage,
-          total: total,
+          total: data?.total,
           showSizeChanger: true,
           showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
           onChange: (page, pageSize) => {
-            // gak perlu fetch ulang karena sudah dihandle oleh useCrud
             setPageSize(pageSize);
             setCurrentPage(page);
           },
@@ -140,7 +140,6 @@ const Log: React.FC = () => {
           };
         }}
       />
-
     </>
   );
 };
