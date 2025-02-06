@@ -1,28 +1,29 @@
 import React from "react";
 import { Table } from "antd";
-import useCrud from "../hooks/useCrud";
 import UserForm from "../components/UserForm";
 import PageHeader from "../components/PageHeader";
 import { ReloadOutlined } from "@ant-design/icons";
 import ActionButton from "../components/buttons/ActionButton";
 import AddButton from "../components/buttons/AddButton";
 import { UserType } from "../types";
+import useForm from "../hooks/useForm";
 
 const User: React.FC = () => {
   const {
-    data,
-    form,
-    errors,
-    isEditing,
-    isModalVisible,
-    isLoading,
-    showDeleteConfirm,
-    handleAdd,
-    handleEdit,
-    handleModalOk,
-    handleModalClose,
+    useFetch,
     refreshData,
-  } = useCrud<UserType>("/users");
+    handleEdit,
+    handleDelete,
+    handleAdd,
+    handleModalClose,
+    handleSubmit,
+    form,
+    showForm,
+    errors,
+    isEditing
+  } = useForm<UserType>("/users", "users");
+
+  const { isPending, data } = useFetch();
 
 
   const columns = [
@@ -42,7 +43,7 @@ const User: React.FC = () => {
       render: (_: string, record: UserType) => (
         <ActionButton
           onEdit={() => handleEdit(record)}
-          onDelete={() => showDeleteConfirm(record.id)}
+          onDelete={() => handleDelete(record.id)}
         />
       ),
     },
@@ -55,7 +56,7 @@ const User: React.FC = () => {
       </PageHeader>
 
       <Table
-        loading={isLoading}
+        loading={isPending}
         size="small"
         columns={columns}
         dataSource={data}
@@ -69,12 +70,12 @@ const User: React.FC = () => {
       />
 
       <UserForm
-        visible={isModalVisible}
+        visible={showForm}
         isEditing={isEditing}
         errors={errors}
         form={form}
         onCancel={handleModalClose}
-        onOk={handleModalOk}
+        onOk={handleSubmit}
       />
     </>
   );
