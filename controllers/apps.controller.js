@@ -13,7 +13,7 @@ exports.index = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
-    const app = await App.create(req.body);
+    const app = await App.create({ ...req.body, UserId: req.user.id });
     res.status(201).json(app);
   } catch (error) {
     next(error);

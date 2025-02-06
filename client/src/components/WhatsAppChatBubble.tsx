@@ -14,7 +14,6 @@ import {
 } from "@ant-design/icons";
 
 type WhatsAppChatBubbleProps = {
-  sender: string;
   message: string;
   file: FileType;
 };
@@ -88,15 +87,15 @@ function FilePreview(file: FileType): React.ReactNode {
   );
 }
 
-const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ sender, message, file }) => {
+const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ message, file }) => {
   return (
     <div className="chat-container">
       <div className="speech-wrapper">
         <div className="bubble">
           <div className="txt">
-            <p className="name">{sender}</p>
+            <p className="name">TPKS</p>
 
-            {file.url && <FilePreview {...file} />}
+            {file?.url && <FilePreview {...file} />}
 
             <p className="message" dangerouslySetInnerHTML={{ __html: format(message) }} />
             <span className="timestamp">now</span>

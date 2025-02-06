@@ -1,28 +1,29 @@
 import React from "react";
 import { Table } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
-import useCrud from "../hooks/useCrud";
 import GroupForm from "../components/GroupForm";
 import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
 import { GroupType } from "../types";
+import useForm from "../hooks/useForm";
 
 const Group: React.FC = () => {
   const {
-    data,
-    form,
-    errors,
-    showDeleteConfirm,
+    useFetch,
     refreshData,
-    handleAdd,
     handleEdit,
-    handleModalOk,
+    handleDelete,
+    handleAdd,
     handleModalClose,
-    isEditing,
-    isModalVisible,
-    isLoading
-  } = useCrud<GroupType>("/groups");
+    handleSubmit,
+    form,
+    showForm,
+    errors,
+    isEditing
+  } = useForm<GroupType>("/groups", "groups");
+
+  const { isPending, data } = useFetch();
 
   const columns = [
     { title: "ID", dataIndex: "id", key: "id", width: 60 },
@@ -34,7 +35,7 @@ const Group: React.FC = () => {
       width: 80,
       align: "center" as const,
       render: (_: string, record: GroupType) => (
-        <ActionButton onEdit={() => handleEdit(record)} onDelete={() => showDeleteConfirm(record.id)} />
+        <ActionButton onEdit={() => handleEdit(record)} onDelete={() => handleDelete(record.id)} />
       ),
     },
   ];
@@ -49,7 +50,7 @@ const Group: React.FC = () => {
       </PageHeader>
 
       <Table
-        loading={isLoading}
+        loading={isPending}
         size="small"
         columns={columns}
         dataSource={data}
@@ -63,10 +64,10 @@ const Group: React.FC = () => {
       />
 
       <GroupForm
-        visible={isModalVisible}
+        visible={showForm}
         isEditing={isEditing}
         onCancel={handleModalClose}
-        onOk={handleModalOk}
+        onOk={handleSubmit}
         errors={errors}
         form={form}
       />

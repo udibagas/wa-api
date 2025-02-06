@@ -29,7 +29,7 @@ export type CrudHook<T> = {
   handleAdd: () => void;
   handleEdit: (
     data: RecursivePartial<T>,
-    additionalData: Record<string, any>
+    additionalData?: Record<string, any>
   ) => void;
   handleModalOk: (values: T) => void;
   handleModalClose: () => void;

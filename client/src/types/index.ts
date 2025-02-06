@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { FormInstance } from "antd";
 
 export type AppType = {
@@ -37,6 +36,21 @@ export type TemplateType = {
   components: object;
   appId: number;
   App: AppType;
+};
+
+export type MessageType = {
+  MessageTemplateId: number;
+  groups: number[];
+  recipients: number[];
+};
+
+export type FileType = {
+  filename: string;
+  mimetype: string;
+  originalname: string;
+  path: string;
+  url: string;
+  size: number;
 };
 
 export type StatusType = "success" | "error" | "warning" | "info" | "failed";

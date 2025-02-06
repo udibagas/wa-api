@@ -2,26 +2,11 @@ import React, { useEffect, useState } from "react";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
 import { Button, Form, message, Select, Upload } from "antd";
-import { GroupType, RecipientType, TemplateType } from "../types";
+import { FileType, GroupType, MessageType, RecipientType, TemplateType } from "../types";
 import axiosInstance from "../utils/axiosInstance";
 import WhatsAppChatBubble from "../components/WhatsAppChatBubble";
 import { Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
-
-type MessageType = {
-  MessageTemplateId: number;
-  groups: number[];
-  recipients: number[];
-};
-
-export type FileType = {
-  filename: string;
-  mimetype: string;
-  originalname: string;
-  path: string;
-  url: string;
-  size: number;
-}
 
 const NewMessage: React.FC = () => {
   const [templates, setTemplates] = useState<TemplateType[]>([]);
@@ -237,7 +222,7 @@ const NewMessage: React.FC = () => {
           </Form.Item>
         </Form>
 
-        <WhatsAppChatBubble sender="PELINDO" message={body} file={file} />
+        <WhatsAppChatBubble message={body} file={file} />
       </div >
     </>
   );

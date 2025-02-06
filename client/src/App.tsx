@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { createBrowserRouter, redirect, RouterProvider } from "react-router";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
@@ -14,7 +14,7 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import axiosInstance from "./utils/axiosInstance";
 import ErrorBoundary from "./components/ErrorBoundary";
-import Loading from "./pages/Loading";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const authLoader = async () => {
   try {
@@ -25,6 +25,8 @@ const authLoader = async () => {
     return redirect('/login');
   }
 }
+
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
   {
@@ -56,9 +58,9 @@ const router = createBrowserRouter([
 const App: React.FC = () => {
   return (
     <ErrorBoundary>
-      <Suspense fallback={<Loading />}>
+      <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
-      </Suspense>
+      </QueryClientProvider>
     </ErrorBoundary>
   )
 };

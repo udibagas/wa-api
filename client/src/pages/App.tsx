@@ -1,29 +1,29 @@
 import React from "react";
 import { Table } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
-import useCrud from "../hooks/useCrud";
 import AppForm from "../components/AppForm";
 import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
 import { AppType } from "../types";
+import useForm from "../hooks/useForm";
 
 const App: React.FC = () => {
   const {
-    data,
-    form,
-    errors,
-    showDeleteConfirm,
+    useFetch,
     refreshData,
-    handleAdd,
     handleEdit,
-    handleModalOk,
+    handleDelete,
+    handleAdd,
     handleModalClose,
-    isEditing,
-    isModalVisible,
-    isLoading
-  } = useCrud<AppType>("/apps");
+    handleSubmit,
+    form,
+    showForm,
+    errors,
+    isEditing
+  } = useForm<AppType>("/apps", "apps");
 
+  const { isPending, data } = useFetch();
 
   const columns = [
     { title: "ID", dataIndex: "id", key: "id", width: 60 },
@@ -35,7 +35,10 @@ const App: React.FC = () => {
       width: 80,
       align: "center" as const,
       render: (_: string, record: AppType) => (
-        <ActionButton onEdit={() => handleEdit(record)} onDelete={() => showDeleteConfirm(record.id)} />
+        <ActionButton
+          onEdit={() => handleEdit(record)}
+          onDelete={() => handleDelete(record.id)}
+        />
       ),
     },
   ];
@@ -50,7 +53,7 @@ const App: React.FC = () => {
       </PageHeader>
 
       <Table
-        loading={isLoading}
+        loading={isPending}
         size="small"
         columns={columns}
         dataSource={data}
@@ -58,16 +61,16 @@ const App: React.FC = () => {
         pagination={false}
         onRow={(record: AppType) => {
           return {
-            onClick: () => handleEdit(record),
+            onClick: () => { console.log(record) },
           };
         }}
       />
 
       <AppForm
-        visible={isModalVisible}
+        visible={showForm}
         isEditing={isEditing}
         onCancel={handleModalClose}
-        onOk={handleModalOk}
+        onOk={handleSubmit}
         errors={errors}
         form={form}
       />

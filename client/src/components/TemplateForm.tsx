@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Modal, Form, Input, Select } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
-import { AppType, CustomFormProps, TemplateType } from "../types";
+import { AppType, CustomFormProps, FileType, TemplateType } from "../types";
 import TextArea from "antd/es/input/TextArea";
 import axiosInstance from "../utils/axiosInstance";
 import WhatsAppChatBubble from "./WhatsAppChatBubble";
-
 
 const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
   const [apps, setApps] = useState([]);
@@ -33,7 +32,7 @@ const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEdit
         <SaveButton label={isEditing ? "Update" : "Add"} key='submit' />,
       ]}
     >
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 20 }}>
         <Form
           style={{ width: 400 }}
           variant="filled"
@@ -41,7 +40,7 @@ const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEdit
           id="form"
           onFinish={onOk}
           requiredMark={false}
-          labelCol={{ span: 8 }}
+          labelCol={{ span: 7 }}
         >
           <Form.Item name="id" hidden>
             <Input />
@@ -77,13 +76,13 @@ const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEdit
             help={errors.body?.join(", ")}
           >
             <TextArea
-              autoSize={{ minRows: 3 }}
+              autoSize={{ minRows: 8, maxRows: 10 }}
               maxLength={4096}
               showCount />
           </Form.Item>
         </Form>
 
-        <WhatsAppChatBubble sender="PELINDO" message={message} />
+        <WhatsAppChatBubble message={message} file={{} as FileType} />
       </div>
 
     </Modal>
