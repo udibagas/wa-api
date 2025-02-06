@@ -40,17 +40,32 @@ const NewMessage: React.FC = () => {
   }, [templateId, templates]);
 
   useEffect(() => {
-    axiosInstance.get("/message-templates").then((response) => {
-      setTemplates(response.data);
-    });
+    axiosInstance.post("/graphql", {
+      query: `
+        query {
+          templates {
+            id
+            name
+            body
+          }
+          groups {
+            id
+            name
+          }
+          recipients {
+            id
+            name
+            phoneNumber
+          }
+        }
+      `
+    }).then((response) => {
+      const { data } = response.data;
 
-    axiosInstance.get("/groups").then((response) => {
-      setGroups(response.data);
-    });
-
-    axiosInstance.get("/recipients", { params: { paginated: false } }).then((response) => {
-      setRecipients(response.data);
-    });
+      setTemplates(data.templates);
+      setGroups(data.groups);
+      setRecipients(data.recipients);
+    })
 
     return () => {
       setTemplates([]);
