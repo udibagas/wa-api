@@ -8,7 +8,7 @@ import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
 import { RecipientType } from "../types";
 import { createStyles } from 'antd-style';
-import moment from "moment";
+import dayjs from "dayjs";
 
 const useStyle = createStyles(({ css, token }) => {
   const { antCls } = token;
@@ -66,9 +66,7 @@ const Recipient: React.FC = () => {
       key: "dateOfBirth",
       ellipsis: true,
       render: (_: string, record: RecipientType) => {
-        return record.dateOfBirth
-          ? moment(record.dateOfBirth).format("DD-MMM-YYYY")
-          : '';
+        return record.dateOfBirth ? dayjs(record.dateOfBirth).format("DD-MMM-YYYY") : "-";
       }
     },
     {
@@ -85,7 +83,13 @@ const Recipient: React.FC = () => {
       width: 80,
       align: "center" as const,
       render: (_: string, record: RecipientType) => (
-        <ActionButton onEdit={() => handleEdit(record)} onDelete={() => showDeleteConfirm(record.id as number)} />
+        <ActionButton
+          onDelete={() => showDeleteConfirm(record.id as number)}
+          onEdit={() => handleEdit(record, {
+            dateOfBirth: record.dateOfBirth ? dayjs(record.dateOfBirth) : null,
+            groups: record.groups.map((group) => group.id),
+          })}
+        />
       ),
     },
   ];
@@ -127,7 +131,10 @@ const Recipient: React.FC = () => {
         }}
         onRow={(record: RecipientType) => {
           return {
-            onDoubleClick: () => handleEdit(record),
+            onClick: () => handleEdit(record, {
+              dateOfBirth: record.dateOfBirth ? dayjs(record.dateOfBirth) : null,
+              groups: record.groups.map((group) => group.id),
+            }),
           };
         }}
       />

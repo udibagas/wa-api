@@ -59,13 +59,13 @@ const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEd
           <Input placeholder="Phone Number" allowClear />
         </Form.Item>
 
-        <Form.Item
-          label="Date of Birth"
-          name="dateOfBirth"
-          validateStatus={errors.dateOfBirth ? "error" : ""}
-          help={errors.dateOfBirth?.join(", ")}
-        >
-          <DatePicker allowClear placeholder="Select date" style={{ width: '100%' }} />
+        <Form.Item label="Date of Birth" name="dateOfBirth">
+          <DatePicker
+            allowClear
+            placeholder="Select date"
+            format={"DD-MMM-YYYY"}
+            style={{ width: '100%' }}
+          />
         </Form.Item>
 
         <Form.Item

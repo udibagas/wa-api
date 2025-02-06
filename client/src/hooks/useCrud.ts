@@ -1,4 +1,4 @@
-import { PaginatedData, RecipientType } from "./../types/index";
+import { PaginatedData } from "./../types/index";
 import { useState, useEffect, useMemo } from "react";
 import { FormInstance, message, Modal } from "antd";
 import axiosInstance from "../utils/axiosInstance";
@@ -27,7 +27,10 @@ export type CrudHook<T> = {
   setIsEditing: (isEditing: boolean) => void;
   setIsModalVisible: (isVisible: boolean) => void;
   handleAdd: () => void;
-  handleEdit: (data: RecursivePartial<T>) => void;
+  handleEdit: (
+    data: RecursivePartial<T>,
+    additionalData: Record<string, any>
+  ) => void;
   handleModalOk: (values: T) => void;
   handleModalClose: () => void;
   setCurrentPage: (page: number) => void;
@@ -148,16 +151,13 @@ const useCrud = <T extends { id?: number }>(
     setIsModalVisible(true);
   };
 
-  const handleEdit = (data: RecursivePartial<T>) => {
+  const handleEdit = (
+    data: RecursivePartial<T>,
+    additionalData: Record<string, any> = {}
+  ) => {
     setIsEditing(true);
-    form.setFieldsValue(data);
-
-    // handle logic untuk masing-masing form
-    if ((data as RecipientType).groups) {
-      const groups = (data as RecipientType).groups.map((group) => group.id);
-      form.setFieldsValue({ ...data, groups });
-    }
-
+    const allData = { ...data, ...additionalData };
+    form.setFieldsValue(allData);
     setIsModalVisible(true);
   };
 

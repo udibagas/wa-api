@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { FormInstance } from "antd";
 
 export type AppType = {
@@ -18,7 +19,7 @@ export type RecipientType = {
   name: string;
   phoneNumber: string;
   groups: GroupType[];
-  dateOfBirth: Date;
+  dateOfBirth: string | null;
 };
 
 export type UserType = {
