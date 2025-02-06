@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Input, Select } from "antd";
+import { Modal, Form, Input, Select, DatePicker } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
 import axiosInstance from "../utils/axiosInstance";
@@ -47,7 +47,7 @@ const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEd
           validateStatus={errors.name ? "error" : ""}
           help={errors.name?.join(", ")}
         >
-          <Input />
+          <Input placeholder="Name" allowClear />
         </Form.Item>
 
         <Form.Item
@@ -56,7 +56,7 @@ const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEd
           validateStatus={errors.phoneNumber ? "error" : ""}
           help={errors.phoneNumber?.join(", ")}
         >
-          <Input />
+          <Input placeholder="Phone Number" allowClear />
         </Form.Item>
 
         <Form.Item
@@ -65,7 +65,7 @@ const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEd
           validateStatus={errors.dateOfBirth ? "error" : ""}
           help={errors.dateOfBirth?.join(", ")}
         >
-          <Input />
+          <DatePicker allowClear placeholder="Select date" style={{ width: '100%' }} />
         </Form.Item>
 
         <Form.Item

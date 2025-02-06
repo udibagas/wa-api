@@ -14,7 +14,7 @@ const Group: React.FC = () => {
     form,
     errors,
     showDeleteConfirm,
-    fetchData,
+    refreshData,
     handleAdd,
     handleEdit,
     handleModalOk,
@@ -25,16 +25,11 @@ const Group: React.FC = () => {
   } = useCrud<GroupType>("/groups");
 
   const columns = [
-    {
-      title: "No.",
-      width: 60,
-      key: "id",
-      render: (_: string, __: GroupType, index: number) => index + 1,
-    },
+    { title: "ID", dataIndex: "id", key: "id", width: 60 },
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Description", dataIndex: "description", key: "description" },
     {
-      title: <ReloadOutlined onClick={fetchData} />,
+      title: <ReloadOutlined onClick={refreshData} />,
       key: "action",
       width: 80,
       align: "center" as const,

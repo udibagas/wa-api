@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { createBrowserRouter, LoaderFunctionArgs, redirect, RouterProvider } from "react-router";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import User from "./pages/User";
@@ -8,35 +8,56 @@ import Recipient from "./pages/Recipient";
 import AppPage from "./pages/App";
 import Template from "./pages/Template";
 import Log from "./pages/Log";
-// import PrivateRoute from "./components/PrivateRoute";
 import Group from "./pages/Group";
-import { AuthProvider } from "./context/AuthContext";
 import NewMessage from "./pages/NewMessage";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import axiosInstance from "./utils/axiosInstance";
+import ErrorBoundary from "./components/ErrorBoundary";
+
+const authLoader = async ({ params, request, context }: LoaderFunctionArgs) => {
+  console.log({ params, request, context })
+  try {
+    const { data: user } = await axiosInstance.get('/me');
+    return { user }
+  } catch (_) {
+    return redirect('/login');
+  }
+}
+
+const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/",
+    element: <MainLayout />,
+    loader: authLoader,
+    children: [
+      { index: true, element: <Home /> },
+      { path: "new-message", element: <NewMessage /> },
+      { path: "groups", element: <Group /> },
+      { path: "recipients", element: <Recipient /> },
+      { path: "apps", element: <AppPage /> },
+      { path: "users", element: <User /> },
+      { path: "templates", element: <Template /> },
+      { path: "logs", element: <Log /> },
+      { path: "profile", element: <Profile /> },
+    ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+]);
 
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<MainLayout />} >
-            <Route index element={<Home />} />
-            <Route path="new-message" element={<NewMessage />} />
-            <Route path="groups" element={<Group />} />
-            <Route path="recipients" element={<Recipient />} />
-            <Route path="apps" element={<AppPage />} />
-            <Route path="users" element={<User />} />
-            <Route path="templates" element={<Template />} />
-            <Route path="logs" element={<Log />} />
-            <Route path="profile" element={<Profile />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
-  );
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
+  )
 };
 
 export default App;

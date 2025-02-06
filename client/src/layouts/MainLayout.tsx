@@ -1,12 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Avatar, Dropdown, Layout, Modal, Space, theme, Typography } from 'antd';
-import '../css/App.css';
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet, useLoaderData, useNavigate } from 'react-router';
 import axiosInstance from '../utils/axiosInstance';
-import AuthContext from '../context/AuthContext';
 import NavMenu from '../components/NavMenu';
+import '../css/App.css';
 
 const { Text } = Typography;
 const { Header, Content, Footer, Sider } = Layout;
@@ -14,7 +13,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user } = useLoaderData()
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -60,7 +59,7 @@ const MainLayout: React.FC = () => {
           <Dropdown menu={{ items: menuItems }} placement="bottom" arrow>
             <Space>
               <Avatar style={{ backgroundColor: '#87d068' }} size={25} icon={<UserOutlined />} />
-              <Text strong>Welcome, {user?.name}!</Text>
+              <Text strong>Welcome, {user.name}!</Text>
             </Space>
           </Dropdown>
         </Header>

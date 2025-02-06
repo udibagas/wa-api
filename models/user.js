@@ -46,8 +46,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         set(value) {
           if (!value) return;
-          const saltRounds = 10;
-          const hash = bcrypt.hashSync(value, saltRounds);
+          const hash = bcrypt.hashSync(value, 10);
           this.setDataValue("password", hash);
         },
         validate: {

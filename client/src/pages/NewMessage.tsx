@@ -110,7 +110,7 @@ const NewMessage: React.FC = () => {
 
   const normFile = (e) => {
     if (Array.isArray(e)) {
-      return e;
+      return e[0].response.file;
     }
 
     return e && e.fileList;
@@ -193,7 +193,7 @@ const NewMessage: React.FC = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item name="image" label="Image" valuePropName="fileList" getValueFromEvent={normFile}>
+          <Form.Item name="file" label="File" valuePropName="fileList" getValueFromEvent={normFile}>
             <Upload
               maxCount={1}
               name="file"

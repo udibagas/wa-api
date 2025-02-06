@@ -25,12 +25,7 @@ const App: React.FC = () => {
   } = useCrud<TemplateType>("/message-templates");
 
   const columns = [
-    {
-      title: "No.",
-      width: 60,
-      key: "id",
-      render: (_: string, __: TemplateType, index: number) => index + 1,
-    },
+    { title: "ID", dataIndex: 'id', key: "id", width: 60 },
     { title: "App", dataIndex: ["App", "name"], key: "app" },
     { title: "Name", dataIndex: "name", key: "name" },
     {

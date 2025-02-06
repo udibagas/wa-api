@@ -26,12 +26,7 @@ const App: React.FC = () => {
 
 
   const columns = [
-    {
-      title: "No.",
-      width: 60,
-      key: "id",
-      render: (_: string, __: AppType, index: number) => index + 1,
-    },
+    { title: "ID", dataIndex: "id", key: "id", width: 60 },
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Description", dataIndex: "description", key: "description" },
     {

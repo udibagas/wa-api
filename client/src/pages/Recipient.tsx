@@ -8,6 +8,7 @@ import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
 import { RecipientType } from "../types";
 import { createStyles } from 'antd-style';
+import moment from "moment";
 
 const useStyle = createStyles(({ css, token }) => {
   const { antCls } = token;
@@ -57,10 +58,24 @@ const Recipient: React.FC = () => {
       key: "id",
       render: (_: string, __: RecipientType, index: number) => currentPage > 1 ? (currentPage - 1) * 10 + index + 1 : index + 1,
     },
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber" },
+    { title: "Name", dataIndex: "name", key: "name", ellipsis: true },
+    { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber", ellipsis: true },
     {
-      title: "Group", key: "groups", render: (_: string, record: RecipientType) => {
+      title: "Date of Birth",
+      dataIndex: "dateOfBirth",
+      key: "dateOfBirth",
+      ellipsis: true,
+      render: (_: string, record: RecipientType) => {
+        return record.dateOfBirth
+          ? moment(record.dateOfBirth).format("DD-MMM-YYYY")
+          : '';
+      }
+    },
+    {
+      title: "Group",
+      key: "groups",
+      ellipsis: true,
+      render: (_: string, record: RecipientType) => {
         return record.groups.map((group) => group.name).join(", ");
       }
     },

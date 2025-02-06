@@ -3,7 +3,7 @@ const { MessageTemplate, App } = require("../models");
 exports.index = async (req, res, next) => {
   try {
     const messageTemplates = await MessageTemplate.findAll({
-      order: [["name", "asc"]],
+      order: [["id", "asc"]],
       include: {
         model: App,
         attributes: ["id", "name"],

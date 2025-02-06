@@ -3,7 +3,7 @@ const { Group } = require("../models");
 exports.index = async (req, res, next) => {
   try {
     const groups = await Group.findAll({
-      order: [["name", "asc"]],
+      order: [["id", "asc"]],
     });
     res.status(200).json(groups);
   } catch (error) {

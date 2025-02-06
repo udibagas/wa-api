@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Form, Input, Button, Card, message, FormProps } from "antd";
 import styles from '../css/Login.module.css'; // Import the CSS file for custom styles
 import { useNavigate } from "react-router";
@@ -6,7 +6,6 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { AxiosError } from "axios";
 import { AxiosErrorResponseType } from "../types";
 import axiosInstance from "../utils/axiosInstance";
-import AuthContext from "../context/AuthContext";
 
 type LoginValues = {
   email?: string;
@@ -15,15 +14,12 @@ type LoginValues = {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext)
-
   const onFinish: FormProps<LoginValues>['onFinish'] = async (values) => {
     console.log("Success:", values);
     try {
-      const { data } = await axiosInstance.post("/login", values);
+      await axiosInstance.post("/login", values);
       message.success("Login successful!");
-      setUser(data.user);
-      navigate("/", { replace: true });
+      navigate('/');
     } catch (error) {
       const axiosError = error as AxiosError;
       const axiosErrorResponse = axiosError.response
@@ -41,6 +37,8 @@ const Login: React.FC = () => {
     <div className={styles.loginContainer}>
       <Card title={<div style={{ textAlign: 'center', fontSize: '1.5rem' }}>WhatsApp Gateway</div>} className={styles.loginCard}>
         <Form
+          variant="filled"
+          size="large"
           layout="vertical"
           name="login"
           onFinish={onFinish}
@@ -61,7 +59,7 @@ const Login: React.FC = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+            <Button type="primary" block htmlType="submit">
               Login
             </Button>
           </Form.Item>

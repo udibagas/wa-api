@@ -41,7 +41,12 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      dateOfBirth: DataTypes.DATEONLY,
+      dateOfBirth: {
+        type: DataTypes.DATEONLY,
+        validate: {
+          isDate: { msg: "Invalid date format" },
+        },
+      },
     },
     {
       sequelize,

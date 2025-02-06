@@ -18,6 +18,7 @@ export type RecipientType = {
   name: string;
   phoneNumber: string;
   groups: GroupType[];
+  dateOfBirth: Date;
 };
 
 export type UserType = {
