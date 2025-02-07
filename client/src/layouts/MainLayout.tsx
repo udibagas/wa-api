@@ -3,9 +3,9 @@ import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Avatar, Dropdown, Layout, Modal, Space, theme, Typography } from 'antd';
 import { Outlet, useLoaderData, useNavigate } from 'react-router';
-import axiosInstance from '../utils/axiosInstance';
 import NavMenu from '../components/NavMenu';
 import '../css/App.css';
+import client from '../api/client';
 
 const { Text } = Typography;
 const { Header, Content, Footer, Sider } = Layout;
@@ -27,7 +27,7 @@ const MainLayout: React.FC = () => {
       okText: 'Yes',
       cancelText: 'No',
       onOk: () => {
-        axiosInstance.post('/logout').then(() => {
+        client.post('/logout').then(() => {
           navigate('/login');
         });
       },
@@ -55,7 +55,7 @@ const MainLayout: React.FC = () => {
       </Sider>
       <Layout>
         <Header style={{ padding: '0 20px', background: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ fontSize: 24 }}>WhatsApp Gateway</div>
+          <div style={{ fontSize: 24, color: '#0C74B6', fontWeight: 'bold' }}>BlastIt!</div>
           <Dropdown menu={{ items: menuItems }} placement="bottom" arrow>
             <Space>
               <Avatar style={{ backgroundColor: '#87d068' }} size={25} icon={<UserOutlined />} />

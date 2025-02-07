@@ -2,22 +2,22 @@ import React, { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import { Button, Form, Input, message } from "antd";
 import { AxiosErrorResponseType, UserType } from "../types";
-import axiosInstance from "../utils/axiosInstance";
 import { AxiosError } from "axios";
+import client from "../api/client";
 
 const Profile: React.FC = () => {
   const [form] = Form.useForm<UserType>();
   const [errors, setErrors] = useState<Record<string, string[]>>({});
 
   useEffect(() => {
-    axiosInstance.get("/me").then(({ data }) => {
+    client.get("/me").then(({ data }) => {
       form.setFieldsValue(data);
     });
   }, [form])
 
   async function onOk(values: UserType) {
     try {
-      await axiosInstance.put(`/users/${values.id}`, values);
+      await client.put(`/users/${values.id}`, values);
       message.success("Profile updated successfully");
     } catch (error: unknown) {
       const axiosError = error as AxiosError;

@@ -6,7 +6,12 @@ import { HomeOutlined } from "@ant-design/icons";
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 'calc(100vh - 220px)'
+    }}>
       <Result
         status="404"
         title="404"

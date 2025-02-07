@@ -4,13 +4,13 @@ import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
 import { AppType, CustomFormProps } from "../types";
 import { SettingOutlined } from "@ant-design/icons";
-import axiosInstance from "../utils/axiosInstance";
 import TextArea from "antd/es/input/TextArea";
+import client from "../api/client";
 
 const AppForm: React.FC<CustomFormProps<AppType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
   const generateToken = () => {
     const id = form.getFieldValue("id");
-    axiosInstance.post(`/apps/${id}/token`).then(({ data }) => {
+    client.post(`/apps/${id}/token`).then(({ data }) => {
       const { token } = data;
       form.setFieldsValue({ token });
     });

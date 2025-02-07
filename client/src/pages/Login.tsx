@@ -1,11 +1,11 @@
 import React from "react";
-import { Form, Input, Button, Card, message, FormProps } from "antd";
+import { Form, Input, Button, message, FormProps } from "antd";
 import styles from '../css/Login.module.css'; // Import the CSS file for custom styles
 import { useNavigate } from "react-router";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { AxiosError } from "axios";
 import { AxiosErrorResponseType } from "../types";
-import axiosInstance from "../utils/axiosInstance";
+import client from "../api/client";
 
 type LoginValues = {
   email?: string;
@@ -17,7 +17,7 @@ const Login: React.FC = () => {
   const onFinish: FormProps<LoginValues>['onFinish'] = async (values) => {
     console.log("Success:", values);
     try {
-      await axiosInstance.post("/login", values);
+      await client.post("/login", values);
       message.success("Login successful!");
       navigate('/');
     } catch (error) {
@@ -35,36 +35,76 @@ const Login: React.FC = () => {
 
   return (
     <div className={styles.loginContainer}>
-      <Card title={<div style={{ textAlign: 'center', fontSize: '1.5rem' }}>WhatsApp Gateway</div>} className={styles.loginCard}>
-        <Form
-          variant="filled"
-          size="large"
-          layout="vertical"
-          name="login"
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
-          <Form.Item
-            name="email"
-            rules={[{ required: true, message: "Please input your email!" }]}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+      }}>
+        <div style={{
+          padding: '2rem',
+          borderRadius: '8px 0 0 8px',
+          backgroundColor: 'white',
+        }}>
+          <h1>Login</h1>
+          <Form
+            style={{ width: 300 }}
+            variant="filled"
+            size="large"
+            layout="vertical"
+            name="login"
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
           >
-            <Input prefix={<UserOutlined />} placeholder="Username" />
-          </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[{ required: true, message: "Please input your email!" }]}
+            >
+              <Input prefix={<UserOutlined />} placeholder="Username" />
+            </Form.Item>
 
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
-          >
-            <Input.Password prefix={<LockOutlined />} placeholder="Password" />
-          </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: "Please input your password!" }]}
+            >
+              <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+            </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" block htmlType="submit">
-              Login
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
+            <Form.Item>
+              <Button
+                block
+                htmlType="submit"
+                style={{ backgroundColor: '#0C74B6', color: 'white', border: 'none' }}
+              >
+                Login
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+        <div style={{
+          textAlign: 'center',
+          width: 300,
+          background: '#0C74B6',
+          color: 'white',
+          padding: '1rem',
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-around",
+          borderRadius: '0 8px 8px 0',
+        }}>
+          <div>
+            <div style={{
+              fontSize: '3rem',
+              fontWeight: 'bold',
+              marginBottom: 0
+            }}>BlastIt!</div>
+            <div style={{ color: '#ddd' }}>Send once, reach all!</div>
+          </div>
+          <small>© {new Date().getFullYear()}</small>
+
+        </div>
+      </div>
     </div>
   );
 };

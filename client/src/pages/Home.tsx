@@ -12,7 +12,7 @@ import {
   // TeamOutlined
 } from "@ant-design/icons";
 import LogTable from "../components/LogTable";
-import axiosInstance from "../utils/axiosInstance";
+import client from "../api/client";
 
 const Home: React.FC = () => {
   const [data, setData] = useState({
@@ -26,7 +26,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     let ignore = false;
 
-    const getData = (): Promise<void> => axiosInstance.get('/stats').then(({ data }) => {
+    const getData = (): Promise<void> => client.get('/stats').then(({ data }) => {
       if (ignore) return;
       setData(data);
     })

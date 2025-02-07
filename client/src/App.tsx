@@ -12,13 +12,14 @@ import Group from "./pages/Group";
 import NewMessage from "./pages/NewMessage";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
-import axiosInstance from "./utils/axiosInstance";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Loading from "./pages/Loading";
+import client from "./api/client";
 
 const authLoader = async () => {
   try {
-    const { data: user } = await axiosInstance.get('/me');
+    const { data: user } = await client.get('/me');
     return { user }
   } catch (error: unknown) {
     console.error(error);
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <MainLayout />,
     loader: authLoader,
+    hydrateFallbackElement: <Loading />,
     children: [
       { index: true, element: <Home /> },
       { path: "new-message", element: <NewMessage /> },
@@ -47,11 +49,8 @@ const router = createBrowserRouter([
       { path: "templates", element: <Template /> },
       { path: "logs", element: <Log /> },
       { path: "profile", element: <Profile /> },
+      { path: "*", element: <NotFound /> },
     ],
-  },
-  {
-    path: "*",
-    element: <NotFound />,
   },
 ]);
 

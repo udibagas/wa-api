@@ -3,11 +3,11 @@ import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
 import { Button, Form, message, Select, Upload } from "antd";
 import { FileType, GroupType, MessageType, RecipientType, TemplateType } from "../types";
-import axiosInstance from "../utils/axiosInstance";
 import WhatsAppChatBubble from "../components/WhatsAppChatBubble";
 import { Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useQuery } from "@tanstack/react-query";
+import client from "../api/client";
 
 const NewMessage: React.FC = () => {
   const [body, setBody] = useState<string>('')
@@ -36,7 +36,7 @@ const NewMessage: React.FC = () => {
           }
         }
       `
-      const { data } = await axiosInstance.post("/graphql", { query })
+      const { data } = await client.post("/graphql", { query })
       const { templates, groups, recipients } = data.data;
       return { templates, groups, recipients };
     }
@@ -83,7 +83,7 @@ const NewMessage: React.FC = () => {
       file
     };
 
-    axiosInstance.post('sendTemplate', payload)
+    client.post('sendTemplate', payload)
       .then(res => {
         message.success(res.data.message);
       }).catch(err => {
@@ -192,7 +192,7 @@ const NewMessage: React.FC = () => {
               maxCount={1}
               name="file"
               listType="picture"
-              action={axiosInstance.defaults.baseURL + '/upload'}
+              action={client.defaults.baseURL + '/upload'}
               accept="image/*, application/*"
               withCredentials
               onChange={({ file }) => {
@@ -201,7 +201,7 @@ const NewMessage: React.FC = () => {
                 }
               }}
               onRemove={(file) => {
-                axiosInstance.post('/delete-file', { path: file.response.file.path })
+                client.post('/delete-file', { path: file.response.file.path })
                 setFile({} as FileType);
               }}
             >
