@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
 import { Button, Form, message, Select, Upload } from "antd";
@@ -7,26 +7,18 @@ import axiosInstance from "../utils/axiosInstance";
 import WhatsAppChatBubble from "../components/WhatsAppChatBubble";
 import { Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { useQuery } from "@tanstack/react-query";
 
 const NewMessage: React.FC = () => {
-  const [templates, setTemplates] = useState<TemplateType[]>([]);
-  const [groups, setGroups] = useState<GroupType[]>([]);
-  const [recipients, setRecipients] = useState<RecipientType[]>([]);
   const [body, setBody] = useState<string>('')
   const [file, setFile] = useState<FileType>({} as FileType);
   const [form] = Form.useForm();
   const templateId = Form.useWatch('MessageTemplateId', form);
 
-  useEffect(() => {
-    if (templateId) {
-      const m = templates.find((t) => t.id === templateId)
-      setBody(m?.body ?? '');
-    }
-  }, [templateId, templates]);
-
-  useEffect(() => {
-    axiosInstance.post("/graphql", {
-      query: `
+  const { data } = useQuery({
+    queryKey: ['masterData'],
+    queryFn: async () => {
+      const query = `
         query {
           templates {
             id
@@ -44,20 +36,22 @@ const NewMessage: React.FC = () => {
           }
         }
       `
-    }).then((response) => {
-      const { data } = response.data;
+      const { data } = await axiosInstance.post("/graphql", { query })
+      const { templates, groups, recipients } = data.data;
+      return { templates, groups, recipients };
+    }
+  })
 
-      setTemplates(data.templates);
-      setGroups(data.groups);
-      setRecipients(data.recipients);
-    })
+  const templates: TemplateType[] = useMemo(() => data?.templates ?? [], [data]);
+  const groups: GroupType[] = useMemo(() => data?.groups ?? [], [data]);
+  const recipients: RecipientType[] = useMemo(() => data?.recipients ?? [], [data]);
 
-    return () => {
-      setTemplates([]);
-      setGroups([]);
-      setRecipients([]);
-    };
-  }, [])
+  useEffect(() => {
+    if (templateId) {
+      const m = templates.find((t) => t.id === templateId)
+      setBody(m?.body ?? '');
+    }
+  }, [templateId, templates]);
 
   function sendMessage(values: MessageType) {
     if (!values) return;

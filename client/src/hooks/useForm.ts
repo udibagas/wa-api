@@ -1,3 +1,4 @@
+import { Dayjs } from "dayjs";
 import { Form, message, Modal } from "antd";
 import { useState } from "react";
 import { AxiosErrorResponseType, RecursivePartial } from "../types";
@@ -36,8 +37,14 @@ const useForm = <T extends { id?: number }>(
     setShowForm(true);
   }
 
-  function handleEdit(data: RecursivePartial<T>) {
-    form.setFieldsValue(data);
+  function handleEdit(
+    data: RecursivePartial<T>,
+    additionalData: Record<
+      string,
+      string | number | boolean | Dayjs | null | number[]
+    > = {}
+  ) {
+    form.setFieldsValue({ ...data, ...additionalData });
     setIsEditing(true);
     setShowForm(true);
   }

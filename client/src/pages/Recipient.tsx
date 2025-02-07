@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { Input, Table } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
-import useCrud from "../hooks/useCrud";
 import RecipientForm from "../components/RecipientForm";
 import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
-import { RecipientType } from "../types";
+import { PaginatedData, RecipientType } from "../types";
 import { createStyles } from 'antd-style';
 import dayjs from "dayjs";
+import useForm from "../hooks/useForm";
 
 const useStyle = createStyles(({ css, token }) => {
   const { antCls } = token;
@@ -29,27 +29,42 @@ const useStyle = createStyles(({ css, token }) => {
 });
 
 const Recipient: React.FC = () => {
+  const { styles } = useStyle();
+
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(10);
+  const [search, setSearch] = React.useState("");
   const {
-    data,
-    total,
-    currentPage,
-    form,
-    errors,
-    isEditing,
-    isModalVisible,
-    isLoading,
-    showDeleteConfirm,
-    fetchData,
+    useFetch,
+    refreshData,
     handleAdd,
     handleEdit,
-    handleModalOk,
+    handleDelete,
     handleModalClose,
-    setCurrentPage,
-    setPageSize,
-    setSearch
-  } = useCrud<RecipientType>("/recipients", true);
+    handleSubmit,
+    errors,
+    form,
+    showForm,
+    isEditing,
+  } = useForm<RecipientType>("/recipients", "recipients");
 
-  const { styles } = useStyle();
+  const params = useMemo(
+    () => ({ page: currentPage, limit: pageSize, search }),
+    [currentPage, pageSize, search]
+  );
+
+  const { data, isPending } = useFetch<PaginatedData<RecipientType>>(params);
+
+  useEffect(() => {
+    refreshData();
+  }, [params]);
+
+  const prepareEdit = (record: RecipientType) => {
+    return handleEdit(record, {
+      dateOfBirth: record.dateOfBirth ? dayjs(record.dateOfBirth) : null,
+      groups: record.groups.map((group) => group.id),
+    });
+  }
 
   const columns = [
     {
@@ -79,17 +94,14 @@ const Recipient: React.FC = () => {
       }
     },
     {
-      title: <ReloadOutlined onClick={() => fetchData()} />,
+      title: <ReloadOutlined onClick={() => refreshData()} />,
       key: "action",
       width: 80,
       align: "center" as const,
       render: (_: string, record: RecipientType) => (
         <ActionButton
-          onDelete={() => showDeleteConfirm(record.id as number)}
-          onEdit={() => handleEdit(record, {
-            dateOfBirth: record.dateOfBirth ? dayjs(record.dateOfBirth) : null,
-            groups: record.groups.map((group) => group.id),
-          })}
+          onDelete={() => handleDelete(record.id as number)}
+          onEdit={() => prepareEdit(record)}
         />
       ),
     },
@@ -113,38 +125,34 @@ const Recipient: React.FC = () => {
       <Table
         className={styles.customTable}
         scroll={{ y: 49 * 10 }}
-        loading={isLoading}
+        loading={isPending}
         size="small"
         columns={columns}
-        dataSource={data}
+        dataSource={data?.rows ?? []}
         rowKey="id"
         pagination={{
           size: "small",
           current: currentPage,
-          total: total,
+          total: data?.total ?? 0,
           showSizeChanger: true,
           showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
           onChange: (page, pageSize) => {
-            // gak perlu fetch ulang karena sudah dihandle oleh useCrud
             setPageSize(pageSize);
             setCurrentPage(page);
           },
         }}
         onRow={(record: RecipientType) => {
           return {
-            onClick: () => handleEdit(record, {
-              dateOfBirth: record.dateOfBirth ? dayjs(record.dateOfBirth) : null,
-              groups: record.groups.map((group) => group.id),
-            }),
+            onClick: () => prepareEdit(record),
           };
         }}
       />
 
       <RecipientForm
-        visible={isModalVisible}
+        visible={showForm}
         isEditing={isEditing}
         onCancel={handleModalClose}
-        onOk={handleModalOk}
+        onOk={handleSubmit}
         errors={errors}
         form={form}
       />

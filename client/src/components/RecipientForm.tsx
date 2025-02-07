@@ -1,22 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Modal, Form, Input, Select, DatePicker } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
-import axiosInstance from "../utils/axiosInstance";
 import { CustomFormProps, GroupType, RecipientType } from "../types";
+import { useQuery } from "@tanstack/react-query";
+import { getItems } from "../api/client";
 
 const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
-  const [groups, setGroups] = useState([]);
-
-  useEffect(() => {
-    axiosInstance.get("/groups").then((response) => {
-      setGroups(response.data);
-    });
-
-    return () => {
-      setGroups([]);
-    };
-  }, [])
+  const { data: groups } = useQuery({
+    queryKey: ["groups"],
+    queryFn: () => getItems<GroupType[]>("/groups"),
+  });
 
   return (
     <Modal
@@ -78,7 +72,7 @@ const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEd
             mode="multiple"
             placeholder="Select group(s)"
             allowClear
-            options={groups.map((group: GroupType) => ({ label: group.name, value: group.id }))}
+            options={groups?.map((group) => ({ label: group.name, value: group.id })) ?? []}
             filterOption={(input, option) =>
               (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
             }
