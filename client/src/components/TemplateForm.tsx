@@ -14,6 +14,7 @@ const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEdit
   const { data: apps } = useQuery({
     queryKey: ["/apps"],
     queryFn: () => getItems<AppType[]>("/apps"),
+    staleTime: 60 * 1000 * 10, // 10 minutes
   })
 
   return (

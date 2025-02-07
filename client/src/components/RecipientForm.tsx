@@ -10,6 +10,7 @@ const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEd
   const { data: groups } = useQuery({
     queryKey: ["groups"],
     queryFn: () => getItems<GroupType[]>("/groups"),
+    staleTime: 60 * 1000 * 10, // 10 minutes
   });
 
   return (

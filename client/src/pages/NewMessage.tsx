@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
 import { Button, Form, message, Select, Upload } from "antd";
@@ -8,6 +8,14 @@ import { Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useQuery } from "@tanstack/react-query";
 import client from "../api/client";
+import apolloClient from "../apollo/client";
+import { GET_MASTER_DATA } from "../graphql/queries";
+
+interface Data {
+  templates: TemplateType[];
+  groups: GroupType[];
+  recipients: RecipientType[];
+}
 
 const NewMessage: React.FC = () => {
   const [body, setBody] = useState<string>('')
@@ -18,33 +26,13 @@ const NewMessage: React.FC = () => {
   const { data } = useQuery({
     queryKey: ['masterData'],
     queryFn: async () => {
-      const query = `
-        query {
-          templates {
-            id
-            name
-            body
-          }
-          groups {
-            id
-            name
-          }
-          recipients {
-            id
-            name
-            phoneNumber
-          }
-        }
-      `
-      const { data } = await client.post("/graphql", { query })
-      const { templates, groups, recipients } = data.data;
+      const { data } = await apolloClient.query({ query: GET_MASTER_DATA })
+      const { templates, groups, recipients }: Data = data;
       return { templates, groups, recipients };
     }
   })
 
-  const templates: TemplateType[] = useMemo(() => data?.templates ?? [], [data]);
-  const groups: GroupType[] = useMemo(() => data?.groups ?? [], [data]);
-  const recipients: RecipientType[] = useMemo(() => data?.recipients ?? [], [data]);
+  const { templates, groups, recipients } = data ?? { templates: [], groups: [], recipients: [] };
 
   useEffect(() => {
     if (templateId) {

@@ -48,12 +48,12 @@ export async function getItems<T>(
   endpoint: string,
   params: Record<string, string | number | boolean> = {}
 ): Promise<T> {
-  const { data } = await client.get(endpoint, { params });
+  const { data } = await client.get<T>(endpoint, { params });
   return data;
 }
 
 export async function getItem<T>(endpoint: string, id: number): Promise<T> {
-  const { data } = await client.get(`${endpoint}/${id}`);
+  const { data } = await client.get<T>(`${endpoint}/${id}`);
   return data;
 }
 

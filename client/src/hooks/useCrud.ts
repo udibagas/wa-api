@@ -5,6 +5,7 @@ import { AxiosErrorResponseType, RecursivePartial } from "../types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createItem, deleteItem, getItems, updateItem } from "../api/client";
 import { AxiosError } from "axios";
+import apolloClient from "../apollo/client";
 
 const useCrud = <T extends { id?: number }>(
   endpoint: string,
@@ -32,6 +33,7 @@ const useCrud = <T extends { id?: number }>(
     return useQuery({
       queryKey: [queryKey, params],
       queryFn: () => getItems<D>(endpoint, params),
+      staleTime: 60 * 1000 * 10, // 10 minutes
     });
   }
 
@@ -39,6 +41,14 @@ const useCrud = <T extends { id?: number }>(
     queryClient.invalidateQueries({
       queryKey: [queryKey],
     });
+
+    queryClient.invalidateQueries({
+      queryKey: ["masterData"],
+    });
+
+    // Clear cache for GetMasterData query
+    apolloClient.cache.evict({ fieldName: "GetMasterData" });
+    apolloClient.cache.gc();
   }
 
   function handleAdd() {
