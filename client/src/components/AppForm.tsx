@@ -76,7 +76,7 @@ const AppForm: React.FC<CustomFormProps<AppType>> = ({ visible, isEditing, onCan
           label="Token"
           name="token"
           help="Click to copy to clipboard"
-          style={{ marginBottom: 30 }}
+          style={{ marginBottom: 35 }}
         >
           <TextArea
             placeholder="App Token"
