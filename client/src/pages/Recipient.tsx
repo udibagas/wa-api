@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import { Input, Table } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 import RecipientForm from "../components/RecipientForm";
@@ -31,9 +31,6 @@ const useStyle = createStyles(({ css, token }) => {
 const Recipient: React.FC = () => {
   const { styles } = useStyle();
 
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(10);
-  const [search, setSearch] = React.useState("");
   const {
     useFetch,
     refreshData,
@@ -42,22 +39,18 @@ const Recipient: React.FC = () => {
     handleDelete,
     handleModalClose,
     handleSubmit,
+    setCurrentPage,
+    setPageSize,
+    setSearch,
     errors,
     form,
     showForm,
     isEditing,
+    currentPage,
+
   } = useForm<RecipientType>("/recipients", "recipients");
 
-  const params = useMemo(
-    () => ({ page: currentPage, limit: pageSize, search }),
-    [currentPage, pageSize, search]
-  );
-
-  const { data, isPending } = useFetch<PaginatedData<RecipientType>>(params);
-
-  useEffect(() => {
-    refreshData();
-  }, [params]);
+  const { data, isPending } = useFetch<PaginatedData<RecipientType>>();
 
   const prepareEdit = (record: RecipientType) => {
     return handleEdit(record, {
