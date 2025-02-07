@@ -1,25 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Modal, Form, Input, Select } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
 import { AppType, CustomFormProps, FileType, TemplateType } from "../types";
 import TextArea from "antd/es/input/TextArea";
-import axiosInstance from "../utils/axiosInstance";
 import WhatsAppChatBubble from "./WhatsAppChatBubble";
+import { useQuery } from "@tanstack/react-query";
+import { getItems } from "../api/client";
 
 const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
-  const [apps, setApps] = useState([]);
   const message = Form.useWatch('body', form);
 
-  useEffect(() => {
-    axiosInstance.get("/apps").then((response) => {
-      setApps(response.data);
-    });
-
-    return () => {
-      setApps([]);
-    };
-  }, [])
+  const { data: apps } = useQuery({
+    queryKey: ["/apps"],
+    queryFn: () => getItems<AppType[]>("/apps"),
+  })
 
   return (
     <Modal
@@ -55,7 +50,7 @@ const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEdit
             <Select
               placeholder="Select App"
               allowClear
-              options={apps.map((group: AppType) => ({ label: group.name, value: group.id }))}
+              options={apps?.map((group: AppType) => ({ label: group.name, value: group.id }))}
             >
             </Select>
           </Form.Item>
