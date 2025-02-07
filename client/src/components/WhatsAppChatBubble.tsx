@@ -72,16 +72,17 @@ function FilePreview(file: FileType): React.ReactNode {
       border: '1px solid #ddd',
       padding: '8px 4px',
       borderRadius: 4,
-      marginBottom: 20,
+      marginBottom: 10,
       display: 'flex',
-      gap: 5
+      gap: 5,
+      alignItems: 'flex-start'
     }}>
 
-      {React.cloneElement(fileIcon as React.ReactElement, { style: { fontSize: 50 } })}
+      {React.cloneElement(fileIcon as React.ReactElement, { style: { fontSize: 35 } })}
 
       <div>
-        <div style={{ fontWeight: 'bold', lineHeight: '1rem', overflow: 'clip' }}> {file.originalname}</div>
-        <small>{readableSize(file.size)} &bull; {file.originalname?.split('.').pop()}</small>
+        <div style={{ fontWeight: 'bold', lineHeight: '1rem' }}> {file.originalname}</div>
+        <small>{readableSize(file.size)} &bull; {file.originalname?.split('.').pop().toUpperCase()}</small>
       </div>
     </div>
   );
