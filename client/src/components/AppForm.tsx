@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Form, Input, Button } from "antd";
+import { Modal, Form, Input, Button, message } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
 import { AppType, CustomFormProps } from "../types";
@@ -15,6 +15,18 @@ const AppForm: React.FC<CustomFormProps<AppType>> = ({ visible, isEditing, onCan
       form.setFieldsValue({ token });
     });
   }
+
+  const handleCopyToClipboard = () => {
+    const appToken = form.getFieldValue("token");
+    navigator.clipboard.writeText(appToken)
+      .then(() => {
+        message.success('App Token copied to clipboard!');
+      })
+      .catch((err) => {
+        message.error('Failed to copy App Token.');
+        console.error('Failed to copy text: ', err);
+      });
+  };
 
   return (
     <Modal
@@ -63,8 +75,16 @@ const AppForm: React.FC<CustomFormProps<AppType>> = ({ visible, isEditing, onCan
         <Form.Item
           label="Token"
           name="token"
+          help="Click to copy to clipboard"
+          style={{ marginBottom: 30 }}
         >
-          <TextArea placeholder="App Token" autoSize={{ minRows: 2, }} />
+          <TextArea
+            placeholder="App Token"
+            readOnly
+            autoSize={{ minRows: 2, }}
+            onClick={handleCopyToClipboard}
+            style={{ cursor: "pointer" }}
+          />
         </Form.Item>
       </Form>
     </Modal>
