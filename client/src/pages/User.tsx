@@ -6,7 +6,7 @@ import { ReloadOutlined } from "@ant-design/icons";
 import ActionButton from "../components/buttons/ActionButton";
 import AddButton from "../components/buttons/AddButton";
 import { UserType } from "../types";
-import useForm from "../hooks/useForm";
+import useForm from "../hooks/useCrud";
 
 const User: React.FC = () => {
   const {

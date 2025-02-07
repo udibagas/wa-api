@@ -6,7 +6,7 @@ import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
 import { TemplateType } from "../types";
 import TemplateForm from "../components/TemplateForm";
-import useForm from "../hooks/useForm";
+import useForm from "../hooks/useCrud";
 
 const App: React.FC = () => {
   const {

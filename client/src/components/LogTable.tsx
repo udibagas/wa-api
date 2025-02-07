@@ -1,7 +1,7 @@
 import React from "react";
 import { Table } from "antd";
 import { LogType, StatusType } from "../types";
-import useCrud from "../hooks/useCrud";
+import useCrud from "../hooks/useCrudOld";
 import moment from "moment";
 import StatusTag from "./StatusTag";
 import { ReloadOutlined } from "@ant-design/icons";

@@ -7,7 +7,7 @@ import moment from "moment";
 import StatusTag from "../components/StatusTag";
 import { showDetailLog } from "../utils/showDetailLog";
 import { CheckCircleOutlined } from "@ant-design/icons";
-import useForm from "../hooks/useForm";
+import useForm from "../hooks/useCrud";
 import client from "../api/client";
 
 const Log: React.FC = () => {

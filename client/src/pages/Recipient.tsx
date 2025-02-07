@@ -8,7 +8,7 @@ import ActionButton from "../components/buttons/ActionButton";
 import { PaginatedData, RecipientType } from "../types";
 import { createStyles } from 'antd-style';
 import dayjs from "dayjs";
-import useForm from "../hooks/useForm";
+import useForm from "../hooks/useCrud";
 
 const useStyle = createStyles(({ css, token }) => {
   const { antCls } = token;

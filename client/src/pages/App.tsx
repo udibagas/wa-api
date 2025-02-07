@@ -6,7 +6,7 @@ import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
 import { AppType } from "../types";
-import useForm from "../hooks/useForm";
+import useForm from "../hooks/useCrud";
 
 const App: React.FC = () => {
   const {
