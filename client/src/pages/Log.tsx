@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import PageHeader from "../components/PageHeader";
 import { Button, Input, Popconfirm, Radio, Space, Table } from "antd";
 import { LogType, PaginatedData, StatusType } from "../types";
@@ -11,22 +11,17 @@ import useForm from "../hooks/useCrud";
 import client from "../api/client";
 
 const Log: React.FC = () => {
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(10);
-  const [search, setSearch] = React.useState("");
-  const [filter, setFilter] = React.useState({ status: 'all' });
-  const { useFetch, refreshData } = useForm<LogType>("/logs", "logs");
+  const {
+    currentPage,
+    filter,
+    useFetch,
+    refreshData,
+    setCurrentPage,
+    setPageSize,
+    setSearch,
+    setFilter } = useForm<LogType>("/logs", "logs");
 
-  const params = useMemo(
-    () => ({ page: currentPage, limit: pageSize, search, ...filter }),
-    [currentPage, pageSize, search, filter]
-  );
-
-  const { data, isPending } = useFetch<PaginatedData<LogType>>(params);
-
-  useEffect(() => {
-    refreshData();
-  }, [params]);
+  const { data, isPending } = useFetch<PaginatedData<LogType>>();
 
   const columns = [
     {

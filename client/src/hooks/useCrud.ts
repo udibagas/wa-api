@@ -1,6 +1,6 @@
 import { Dayjs } from "dayjs";
 import { Form, message, Modal } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AxiosErrorResponseType, RecursivePartial } from "../types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createItem, deleteItem, getItems, updateItem } from "../api/client";
@@ -16,11 +16,21 @@ const useCrud = <T extends { id?: number }>(
   const [showForm, setShowForm] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  function useFetch<D = T[]>(
-    params: Record<string, string | number | boolean> = {}
-  ) {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [search, setSearch] = useState<string>("");
+  const [filter, setFilter] = useState<Record<string, string>>({
+    status: "all",
+  });
+
+  const params = useMemo(
+    () => ({ page: currentPage, limit: pageSize, search, ...filter }),
+    [currentPage, pageSize, search, filter]
+  );
+
+  function useFetch<D = T[]>() {
     return useQuery({
-      queryKey: [queryKey],
+      queryKey: [queryKey, params],
       queryFn: () => getItems<D>(endpoint, params),
     });
   }
@@ -98,6 +108,11 @@ const useCrud = <T extends { id?: number }>(
     errors,
     showForm,
     isEditing,
+    currentPage,
+    pageSize,
+    search,
+    filter,
+    params,
     setShowForm,
     useFetch,
     handleAdd,
@@ -106,6 +121,10 @@ const useCrud = <T extends { id?: number }>(
     handleDelete,
     handleModalClose,
     refreshData,
+    setCurrentPage,
+    setPageSize,
+    setSearch,
+    setFilter,
   };
 };
 
