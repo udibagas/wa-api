@@ -7,9 +7,8 @@ import StatusTag from "./StatusTag";
 import { ReloadOutlined } from "@ant-design/icons";
 import { showDetailLog } from "../utils/showDetailLog";
 
-const LogTable: React.FC = () => {
+const LogTable: React.FC = React.memo(() => {
   const { useFetch, refreshData } = useCrud<LogType>("/logs", "logs");
-
   const { data, isPending } = useFetch<PaginatedData<LogType>>();
 
   const columns = [
@@ -69,6 +68,6 @@ const LogTable: React.FC = () => {
       />
     </>
   );
-};
+});
 
 export default LogTable;
