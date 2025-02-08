@@ -15,7 +15,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onEdit, onDelete }) => {
 
   return (
     <Dropdown menu={{ items }} placement="bottom" arrow>
-      <Button type="link" icon={<EllipsisOutlined />} />
+      <Button size="small" type="link" icon={<EllipsisOutlined />} />
     </Dropdown>
 
   )

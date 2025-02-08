@@ -1,5 +1,5 @@
 import { Menu, MenuProps } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import {
   BarChartOutlined,
@@ -43,10 +43,20 @@ const items: MenuItem[] = [
 
 const NavMenu: React.FC = () => {
   const location = useLocation();
-  const selectedKey = location.pathname.split('/')[1] || 'home';
+  const [selectedKey, setSelectedKeys] = useState(location.pathname.split('/')[1] || 'home');
+
+  useEffect(() => {
+    console.log(location.pathname.split('/')[1]);
+    setSelectedKeys(location.pathname.split('/')[1] || 'home');
+  }, [location]);
 
   return (
-    <Menu theme="dark" defaultSelectedKeys={[selectedKey]} mode="inline" items={items} />
+    <Menu
+      theme="dark"
+      selectedKeys={[selectedKey]}
+      mode="inline"
+      items={items}
+    />
   );
 };
 

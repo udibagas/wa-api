@@ -114,6 +114,7 @@ const Log: React.FC = () => {
 
       <Table
         loading={isPending}
+        scroll={{ y: 41 * 10 }}
         size="small"
         columns={columns}
         dataSource={data?.rows ?? []}

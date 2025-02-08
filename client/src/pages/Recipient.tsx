@@ -95,7 +95,7 @@ const Recipient: React.FC = () => {
       </PageHeader>
 
       <Table
-        scroll={{ y: 49 * 10 }}
+        scroll={{ y: 41 * 10 }}
         loading={isPending}
         size="small"
         columns={columns}
