@@ -61,7 +61,7 @@ const App: React.FC = () => {
         pagination={false}
         onRow={(record: AppType) => {
           return {
-            onClick: () => handleEdit(record),
+            onDoubleClick: () => handleEdit(record),
           };
         }}
       />

@@ -114,7 +114,7 @@ const Recipient: React.FC = () => {
         }}
         onRow={(record: RecipientType) => {
           return {
-            onClick: () => prepareEdit(record),
+            onDoubleClick: () => prepareEdit(record),
           };
         }}
       />
