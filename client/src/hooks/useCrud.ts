@@ -1,6 +1,6 @@
 import { Dayjs } from "dayjs";
 import { Form, message, Modal } from "antd";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AxiosErrorResponseType, RecursivePartial } from "../types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createItem, deleteItem, getItems, updateItem } from "../api/client";
@@ -37,7 +37,7 @@ const useCrud = <T extends { id?: number }>(
     });
   }
 
-  function refreshData() {
+  const refreshData = useCallback(() => {
     queryClient.invalidateQueries({
       queryKey: [queryKey],
     });
@@ -47,69 +47,78 @@ const useCrud = <T extends { id?: number }>(
     });
 
     apolloClient.cache.reset();
-  }
+  }, [queryKey, queryClient]);
 
-  function handleAdd() {
+  const handleAdd = useCallback(() => {
     form.resetFields();
     setIsEditing(false);
     setShowForm(true);
-  }
+  }, [form]);
 
-  function handleEdit(
-    data: RecursivePartial<T>,
-    additionalData: Record<
-      string,
-      string | number | boolean | Dayjs | null | number[]
-    > = {}
-  ) {
-    form.setFieldsValue({ ...data, ...additionalData });
-    setIsEditing(true);
-    setShowForm(true);
-  }
+  const handleEdit = useCallback(
+    (
+      data: RecursivePartial<T>,
+      additionalData: Record<
+        string,
+        string | number | boolean | Dayjs | null | number[]
+      > = {}
+    ) => {
+      form.setFieldsValue({ ...data, ...additionalData });
+      setIsEditing(true);
+      setShowForm(true);
+    },
+    [form]
+  );
 
-  function handleModalClose() {
+  const handleModalClose = useCallback(() => {
     setShowForm(false);
     form.resetFields();
     setErrors({});
-  }
+  }, [form]);
 
-  async function handleSubmit(values: T) {
-    try {
-      const res = values.id
-        ? await updateItem(endpoint, values.id, values)
-        : await createItem(endpoint, values);
+  const handleSubmit = useCallback(
+    async (values: T) => {
+      try {
+        const res = values.id
+          ? await updateItem(endpoint, values.id, values)
+          : await createItem(endpoint, values);
 
-      console.log(res);
-      message.success("Record saved successfully");
-      form.resetFields();
-      setErrors({});
-      setShowForm(false);
-      refreshData();
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      const axiosErrorResponse = axiosError.response
-        ?.data as AxiosErrorResponseType;
+        console.log(res);
+        message.success("Record saved successfully");
+        form.resetFields();
+        setErrors({});
+        setShowForm(false);
+        refreshData();
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        const axiosErrorResponse = axiosError.response
+          ?.data as AxiosErrorResponseType;
 
-      if (axiosError.response?.status === 400) {
-        setErrors(axiosErrorResponse.errors ?? {});
+        if (axiosError.response?.status === 400) {
+          setErrors(axiosErrorResponse.errors ?? {});
+        }
       }
-    }
-  }
+    },
+    [endpoint, form, refreshData]
+  );
 
-  function handleDelete(id: number) {
-    Modal.confirm({
-      title: "Are you sure you want to delete this record?",
-      content: "This action cannot be undone.",
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "No",
-      onOk: () => {
-        deleteItem(endpoint, id).then(() => {
-          refreshData();
-        });
-      },
-    });
-  }
+  const handleDelete = useCallback(
+    (id: number) => {
+      Modal.confirm({
+        title: "Are you sure you want to delete this record?",
+        content: "This action cannot be undone.",
+        okText: "Yes",
+        okType: "danger",
+        cancelText: "No",
+        onOk: () => {
+          deleteItem(endpoint, id).then(() => {
+            refreshData();
+          });
+        },
+      });
+    },
+    [endpoint, refreshData]
+  );
 
   return {
     form,
