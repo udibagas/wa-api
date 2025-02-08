@@ -1,10 +1,10 @@
 import React from "react";
 import { Modal, Form, Input, Select, DatePicker } from "antd";
-import CancelButton from "./buttons/CancelButton";
-import SaveButton from "./buttons/SaveButton";
-import { CustomFormProps, GroupType, RecipientType } from "../types";
+import CancelButton from "../../components/buttons/CancelButton";
+import SaveButton from "../../components/buttons/SaveButton";
+import { CustomFormProps, GroupType, RecipientType } from "../../types";
 import { useQuery } from "@tanstack/react-query";
-import { getItems } from "../api/client";
+import { getItems } from "../../api/client";
 
 const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
   const { data: groups } = useQuery({
