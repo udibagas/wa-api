@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
-import { Button, Form, message, Select, Upload } from "antd";
+import { Button, Form, message, Result, Select, Upload } from "antd";
 import { FileType, GroupType, MessageType, RecipientType, TemplateType } from "../types";
 import WhatsAppChatBubble from "../components/WhatsAppChatBubble";
 import { Modal } from "antd";
@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import client from "../api/client";
 import apolloClient from "../apollo/client";
 import { GET_MASTER_DATA } from "../graphql/queries";
+import { useNavigate } from "react-router";
 
 interface Data {
   templates: TemplateType[];
@@ -22,6 +23,7 @@ const NewMessage: React.FC = () => {
   const [file, setFile] = useState<FileType>({} as FileType);
   const [form] = Form.useForm();
   const templateId = Form.useWatch('MessageTemplateId', form);
+  const navigate = useNavigate();
 
   const { data } = useQuery({
     queryKey: ['masterData'],
@@ -40,6 +42,12 @@ const NewMessage: React.FC = () => {
       setBody(m?.body ?? '');
     }
   }, [templateId, templates]);
+
+  function resetForm() {
+    form.resetFields();
+    setBody('');
+    setFile({} as FileType);
+  }
 
   function sendMessage(values: MessageType) {
     if (!values) return;
@@ -73,7 +81,44 @@ const NewMessage: React.FC = () => {
 
     client.post('sendTemplate', payload)
       .then(res => {
-        message.success(res.data.message);
+        // message.success(res.data.message);
+        const modal = Modal.info({
+          title: 'Success',
+          width: 600,
+          onCancel: () => resetForm(),
+          content: (
+            <Result
+              status="success"
+              title={res.data.message}
+              subTitle="Please refer to the log for more details."
+              extra={[
+                <Button
+                  type="primary"
+                  key="send"
+                  onClick={() => {
+                    modal.destroy()
+                    resetForm()
+                  }}
+                >
+                  Send Another Message
+                </Button>,
+
+                <Button
+                  key="log"
+                  onClick={() => {
+                    modal.destroy();
+                    navigate('/logs')
+                  }}
+                >
+                  View Log
+                </Button>,
+              ]}
+            />
+          ),
+          centered: true,
+          closable: true,
+          footer: null,
+        });
       }).catch(err => {
         message.error(err.response.data.message);
       });
