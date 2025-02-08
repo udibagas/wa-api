@@ -6,31 +6,10 @@ import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
 import { PaginatedData, RecipientType } from "../types";
-import { createStyles } from 'antd-style';
 import dayjs from "dayjs";
-import useForm from "../hooks/useCrud";
-
-const useStyle = createStyles(({ css, token }) => {
-  const { antCls } = token;
-  return {
-    customTable: css`
-      ${antCls}-table {
-        ${antCls}-table-container {
-          ${antCls}-table-body,
-          ${antCls}-table-content {
-            scrollbar-width: thin;
-            scrollbar-color: #eaeaea transparent;
-            scrollbar-gutter: stable;
-          }
-        }
-      }
-    `,
-  };
-});
+import useCrud from "../hooks/useCrud";
 
 const Recipient: React.FC = () => {
-  const { styles } = useStyle();
-
   const {
     useFetch,
     refreshData,
@@ -48,7 +27,7 @@ const Recipient: React.FC = () => {
     isEditing,
     currentPage,
 
-  } = useForm<RecipientType>("/recipients", "recipients");
+  } = useCrud<RecipientType>("/recipients", "recipients");
 
   const { data, isPending } = useFetch<PaginatedData<RecipientType>>();
 
@@ -116,7 +95,6 @@ const Recipient: React.FC = () => {
       </PageHeader>
 
       <Table
-        className={styles.customTable}
         scroll={{ y: 49 * 10 }}
         loading={isPending}
         size="small"

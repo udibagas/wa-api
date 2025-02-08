@@ -6,7 +6,7 @@ import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
 import { TemplateType } from "../types";
 import TemplateForm from "../components/TemplateForm";
-import useForm from "../hooks/useCrud";
+import useCrud from "../hooks/useCrud";
 
 const App: React.FC = () => {
   const {
@@ -21,7 +21,7 @@ const App: React.FC = () => {
     showForm,
     errors,
     isEditing
-  } = useForm<TemplateType>("/message-templates", "message-templates");
+  } = useCrud<TemplateType>("/message-templates", "message-templates");
 
   const { isPending, data } = useFetch();
 

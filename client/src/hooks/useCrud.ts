@@ -46,9 +46,7 @@ const useCrud = <T extends { id?: number }>(
       queryKey: ["masterData"],
     });
 
-    // Clear cache for GetMasterData query
-    apolloClient.cache.evict({ fieldName: "GetMasterData" });
-    apolloClient.cache.gc();
+    apolloClient.cache.reset();
   }
 
   function handleAdd() {

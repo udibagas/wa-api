@@ -7,7 +7,7 @@ import moment from "moment";
 import StatusTag from "../components/StatusTag";
 import { showDetailLog } from "../utils/showDetailLog";
 import { CheckCircleOutlined } from "@ant-design/icons";
-import useForm from "../hooks/useCrud";
+import useCrud from "../hooks/useCrud";
 import client from "../api/client";
 
 const Log: React.FC = () => {
@@ -19,7 +19,7 @@ const Log: React.FC = () => {
     setCurrentPage,
     setPageSize,
     setSearch,
-    setFilter } = useForm<LogType>("/logs", "logs");
+    setFilter } = useCrud<LogType>("/logs", "logs");
 
   const { data, isPending } = useFetch<PaginatedData<LogType>>();
 

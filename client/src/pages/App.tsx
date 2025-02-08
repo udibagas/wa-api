@@ -6,7 +6,7 @@ import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
 import { AppType } from "../types";
-import useForm from "../hooks/useCrud";
+import useCrud from "../hooks/useCrud";
 
 const App: React.FC = () => {
   const {
@@ -21,7 +21,7 @@ const App: React.FC = () => {
     showForm,
     errors,
     isEditing
-  } = useForm<AppType>("/apps", "apps");
+  } = useCrud<AppType>("/apps", "apps");
 
   const { isPending, data } = useFetch();
 

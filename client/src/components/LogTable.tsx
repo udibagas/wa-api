@@ -1,14 +1,16 @@
 import React from "react";
 import { Table } from "antd";
-import { LogType, StatusType } from "../types";
-import useCrud from "../hooks/useCrudOld";
+import { LogType, PaginatedData, StatusType } from "../types";
+import useCrud from "../hooks/useCrud";
 import moment from "moment";
 import StatusTag from "./StatusTag";
 import { ReloadOutlined } from "@ant-design/icons";
 import { showDetailLog } from "../utils/showDetailLog";
 
 const LogTable: React.FC = () => {
-  const { data, isLoading, refreshData } = useCrud<LogType>("/logs", true);
+  const { useFetch, refreshData } = useCrud<LogType>("/logs", "logs");
+
+  const { data, isPending } = useFetch<PaginatedData<LogType>>();
 
   const columns = [
     {
@@ -49,10 +51,10 @@ const LogTable: React.FC = () => {
   return (
     <>
       <Table
-        loading={isLoading}
+        loading={isPending}
         size="small"
         columns={columns}
-        dataSource={data}
+        dataSource={data?.rows ?? []}
         rowKey="id"
         pagination={false}
         onRow={(record: LogType) => {

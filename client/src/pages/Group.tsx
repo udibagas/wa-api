@@ -6,7 +6,7 @@ import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
 import { GroupType } from "../types";
-import useForm from "../hooks/useCrud";
+import useCrud from "../hooks/useCrud";
 
 const Group: React.FC = () => {
   const {
@@ -21,7 +21,7 @@ const Group: React.FC = () => {
     showForm,
     errors,
     isEditing
-  } = useForm<GroupType>("/groups", "groups");
+  } = useCrud<GroupType>("/groups", "groups");
 
   const { isPending, data } = useFetch();
 

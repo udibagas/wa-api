@@ -6,7 +6,7 @@ import { ReloadOutlined } from "@ant-design/icons";
 import ActionButton from "../components/buttons/ActionButton";
 import AddButton from "../components/buttons/AddButton";
 import { UserType } from "../types";
-import useForm from "../hooks/useCrud";
+import useCrud from "../hooks/useCrud";
 
 const User: React.FC = () => {
   const {
@@ -21,7 +21,7 @@ const User: React.FC = () => {
     showForm,
     errors,
     isEditing
-  } = useForm<UserType>("/users", "users");
+  } = useCrud<UserType>("/users", "users");
 
   const { isPending, data } = useFetch();
 

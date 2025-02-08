@@ -55,11 +55,11 @@ const NewMessage: React.FC = () => {
 
     let type = 'text';
 
-    if (file.mimetype.includes('image')) {
+    if (file?.mimetype?.includes('image')) {
       type = 'image';
     }
 
-    if (file.mimetype.includes('application')) {
+    if (file?.mimetype?.includes('application')) {
       type = 'document';
     }
 
