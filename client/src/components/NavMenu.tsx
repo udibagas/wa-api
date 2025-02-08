@@ -46,7 +46,6 @@ const NavMenu: React.FC = () => {
   const [selectedKey, setSelectedKeys] = useState(location.pathname.split('/')[1] || 'home');
 
   useEffect(() => {
-    console.log(location.pathname.split('/')[1]);
     setSelectedKeys(location.pathname.split('/')[1] || 'home');
   }, [location]);
 

@@ -34,21 +34,25 @@ const Log: React.FC = () => {
       title: "App",
       key: "AppId",
       dataIndex: ["app", 'name'],
+      ellipsis: true,
     },
     {
       title: "Recipient",
       key: "recipient",
       dataIndex: ["recipient", 'name'],
+      ellipsis: true,
     },
     {
       title: "Phone Number",
       key: "phoneNumber",
       dataIndex: ["recipient", 'phoneNumber'],
+      ellipsis: true,
     },
     {
       title: "Template",
       key: "messageTemplate",
       dataIndex: ["messageTemplate", 'name'],
+      ellipsis: true,
     },
     {
       title: <ReloadOutlined onClick={refreshData} />,
