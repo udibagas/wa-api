@@ -1,7 +1,7 @@
 import React from "react";
 import { Input, Table } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
-import RecipientForm from "../components/RecipientForm";
+import RecipientForm from "../features/recipients/RecipientForm"
 import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
