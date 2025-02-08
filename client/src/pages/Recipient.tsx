@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Input, Table } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 import RecipientForm from "../features/recipients/RecipientForm"
@@ -31,12 +31,12 @@ const Recipient: React.FC = () => {
 
   const { data, isPending } = useFetch<PaginatedData<RecipientType>>();
 
-  const prepareEdit = (record: RecipientType) => {
+  const prepareEdit = useCallback((record: RecipientType) => {
     return handleEdit(record, {
       dateOfBirth: record.dateOfBirth ? dayjs(record.dateOfBirth) : null,
       groups: record.groups.map((group) => group.id),
     });
-  }
+  }, [handleEdit]);
 
   const columns = [
     {
