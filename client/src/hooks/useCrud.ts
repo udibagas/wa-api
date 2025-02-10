@@ -46,6 +46,10 @@ const useCrud = <T extends { id?: number }>(
       queryKey: ["masterData"],
     });
 
+    queryClient.invalidateQueries({
+      queryKey: ["allRecipients"],
+    });
+
     apolloClient.cache.reset();
   }, [queryKey, queryClient]);
 

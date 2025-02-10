@@ -6,7 +6,8 @@ const jwt = require("jsonwebtoken");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // define association here
+      User.hasMany(models.App);
+      User.hasMany(models.ScheduledMessage);
     }
 
     comparePassword(password) {

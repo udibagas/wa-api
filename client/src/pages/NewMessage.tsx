@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
 import { Button, Form, message, Result, Select, Upload } from "antd";
-import { FileType, GroupType, MessageType, RecipientType, TemplateType } from "../types";
+import { FileType, MasterData, MessageType } from "../types";
 import WhatsAppChatBubble from "../components/WhatsAppChatBubble";
 import { Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -11,12 +11,7 @@ import client from "../api/client";
 import apolloClient from "../apollo/client";
 import { GET_MASTER_DATA } from "../graphql/queries";
 import { useNavigate } from "react-router";
-
-interface Data {
-  templates: TemplateType[];
-  groups: GroupType[];
-  recipients: RecipientType[];
-}
+import RecipientSelectOption from "../components/RecipientSelectOption";
 
 const NewMessage: React.FC = () => {
   const [body, setBody] = useState<string>('')
@@ -29,12 +24,12 @@ const NewMessage: React.FC = () => {
     queryKey: ['masterData'],
     queryFn: async () => {
       const { data } = await apolloClient.query({ query: GET_MASTER_DATA })
-      const { templates, groups, recipients }: Data = data;
-      return { templates, groups, recipients };
-    }
+      const { templates, groups }: MasterData = data;
+      return { templates, groups };
+    },
   })
 
-  const { templates, groups, recipients } = data ?? { templates: [], groups: [], recipients: [] };
+  const { templates, groups } = data ?? { templates: [], groups: [] };
 
   useEffect(() => {
     if (templateId) {
@@ -199,25 +194,7 @@ const NewMessage: React.FC = () => {
             name="recipients"
             label="Recipients"
           >
-            <Select
-              mode="multiple"
-              placeholder="Enter recipient name/phone number"
-              allowClear
-              options={recipients.map((t) => ({ label: `${t.name} - ${t.phoneNumber}`, value: t.id }))}
-              filterOption={(input, option) =>
-                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-              }
-              optionRender={({ label }) => {
-                const [name, phoneNumber] = (label as string)?.split(' - ') ?? [];
-                return (
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>{name}</span>
-                    <i style={{ color: '#999' }}>+{phoneNumber}</i>
-                  </div>
-                );
-              }}
-            >
-            </Select>
+            <RecipientSelectOption />
           </Form.Item>
 
           <Form.Item name="file" label="File" valuePropName="fileList" getValueFromEvent={normFile}>

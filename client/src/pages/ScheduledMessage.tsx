@@ -4,11 +4,11 @@ import { ReloadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
-import { TemplateType } from "../types";
-import TemplateForm from "../components/TemplateForm";
+import { ScheduledMessageType } from "../types";
 import useCrud from "../hooks/useCrud";
+import ScheduledMessageForm from "../components/ScheduledMessageForm";
 
-const Template: React.FC = () => {
+const ScheduledMessage: React.FC = () => {
   const {
     useFetch,
     refreshData,
@@ -21,20 +21,21 @@ const Template: React.FC = () => {
     showForm,
     errors,
     isEditing
-  } = useCrud<TemplateType>("/message-templates", "message-templates");
+  } = useCrud<ScheduledMessageType>("/scheduled-messages", "scheduled-messages");
 
   const { isPending, data } = useFetch();
 
   const columns = [
     { title: "ID", dataIndex: 'id', key: "id", width: 60 },
-    { title: "App", dataIndex: ["App", "name"], key: "app" },
     { title: "Name", dataIndex: "name", key: "name" },
+    { title: "Time", dataIndex: "time", key: "time" },
+    { title: "Recipients", dataIndex: "recipients", key: "recipients" },
     {
       title: <ReloadOutlined onClick={refreshData} />,
       key: "action",
       width: 80,
       align: "center" as const,
-      render: (_: string, record: TemplateType) => (
+      render: (_: string, record: ScheduledMessageType) => (
         <ActionButton
           onEdit={() => handleEdit(record)}
           onDelete={() => handleDelete(record.id)}
@@ -46,10 +47,10 @@ const Template: React.FC = () => {
   return (
     <>
       <PageHeader
-        title="Template Management"
-        subtitle="Manage your templates"
+        title="Scheduled Message"
+        subtitle="Manage your scheduled message"
       >
-        <AddButton label="Create New Template" onClick={handleAdd} />
+        <AddButton label="Create New Scheduled Message" onClick={handleAdd} />
       </PageHeader>
 
       <Table
@@ -59,14 +60,14 @@ const Template: React.FC = () => {
         dataSource={data}
         rowKey="id"
         pagination={false}
-        onRow={(record: TemplateType) => {
+        onRow={(record: ScheduledMessageType) => {
           return {
             onDoubleClick: () => handleEdit(record),
           };
         }}
       />
 
-      <TemplateForm
+      <ScheduledMessageForm
         visible={showForm}
         isEditing={isEditing}
         onCancel={handleModalClose}
@@ -78,4 +79,4 @@ const Template: React.FC = () => {
   );
 };
 
-export default Template;
+export default ScheduledMessage;

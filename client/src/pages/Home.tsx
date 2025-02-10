@@ -23,6 +23,8 @@ const Home: React.FC = () => {
     successRate: 0,
   });
 
+  console.log('Render ulang Home');
+
   useEffect(() => {
     let ignore = false;
 

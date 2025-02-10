@@ -68,6 +68,25 @@ export type LogType = {
   recipient: { name: string; phoneNumber: string };
 };
 
+export type ScheduledMessageType = {
+  id: number;
+  name: string;
+  UserId: number;
+  user?: UserType;
+  time: string;
+  message: string;
+  file: FileType;
+  recipients: number[];
+  recurring: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type MasterData = {
+  templates: TemplateType[];
+  groups: GroupType[];
+};
+
 export type PaginatedData<T> = {
   from: number;
   to: number;

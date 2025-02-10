@@ -11,10 +11,5 @@ export const GET_MASTER_DATA = gql`
       id
       name
     }
-    recipients {
-      id
-      name
-      phoneNumber
-    }
   }
 `;

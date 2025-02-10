@@ -16,6 +16,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Loading from "./pages/Loading";
 import client from "./api/client";
+import ScheduledMessage from "./pages/ScheduledMessage";
 
 const authLoader = async () => {
   try {
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "new-message", element: <NewMessage /> },
+      { path: "scheduled-message", element: <ScheduledMessage /> },
       { path: "groups", element: <Group /> },
       { path: "recipients", element: <Recipient /> },
       { path: "apps", element: <AppPage /> },
