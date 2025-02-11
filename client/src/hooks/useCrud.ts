@@ -116,6 +116,7 @@ const useCrud = <T extends { id?: number }>(
         cancelText: "No",
         onOk: () => {
           deleteItem(endpoint, id).then(() => {
+            message.success("Record deleted successfully");
             refreshData();
           });
         },

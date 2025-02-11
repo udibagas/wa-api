@@ -16,6 +16,7 @@ module.exports = {
           model: "Recipients",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       response: {
         type: Sequelize.JSON,

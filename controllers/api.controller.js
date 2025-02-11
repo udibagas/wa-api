@@ -82,7 +82,7 @@ exports.sendTemplate = async (req, res, next) => {
     }
 
     if (!target.length) {
-      const error = new Error("Group(s) has no recipients");
+      const error = new Error("No target selected");
       error.status = 400;
       throw error;
     }

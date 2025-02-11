@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { ScheduledMessage, Recipient } = require("../models");
 
 exports.index = async (req, res, next) => {
@@ -34,9 +35,7 @@ exports.create = async (req, res, next) => {
     }
   }
 
-  const uniqueRecipients = Array.from(
-    new Map(target.map((item) => [item.id, item])).values()
-  );
+  const uniqueRecipients = Array.from(new Set(target));
 
   try {
     const data = await ScheduledMessage.create({
@@ -77,9 +76,11 @@ exports.update = async (req, res, next) => {
     }
   }
 
-  const uniqueRecipients = Array.from(
-    new Map(target.map((item) => [item.id, item])).values()
-  );
+  console.log(target);
+
+  const uniqueRecipients = Array.from(new Set(target));
+
+  console.log(uniqueRecipients);
 
   try {
     const data = await ScheduledMessage.findByPk(req.params.id);
