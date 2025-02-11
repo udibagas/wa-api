@@ -71,6 +71,15 @@ module.exports = (sequelize, DataTypes) => {
       time: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          isCronTime(value) {
+            try {
+              new CronTime(value);
+            } catch (error) {
+              throw new Error("Invalid cron time format");
+            }
+          },
+        },
       },
       message: {
         type: DataTypes.TEXT,
