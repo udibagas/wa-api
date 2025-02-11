@@ -1,14 +1,22 @@
 import React from "react";
-import { Modal, Form, Input, Switch } from "antd";
+import { Modal, Form, Input, Switch, Select } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
-import { CustomFormProps, FileType, ScheduledMessageType } from "../types";
+import { CustomFormProps, FileType, GroupType, ScheduledMessageType } from "../types";
 import TextArea from "antd/es/input/TextArea";
 import WhatsAppChatBubble from "./WhatsAppChatBubble";
 import RecipientSelectOption from "./RecipientSelectOption";
+import { useQuery } from "@tanstack/react-query";
+import { getItems } from "../api/client";
 
 const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
   const message = Form.useWatch('message', form);
+
+  const { data: groups } = useQuery({
+    queryKey: ['groups'],
+    queryFn: () => getItems<GroupType[]>('/groups'),
+    staleTime: 1000 * 60 * 10, // 10 minutes
+  })
 
   return (
     <Modal
@@ -59,6 +67,22 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
             </Form.Item>
 
             <Form.Item
+              name="groups"
+              label="Group"
+            >
+              <Select
+                mode="multiple"
+                placeholder="Select group(s)"
+                allowClear
+                options={groups?.map((group) => ({ label: group.name, value: group.id })) ?? []}
+                filterOption={(input, option) =>
+                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                }
+              >
+              </Select>
+            </Form.Item>
+
+            <Form.Item
               label="Recipients"
               name="recipients"
               validateStatus={errors.recipient ? "error" : ""}
@@ -94,7 +118,7 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
 
       <div>
         <h4 style={{ marginBottom: 10 }}>Time Format</h4>
-        <table>
+        <table className="table">
           <thead>
             <tr>
               <th>Field</th>

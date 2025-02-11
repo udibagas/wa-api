@@ -67,6 +67,10 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: { msg: "Name is required" },
+          notNull: { msg: "Name is required" },
+        },
       },
       time: {
         type: DataTypes.STRING,
@@ -84,11 +88,19 @@ module.exports = (sequelize, DataTypes) => {
       message: {
         type: DataTypes.TEXT,
         allowNull: false,
+        validate: {
+          notEmpty: { msg: "Message is required" },
+          notNull: { msg: "Message is required" },
+        },
       },
       file: DataTypes.JSON,
       recipients: {
         type: DataTypes.JSON,
         allowNull: false,
+        validate: {
+          notEmpty: { msg: "Recipient is required" },
+          notNull: { msg: "Recipient is required" },
+        },
       },
       recurring: {
         type: DataTypes.BOOLEAN,
