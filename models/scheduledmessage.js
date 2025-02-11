@@ -10,16 +10,19 @@ module.exports = (sequelize, DataTypes) => {
       ScheduledMessage.belongsTo(models.User);
     }
 
-    createJob() {
-      const { id, time, name, recurring } = this;
-      console.log("Creating job", name);
-
-      const existingJob = jobs.findIndex((job) => job.id === id);
+    deleteExistingJob() {
+      const existingJob = jobs.findIndex((job) => job.id === this.id);
 
       if (existingJob > -1) {
         jobs[existingJob].cronJob.stop();
         jobs.splice(existingJob, 1);
       }
+    }
+
+    createJob() {
+      const { id, time, name, recurring } = this;
+      console.log("Creating job", name);
+      this.deleteExistingJob();
 
       const cronJob = CronJob.from({
         cronTime: time,
@@ -92,6 +95,10 @@ module.exports = (sequelize, DataTypes) => {
 
   ScheduledMessage.afterSave((instance) => {
     instance.createJob();
+  });
+
+  ScheduledMessage.afterDestroy((instance) => {
+    delete instance.deleteExistingJob();
   });
 
   return ScheduledMessage;

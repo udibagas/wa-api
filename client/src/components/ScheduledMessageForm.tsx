@@ -53,7 +53,7 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
             >
               <TextArea
                 placeholder="Type your message here"
-                autoSize={{ minRows: 8, maxRows: 10 }}
+                autoSize={{ minRows: 3, maxRows: 8 }}
                 maxLength={4096}
                 showCount />
             </Form.Item>
