@@ -1,5 +1,5 @@
 import React from "react";
-import { Table } from "antd";
+import { Switch, Table } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
@@ -29,7 +29,18 @@ const ScheduledMessage: React.FC = () => {
     { title: "ID", dataIndex: 'id', key: "id", width: 60 },
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Time", dataIndex: "time", key: "time" },
-    { title: "Recipients", dataIndex: "recipients", key: "recipients" },
+    {
+      title: "Recurring",
+      render: (_: string, record: ScheduledMessageType) => {
+        return <Switch checked={record.recurring} disabled size="small" />
+      }
+    },
+    {
+      title: "Recipients",
+      render: (_: string, record: ScheduledMessageType) => {
+        return record.recipients.length
+      }
+    },
     {
       title: <ReloadOutlined onClick={refreshData} />,
       key: "action",

@@ -11,8 +11,7 @@ type RecipientSelectOptionProps = {
   onChange: (value: number[]) => void
 }
 
-const RecipientSelectOption: React.FC<RecipientSelectOptionProps> = (props) => {
-  const { id, onChange } = props;
+const RecipientSelectOption: React.FC<RecipientSelectOptionProps> = ({ onChange }) => {
   const { data: recipients } = useQuery({
     queryKey: ['allRecipients'],
     staleTime: 1000 * 60 * 10, // 10 minutes
@@ -36,10 +35,9 @@ const RecipientSelectOption: React.FC<RecipientSelectOptionProps> = (props) => {
 
   return (
     <Select
-      id={id}
       allowClear
-      mode="multiple"
       onChange={onChange}
+      mode="multiple"
       placeholder="Enter recipient name/phone number"
       options={recipients?.map((t) => ({ label: `${t.name} - ${t.phoneNumber}`, value: t.id }))}
       filterOption={(input, option) =>

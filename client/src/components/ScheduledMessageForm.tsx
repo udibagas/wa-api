@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Form, Input } from "antd";
+import { Modal, Form, Input, Switch } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
 import { CustomFormProps, FileType, ScheduledMessageType } from "../types";
@@ -12,7 +12,7 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
 
   return (
     <Modal
-      width={800}
+      width={900}
       title={isEditing ? "Edit Schedule Message" : "Create New Schedule Message"}
       open={visible}
       onCancel={onCancel}
@@ -22,69 +22,156 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
       ]}
     >
       <div style={{ display: "flex", justifyContent: "space-between", gap: 20 }}>
-        <Form
-          style={{ width: 400 }}
-          variant="filled"
-          form={form}
-          id="form"
-          onFinish={onOk}
-          requiredMark={false}
-          labelCol={{ span: 7 }}
-        >
-          <Form.Item name="id" hidden>
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Name"
-            name="name"
-            validateStatus={errors.name ? "error" : ""}
-            help={errors.name?.join(", ")}
+        <div>
+          <Form
+            style={{ width: 500 }}
+            variant="filled"
+            form={form}
+            id="form"
+            onFinish={onOk}
+            requiredMark={false}
+            labelCol={{ span: 7 }}
           >
-            <Input placeholder="Message name" />
-          </Form.Item>
+            <Form.Item name="id" hidden>
+              <Input />
+            </Form.Item>
 
-          <Form.Item
-            label="Message"
-            name="message"
-            validateStatus={errors.message ? "error" : ""}
-            help={errors.message?.join(", ")}
-          >
-            <TextArea
-              placeholder="Type your message here"
-              autoSize={{ minRows: 8, maxRows: 10 }}
-              maxLength={4096}
-              showCount />
-          </Form.Item>
+            <Form.Item
+              label="Name"
+              name="name"
+              validateStatus={errors.name ? "error" : ""}
+              help={errors.name?.join(", ")}
+            >
+              <Input placeholder="Message name" />
+            </Form.Item>
 
-          <Form.Item
-            label="Recipients"
-            name="recipients"
-            validateStatus={errors.recipient ? "error" : ""}
-            help={errors.recipient?.join(", ")}
-          >
-            <RecipientSelectOption />
-          </Form.Item>
+            <Form.Item
+              label="Message"
+              name="message"
+              validateStatus={errors.message ? "error" : ""}
+              help={errors.message?.join(", ")}
+            >
+              <TextArea
+                placeholder="Type your message here"
+                autoSize={{ minRows: 8, maxRows: 10 }}
+                maxLength={4096}
+                showCount />
+            </Form.Item>
 
-          <Form.Item
-            label="Time"
-            name="time"
-            validateStatus={errors.time ? "error" : ""}
-            help={errors.time?.join(", ")}
-          >
-            <Input placeholder="m H D M d Y" />
-            <div>
-              m = minute <br />
-              H = hour <br />
-              D = date <br />
-              M = month <br />
-              d = day of week <br />
-              Y = year
-            </div>
-          </Form.Item>
-        </Form>
+            <Form.Item
+              label="Recipients"
+              name="recipients"
+              validateStatus={errors.recipient ? "error" : ""}
+              help={errors.recipient?.join(", ")}
+            >
+              <RecipientSelectOption />
+            </Form.Item>
+
+            <Form.Item
+              label="Time"
+              name="time"
+              validateStatus={errors.time ? "error" : ""}
+              help={errors.time?.join(", ")}
+            >
+              <Input placeholder="s m H D M d Y" />
+
+            </Form.Item>
+
+            <Form.Item
+              label="Recurring"
+              name="recurring"
+              validateStatus={errors.recurring ? "error" : ""}
+              help={errors.recurring?.join(", ")}
+            >
+              <Switch />
+            </Form.Item>
+          </Form>
+        </div>
+
 
         <WhatsAppChatBubble message={message} file={{} as FileType} />
+      </div>
+
+      <div>
+        <h4 style={{ marginBottom: 10 }}>Time Format</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Description</th>
+              <th>Allowed value</th>
+              <th>Value Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>s</td>
+              <td>second</td>
+              <td>0-60, *, */(1-60)</td>
+              <td>
+                * = every second <br />
+                */5 = every 5 seconds <br />
+              </td>
+            </tr>
+            <tr>
+              <td>m</td>
+              <td>minute</td>
+              <td>0-60*, */(1-60)</td>
+              <td>
+                * = every minute <br />
+                */5 = every 5 minutes <br />
+              </td>
+            </tr>
+            <tr>
+              <td>H</td>
+              <td>hour</td>
+              <td>0-23, *, */(1-23)</td>
+              <td>
+                * = every hour <br />
+                */5 = every 5 hours <br />
+              </td>
+            </tr>
+            <tr>
+              <td>D</td>
+              <td>day of month</td>
+              <td>1-31, *, */(1-31)</td>
+              <td>
+                * = every day <br />
+                */5 = every 5 days <br />
+              </td>
+            </tr>
+            <tr>
+              <td>M</td>
+              <td>month</td>
+              <td>1-12, *, */(1-12)</td>
+              <td>
+                * = every month <br />
+                */5 = every 5 months <br />
+              </td>
+            </tr>
+            <tr>
+              <td>d</td>
+              <td>day of week</td>
+              <td>0-7, *</td>
+              <td>
+                0 = Sunday <br />
+                1 = Monday <br />
+                2 = Tuesday <br />
+                3 = Wednesday <br />
+                4 = Thursday <br />
+                5 = Friday <br />
+                6 = Saturday <br />
+                7 = Sunday <br />
+                * = every day <br />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style={{ marginBottom: 5 }}>Contoh</h4>
+        0 0 12 * * * = setiap hari jam 12:00 <br />
+        0 0 8 * * 1 = setiap hari senin jam 08:00 <br />
+        0 0 8 1 * * = setiap tanggal 1 jam 08:00 <br />
       </div>
 
     </Modal>

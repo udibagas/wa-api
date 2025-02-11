@@ -30,3 +30,31 @@ body {
     background-color: #f9f9f9;
   }
 }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1.5rem;
+  color: inherit;
+}
+
+thead {
+  background-color: #f9f9f9;
+}
+
+th {
+  padding-left: 10px;
+  text-align: left;
+  font-weight: 600;
+}
+
+td {
+  text-align: left;
+}
+
+th,
+td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+}

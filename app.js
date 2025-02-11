@@ -10,6 +10,7 @@ const errorHandlerMiddleware = require("./middlewares/errorHandler.middleware");
 const { createHandler } = require("graphql-http/lib/use/express");
 const { auth } = require("./middlewares/auth.middleware");
 const { ruruHTML } = require("ruru/server");
+const { ScheduledMessage } = require("./models");
 const port = process.env.PORT || 3000;
 
 // Middleware
@@ -35,11 +36,8 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// const cronJob = CronJob.from({
-//   cronTime: "* * * * * *",
-//   onTick: async () => {
-//     console.log("This job runs every second");
-//   },
-//   start: true,
-//   timeZone: "Asia/Jakarta",
-// });
+ScheduledMessage.findAll().then((data) => {
+  data.forEach((i) => {
+    i.createJob();
+  });
+});
