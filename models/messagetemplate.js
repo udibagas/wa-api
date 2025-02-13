@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: { msg: "App is required" },
         },
       },
+      file: DataTypes.JSON,
     },
     {
       sequelize,

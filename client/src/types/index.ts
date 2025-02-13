@@ -36,6 +36,7 @@ export type TemplateType = {
   components: object;
   appId: number;
   App: AppType;
+  file?: any[];
 };
 
 export type MessageType = {
@@ -52,6 +53,25 @@ export type FileType = {
   url: string;
   size: number;
 };
+
+export type FileTypes =
+  | "pdf"
+  | "doc"
+  | "docx"
+  | "xls"
+  | "xlsx"
+  | "ppt"
+  | "pptx"
+  | "txt"
+  | "zip"
+  | "rar"
+  | "csv"
+  | "mp3"
+  | "mp4"
+  | "jpg"
+  | "jpeg"
+  | "png"
+  | "gif";
 
 export type StatusType = "success" | "error" | "warning" | "info" | "failed";
 

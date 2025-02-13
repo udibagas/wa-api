@@ -87,7 +87,7 @@ const useCrud = <T extends { id?: number }>(
           ? await updateItem(endpoint, values.id, values)
           : await createItem(endpoint, values);
 
-        console.log(res);
+        console.log("Response", res);
         message.success("Record saved successfully");
         form.resetFields();
         setErrors({});

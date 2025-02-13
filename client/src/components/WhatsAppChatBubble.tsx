@@ -1,6 +1,5 @@
 import React from "react";
 import "../css/WhatsAppChatBubble.css";
-import { FileType } from "../pages/NewMessage";
 import {
   AudioTwoTone,
   FileExcelTwoTone,
@@ -12,13 +11,7 @@ import {
   FileZipTwoTone,
   PlaySquareTwoTone
 } from "@ant-design/icons";
-
-type WhatsAppChatBubbleProps = {
-  message: string;
-  file: FileType;
-};
-
-type FileTypes = "pdf" | "doc" | "docx" | "xls" | "xlsx" | "ppt" | "pptx" | "txt" | "zip" | "rar" | "csv" | "mp3" | "mp4" | "jpg" | "jpeg" | "png" | "gif";
+import { FileType, FileTypes } from "../types";
 
 function readableSize(size: number): string {
   if (size === 0) return "0 B";
@@ -82,11 +75,16 @@ function FilePreview(file: FileType): React.ReactNode {
 
       <div>
         <div style={{ fontWeight: 'bold', lineHeight: '1rem' }}> {file.originalname}</div>
-        <small>{readableSize(file.size)} &bull; {file.originalname?.split('.').pop().toUpperCase()}</small>
+        <small>{readableSize(file.size)} &bull; {file.originalname?.split('.').pop()?.toUpperCase()}</small>
       </div>
     </div>
   );
 }
+
+type WhatsAppChatBubbleProps = {
+  message: string;
+  file: FileType;
+};
 
 const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ message, file }) => {
   return (
