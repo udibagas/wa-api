@@ -39,7 +39,7 @@ const Template: React.FC = () => {
 
   const submitTemplate = async (record: TemplateType) => {
     try {
-      await client.post(`/message-templates/${record.id}/submit`);
+      await client.patch(`/message-templates/${record.id}/submit`);
       message.success("Template submitted successfully");
       refreshData();
     } catch (error) {
