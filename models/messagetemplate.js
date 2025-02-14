@@ -52,52 +52,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  MessageTemplate.afterUpdate((instance) => {
-    if (instance.changed("status") && instance.status === "submitted") {
-      mailer
-        .sendMail({
-          from: process.env.SMTP_USER || "udibagas@gmail.com",
-          to: "udibagas@gmail.com",
-          subject: `Template Submitted: ${instance.name}`,
-          html: `
-        <h3>Dear Admin,</h3>
-
-        <p>Message template has been submitted with the following details:</p>
-        
-        <p>
-          Name: <br />
-          <strong>${instance.name}</strong>
-        </p>
-
-        <p>
-          Body:<br />
-          <pre>${instance.body}</pre>
-        </p>
-
-        <p>
-          Components:<br />
-          ${JSON.stringify(instance.components)}
-        </p>
-        
-
-        <p>Please submit the template for review.</p>
-
-        Regards,
-        <br />
-        <br />
-        <br />
-        <strong>BlastIt! Team</strong>
-      `,
-        })
-        .then(() => {
-          console.log("Email sent");
-        })
-        .catch((error) => {
-          console.error(error.message);
-        });
-    }
-  });
-
   MessageTemplate.afterDestroy((instance) => {
     mailer
       .sendMail({

@@ -36,7 +36,7 @@ export type TemplateType = {
   components: object;
   appId: number;
   App: AppType;
-  file?: any[];
+  status: "draft" | "submitted" | "approved";
 };
 
 export type MessageType = {
@@ -73,7 +73,17 @@ export type FileTypes =
   | "png"
   | "gif";
 
-export type StatusType = "success" | "error" | "warning" | "info" | "failed";
+export type StatusType =
+  | "success"
+  | "error"
+  | "warning"
+  | "info"
+  | "failed"
+  | "draft"
+  | "submitted"
+  | "in-review"
+  | "rejected"
+  | "approved";
 
 export type LogType = {
   id: number;

@@ -9,6 +9,24 @@ const colors: { [key in StatusType]: string } = {
   failed: "red",
   warning: "orange",
   info: "blue",
+  draft: "default",
+  submitted: "orange",
+  "in-review": "orange",
+  rejected: "red",
+  approved: "success",
+}
+
+const icons: { [key in StatusType]: React.ReactElement } = {
+  success: <CheckCircleOutlined />,
+  error: <CloseCircleOutlined />,
+  failed: <CloseCircleOutlined />,
+  warning: <CloseCircleOutlined />,
+  info: <CloseCircleOutlined />,
+  draft: <CheckCircleOutlined />,
+  submitted: <CheckCircleOutlined />,
+  "in-review": <CheckCircleOutlined />,
+  rejected: <CloseCircleOutlined />,
+  approved: <CheckCircleOutlined />,
 }
 
 type StatusTagProps = {
@@ -21,7 +39,7 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
     <Tag
       bordered={false}
       color={colors[status]}
-      icon={status === 'success' ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+      icon={icons[status]}
       style={{ textAlign: "center" }}
     >
       {status.toUpperCase()}

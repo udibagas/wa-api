@@ -8,6 +8,7 @@ import { TemplateType } from "../types";
 import TemplateForm from "../components/TemplateForm";
 import useCrud from "../hooks/useCrud";
 import client from "../api/client";
+import StatusTag from "../components/StatusTag";
 
 const Template: React.FC = () => {
   const {
@@ -51,7 +52,9 @@ const Template: React.FC = () => {
     { title: "ID", dataIndex: 'id', key: "id", width: 60 },
     { title: "App", dataIndex: ["App", "name"], key: "app" },
     { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Status", dataIndex: "status", key: "status", width: 100 },
+    {
+      title: "Status", render: (_: string, record: TemplateType) => <StatusTag status={record.status} />
+    },
     {
       title: <ReloadOutlined onClick={refreshData} />,
       key: "action",
