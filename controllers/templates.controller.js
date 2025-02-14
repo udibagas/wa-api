@@ -34,7 +34,16 @@ exports.update = async (req, res, next) => {
       throw error;
     }
 
-    await messageTemplate.update(req.body);
+    let status = messageTemplate.status;
+
+    if (
+      messageTemplate.name != req.body.name ||
+      messageTemplate.body != req.body.body
+    ) {
+      status = "draft";
+    }
+
+    await messageTemplate.update({ ...req.body, status });
     res.status(200).json(messageTemplate);
   } catch (error) {
     next(error);
@@ -56,4 +65,22 @@ exports.destroy = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+exports.submit = (req, res, next) => {
+  MessageTemplate.findByPk(req.params.id)
+    .then((messageTemplate) => {
+      if (!messageTemplate) {
+        const error = new Error("Message Template not found");
+        error.status = 404;
+        throw error;
+      }
+
+      messageTemplate.status = "submitted";
+      return messageTemplate.save();
+    })
+    .then((messageTemplate) => {
+      res.status(200).json(messageTemplate);
+    })
+    .catch(next);
 };
