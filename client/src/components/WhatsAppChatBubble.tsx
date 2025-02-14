@@ -92,7 +92,7 @@ const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ message, file }
       <div className="speech-wrapper">
         <div className="bubble">
           <div className="txt">
-            <p className="name">TPKS</p>
+            <p className="name">TPSM</p>
 
             {file?.url && <FilePreview {...file} />}
 
