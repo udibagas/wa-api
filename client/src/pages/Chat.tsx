@@ -6,6 +6,7 @@ import { SendOutlined } from '@ant-design/icons';
 import { markupTextToWhatsApp } from '../utils/markupTextToWhatsApp';
 import ContactList from '../components/ContactList';
 import { RecipientType } from '../types';
+import ContactAvatar from '../components/ContactAvatar';
 
 type Message = { id: number; text: string; sender: string }
 
@@ -37,7 +38,11 @@ const Chat: React.FC = () => {
       <div className="chat-container">
         {contact ? <>
           <div className="chat-header">
-            <h2>{contact.name}</h2>
+            <ContactAvatar contact={contact} size={50} />
+            <div>
+              <h2 style={{ margin: 0 }}>{contact.name}</h2>
+              <div>+{contact.phoneNumber}</div>
+            </div>
           </div>
 
           <div className="chat-messages">

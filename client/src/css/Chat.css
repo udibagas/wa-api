@@ -3,13 +3,16 @@
   flex-direction: column;
   overflow: hidden;
   flex-grow: 1;
+  border-radius: 10px;
 }
 
 .chat-header {
   background-color: #075e54;
   color: white;
-  padding: 0px;
-  text-align: center;
+  padding: 10px 15px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .chat-messages {

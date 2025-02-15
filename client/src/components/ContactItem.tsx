@@ -1,16 +1,8 @@
-import React, { useMemo } from 'react';
-import '../css/ContactItem.css';
-import { Avatar, Flex } from 'antd';
+import React, { useCallback } from 'react';
+import { Flex } from 'antd';
 import { RecipientType } from '../types';
-
-const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
+import ContactAvatar from './ContactAvatar';
+import '../css/ContactItem.css';
 
 type PropType = {
   contact: RecipientType,
@@ -18,7 +10,8 @@ type PropType = {
 }
 
 const ContactItem: React.FC<PropType> = ({ contact, onClick }) => {
-  function handleClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+
+  const handleClick = useCallback((e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.currentTarget.classList.add('active');
     e.currentTarget.parentElement?.querySelectorAll('.contact-item').forEach((el) => {
       if (el !== e.currentTarget) {
@@ -27,7 +20,7 @@ const ContactItem: React.FC<PropType> = ({ contact, onClick }) => {
     });
 
     onClick(contact);
-  }
+  }, [contact, onClick]);
 
   return (
     <Flex
@@ -35,13 +28,7 @@ const ContactItem: React.FC<PropType> = ({ contact, onClick }) => {
       className="contact-item"
       onClick={handleClick}
     >
-      {useMemo(() => <Avatar
-        style={{ backgroundColor: getRandomColor(), verticalAlign: 'middle' }}
-        size={45}
-        gap={4}
-      >
-        {contact.name[0].toUpperCase()}
-      </Avatar>, [contact.name])}
+      <ContactAvatar contact={contact} />
 
       <div className="contact-info">
         <Flex justify='space-between' align='center'>
