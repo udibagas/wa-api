@@ -1,8 +1,8 @@
 import React, { FormEvent, useState } from 'react';
 import '../css/Chat.css';
-import { Button, Empty, Flex } from 'antd';
+import { Alert, Button, Empty, Flex, Tooltip } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import { SendOutlined } from '@ant-design/icons';
+import { SendOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import { markupTextToWhatsApp } from '../utils/markupTextToWhatsApp';
 import ContactList from '../components/ContactList';
 import { RecipientType } from '../types';
@@ -33,6 +33,16 @@ const Chat: React.FC = () => {
 
   return (
     <Flex gap={20}>
+      <div style={{ borderRight: '1px solid #eee', paddingRight: '20px' }}>
+        <Tooltip title='Send broadcast message' placement='right'>
+          <Button
+            variant='filled'
+            color='default'
+            icon={<WhatsAppOutlined />}
+            size='large'>
+          </Button>
+        </Tooltip>
+      </div>
       <ContactList onSelect={handleSelectContact} />
 
       <div className="chat-container">
@@ -46,6 +56,15 @@ const Chat: React.FC = () => {
           </div>
 
           <div className="chat-messages">
+            <Alert
+              message="Perhatian!"
+              description="Message non template hanya akan terkirim jika penerima berinteraksi terlebih dahulu dalam waktu 24 jam."
+              type="warning"
+              showIcon
+              style={{ marginBottom: 20 }}
+              closable
+            />
+
             {messages.map((message) => (
               <div
                 key={message.id}
