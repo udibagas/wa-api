@@ -19,17 +19,17 @@ export function showDetailLog(record: LogType) {
           {moment(record.createdAt).format("DD-MMM-YYYY HH:mm:ss")}
         </Descriptions.Item>
 
-        <Descriptions.Item label="App">
-          {record.app.name}
-        </Descriptions.Item>
+        {record.app && <Descriptions.Item label="App">
+          {record.app?.name}
+        </Descriptions.Item>}
 
         <Descriptions.Item label="Recipient">
           {record.recipient.name} - {record.recipient.phoneNumber}
         </Descriptions.Item>
 
-        <Descriptions.Item label="Template">
-          {record.messageTemplate.name}
-        </Descriptions.Item>
+        {record.messageTemplate && <Descriptions.Item label="Template">
+          {record.messageTemplate?.name}
+        </Descriptions.Item>}
 
         <Descriptions.Item label="Status">
           <StatusTag status={record.status as StatusType} />

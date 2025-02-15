@@ -44,18 +44,30 @@ exports.sendTemplate = async (req, res, next) => {
       MessageTemplateId,
       recipients = [],
       file,
+      templateName,
     } = req.body;
 
-    const template = await MessageTemplate.findByPk(MessageTemplateId);
+    let template = null;
 
-    if (!template) {
-      const error = new Error("Template not found");
-      error.status = 404;
-      throw error;
+    if (MessageTemplateId) {
+      template = await MessageTemplate.findByPk(MessageTemplateId);
+      if (!template) {
+        const error = new Error("Template not found");
+        error.status = 404;
+        throw error;
+      }
     }
 
-    const AppId = template.appId;
-    const payload = { type, file, message, caption };
+    const AppId = template?.appId ?? null;
+
+    const payload = {
+      type,
+      file,
+      message,
+      caption,
+      templateName,
+    };
+
     const target = [];
 
     if (recipients.length) {

@@ -19,7 +19,8 @@ module.exports = {
         model: "Apps",
         key: "id",
       },
-      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
     });
   },
 

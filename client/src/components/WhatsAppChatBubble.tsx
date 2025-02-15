@@ -12,6 +12,7 @@ import {
   PlaySquareTwoTone
 } from "@ant-design/icons";
 import { FileType, FileTypes } from "../types";
+import { markupTextToWhatsApp } from "../utils/markupTextToWhatsApp";
 
 function readableSize(size: number): string {
   if (size === 0) return "0 B";
@@ -19,17 +20,6 @@ function readableSize(size: number): string {
   const sizes = ["B", "KB", "MB", "GB", "TB"];
   const i = Math.floor(Math.log(size) / Math.log(k));
   return parseFloat((size / Math.pow(k, i)).toFixed(0)) + " " + sizes[i];
-}
-
-function format(message: string) {
-  if (!message) return "";
-
-  return message
-    .replace(/(?:\r\n|\r|\n)/g, "<br>")
-    .replace(/(https?:\/\/[^\s]+)/g, "<a href='$1' target='_blank'>$1</a>")
-    .replace(/\*(.*?)\*/g, "<b>$1</b>")
-    .replace(/_(.*?)_/g, "<i>$1</i>")
-    .replace(/~(.*?)~/g, "<s>$1</s>");
 }
 
 function FilePreview(file: FileType): React.ReactNode {
@@ -96,7 +86,7 @@ const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ message, file }
 
             {file?.url && <FilePreview {...file} />}
 
-            <p className="message" dangerouslySetInnerHTML={{ __html: format(message) }} />
+            <p className="message" dangerouslySetInnerHTML={{ __html: markupTextToWhatsApp(message) }} />
             <span className="timestamp">now</span>
           </div>
           <div className="bubble-arrow"></div>

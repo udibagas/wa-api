@@ -1,0 +1,31 @@
+.contact-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 10px;
+}
+
+.contact-item:hover, .contact-item.active {
+  background-color: #f1f1f1;
+}
+
+.contact-avatar img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.contact-info {
+  flex-grow: 1;
+}
+
+.contact-info h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.contact-info p {
+  margin: 0;
+  color: #888;
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
-import { Button, Form, message, Result, Select, Upload } from "antd";
+import { Alert, Button, Form, message, Result, Select, Upload } from "antd";
 import { FileType, MasterData, MessageType } from "../types";
 import WhatsAppChatBubble from "../components/WhatsAppChatBubble";
 import { Modal } from "antd";
@@ -32,10 +32,9 @@ const NewMessage: React.FC = () => {
   const { templates, groups } = data ?? { templates: [], groups: [] };
 
   useEffect(() => {
-    if (templateId) {
-      const m = templates.find((t) => t.id === templateId)
-      setBody(m?.body ?? '');
-    }
+    if (!templateId) return setBody('');
+    const m = templates.find((t) => t.id === templateId)
+    setBody(m?.body ?? '');
   }, [templateId, templates]);
 
   function resetForm() {
@@ -50,6 +49,7 @@ const NewMessage: React.FC = () => {
     console.log(values);
 
     const { groups = [], recipients = [] } = values;
+    let templateName = '';
 
     if (!groups.length && !recipients.length) {
       message.error('Mohon pilih group atau penerima');
@@ -66,12 +66,18 @@ const NewMessage: React.FC = () => {
       type = 'document';
     }
 
+    if (templateId) {
+      type = 'template';
+      templateName = templates?.find((t) => t.id === templateId)?.name as string;
+    }
+
     const payload = {
       ...values,
       type,
       message: body,
       caption: body,
-      file
+      file,
+      templateName
     };
 
     client.post('sendTemplate', payload)
@@ -150,20 +156,24 @@ const NewMessage: React.FC = () => {
           style={{ width: 500 }}
           onFinish={handleSend}
         >
-          <Form.Item
-            name="MessageTemplateId"
-            label="Message Template"
-            rules={[{ required: true, message: 'Mohon pilih template' }]}
-          >
+          {!templateId && <Alert
+            message="Perhatian!"
+            description="Message non template hanya akan terkirim jika penerima berinteraksi terlebih dahulu dalam waktu 24 jam."
+            type="warning"
+            showIcon
+            style={{ marginBottom: 20 }}
+          />}
+
+          <Form.Item name="MessageTemplateId" label="Message Template">
             <Select
               placeholder="Select template"
               allowClear
-              options={templates.map((t) => ({ label: t.name, value: t.id }))}
+              options={[{ label: 'None', value: null }, ...templates.map((t) => ({ label: t.name, value: t.id }))]}
             >
             </Select>
           </Form.Item>
 
-          <Form.Item label="Body">
+          {!templateId && <Form.Item label="Body">
             <TextArea
               value={body}
               onChange={(e) => setBody(e.target.value)}
@@ -172,7 +182,7 @@ const NewMessage: React.FC = () => {
               maxLength={4096}
               showCount
             />
-          </Form.Item>
+          </Form.Item>}
 
           <Form.Item
             name="groups"
@@ -197,7 +207,7 @@ const NewMessage: React.FC = () => {
             <RecipientSelectOption />
           </Form.Item>
 
-          <Form.Item name="file" label="File" valuePropName="fileList" getValueFromEvent={normFile}>
+          {!templateId && <Form.Item name="file" label="File" valuePropName="fileList" getValueFromEvent={normFile}>
             <Upload
               maxCount={1}
               name="file"
@@ -217,7 +227,7 @@ const NewMessage: React.FC = () => {
             >
               <Button icon={<UploadOutlined />}>Select file</Button>
             </Upload>
-          </Form.Item>
+          </Form.Item>}
 
           <Form.Item label={null}>
             <Button block type="primary" htmlType="submit" icon={<SendOutlined />}>

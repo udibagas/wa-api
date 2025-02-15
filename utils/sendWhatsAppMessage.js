@@ -32,7 +32,7 @@ async function sendWhatsAppMessage({
     case "template":
       const payload = {
         name: templateName,
-        language: { code: "en_US" },
+        language: { code: "id_ID" },
         components,
       };
 
