@@ -1,59 +1,109 @@
-import React, { FormEvent, useState } from 'react';
-import '../css/Chat.css';
-import { Alert, Button, Empty, Flex, Tooltip } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
-import { SendOutlined, WhatsAppOutlined } from '@ant-design/icons';
-import { markupTextToWhatsApp } from '../utils/markupTextToWhatsApp';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Button, Empty, Flex, message, Tooltip } from 'antd';
 import ContactList from '../components/ContactList';
-import { RecipientType } from '../types';
-import ContactAvatar from '../components/ContactAvatar';
+import { Message, RecipientType } from '../types';
+import '../css/Chat.css';
+import { createItem, getItems } from '../api/client';
+import { useQuery } from '@tanstack/react-query';
+import ChatForm from '../components/ChatForm';
+import {
+  CommentOutlined,
+  NotificationOutlined,
+  TeamOutlined
+} from '@ant-design/icons';
+import ChatMessage from '../components/ChatMessage';
+import ChatHeader from '../components/ChatHeader';
 
-type Message = { id: number; text: string; sender: string }
+const EmptyMessage: React.FC = () => (
+  <Flex align='center' justify='center' style={{ height: 'calc(100vh - 320px)' }}>
+    <Empty description="Select chat to display conversation" />
+  </Flex>
+);
 
 const Chat: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 1, text: 'Hello', sender: 'me' },
-    { id: 2, text: 'Hi', sender: 'them' },
-  ]);
-
+  const [messages, setMessages] = useState<Message[]>([]);
   const [contact, setContact] = useState<RecipientType | null>(null);
-  const [input, setInput] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (input.trim()) {
-      setMessages([...messages, { id: Date.now(), text: input, sender: 'me' }]);
-      setInput('');
+  const handleSend = async (text: string) => {
+    if (text.trim()) {
+      try {
+        const message = await createItem<Message>('/chats', {
+          type: 'text',
+          to: contact?.phoneNumber as string,
+          message: text
+        })
+
+        setMessages([...messages, message]);
+
+      } catch (error) {
+        message.error(`Failed to send message: ${(error as Error).message}`);
+      }
     }
   };
 
-  function handleSelectContact(contact: RecipientType) {
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const { data } = useQuery({
+    queryKey: ['chats', { phoneNumber: contact?.phoneNumber }],
+    queryFn: async () => {
+      if (contact) {
+        const data = await getItems<Message[]>(`/chats`, { phoneNumber: contact.phoneNumber });
+        return data;
+      }
+      return [];
+    },
+    enabled: !!contact,
+    refetchInterval: 5000,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setMessages(data);
+    }
+  }, [data]);
+
+  async function handleSelectContact(contact: RecipientType) {
     setContact(contact);
   }
 
   return (
     <Flex gap={20}>
-      <div style={{ borderRight: '1px solid #eee', paddingRight: '20px' }}>
-        <Tooltip title='Send broadcast message' placement='right'>
+      <Flex vertical gap={15} style={{ borderRight: '1px solid #eee', paddingRight: '20px' }}>
+        <Tooltip title='Chat' placement='right'>
           <Button
-            variant='filled'
             color='default'
-            icon={<WhatsAppOutlined />}
+            icon={<CommentOutlined />}
             size='large'>
           </Button>
         </Tooltip>
-      </div>
+        <Tooltip title='Send Broadcast Message' placement='right'>
+          <Button
+            color='default'
+            icon={<NotificationOutlined />}
+            size='large'>
+          </Button>
+        </Tooltip>
+        <Tooltip title='Contact' placement='right'>
+          <Button
+            color='default'
+            icon={<TeamOutlined />}
+            size='large'>
+          </Button>
+        </Tooltip>
+      </Flex>
+
       <ContactList onSelect={handleSelectContact} />
 
       <div className="chat-container">
         {contact ? <>
-          <div className="chat-header">
-            <ContactAvatar contact={contact} size={50} />
-            <div>
-              <h2 style={{ margin: 0 }}>{contact.name}</h2>
-              <div>+{contact.phoneNumber}</div>
-            </div>
-          </div>
+          <ChatHeader contact={contact} />
 
           <div className="chat-messages">
             <Alert
@@ -66,38 +116,13 @@ const Chat: React.FC = () => {
             />
 
             {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`chat-message ${message.sender}`}
-                dangerouslySetInnerHTML={{ __html: markupTextToWhatsApp(message.text) }}
-              >
-              </div>
+              <ChatMessage key={message.id} message={message} />
             ))}
+            <div ref={messagesEndRef} />
           </div>
 
-          <form onSubmit={handleSend}>
-            <Flex gap={10} style={{ padding: 10 }}>
-              <TextArea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type a message..."
-                style={{ flex: 1 }}
-                autoSize={{ minRows: 1, maxRows: 4 }}
-                size='large'
-              />
-
-              <Button
-                htmlType='submit'
-                icon={<SendOutlined />}
-                iconPosition='end'
-                size='large'
-                style={{ backgroundColor: '#075e54', color: 'white' }}
-              >
-                SEND
-              </Button>
-            </Flex>
-          </form>
-        </> : <Flex align='center' justify='center' style={{ height: 'calc(100vh - 320px)' }}><Empty /></Flex>}
+          <ChatForm onSubmit={handleSend} />
+        </> : <EmptyMessage />}
       </div>
     </Flex>
   );

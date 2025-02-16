@@ -45,6 +45,16 @@ export type MessageType = {
   recipients: number[];
 };
 
+export type Message = {
+  id?: number;
+  from?: string;
+  to: string;
+  message: string;
+  type: string;
+  status?: string;
+  createdAt?: string;
+};
+
 export type FileType = {
   filename: string;
   mimetype: string;

@@ -52,7 +52,7 @@ const router = createBrowserRouter([
       { path: "users", element: <User /> },
       { path: "templates", element: <Template /> },
       { path: "logs", element: <Log /> },
-      { path: "profile", element: <Profile /> },
+      { path: "profile", element: <Profile />, loader: authLoader, hydrateFallbackElement: <Loading /> },
       { path: "*", element: <NotFound /> },
     ],
   },

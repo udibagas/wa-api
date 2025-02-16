@@ -4,16 +4,17 @@ import { Button, Form, Input, message } from "antd";
 import { AxiosErrorResponseType, UserType } from "../types";
 import { AxiosError } from "axios";
 import client from "../api/client";
+import { useLoaderData } from "react-router";
 
 const Profile: React.FC = () => {
   const [form] = Form.useForm<UserType>();
   const [errors, setErrors] = useState<Record<string, string[]>>({});
 
+  const { user } = useLoaderData<{ user: UserType }>();
+
   useEffect(() => {
-    client.get("/me").then(({ data }) => {
-      form.setFieldsValue(data);
-    });
-  }, [form])
+    form.setFieldsValue(user);
+  }, [user, form]);
 
   async function onOk(values: UserType) {
     try {

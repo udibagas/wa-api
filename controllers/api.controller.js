@@ -22,12 +22,8 @@ exports.sendMessage = async (req, res, next) => {
       components,
     };
 
-    if (type === "image") {
-      payload.filePath = req.file.path;
-      payload.fileType = req.file.mimetype;
-    }
-
     const body = await sendWhatsAppMessage(payload);
+    console.log(body);
     res.status(200).json(body);
   } catch (error) {
     next(error);

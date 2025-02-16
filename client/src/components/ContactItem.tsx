@@ -9,7 +9,7 @@ type PropType = {
   onClick: (contact: RecipientType) => void
 }
 
-const ContactItem: React.FC<PropType> = ({ contact, onClick }) => {
+const ContactItem: React.FC<PropType> = React.memo(({ contact, onClick }) => {
 
   const handleClick = useCallback((e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.currentTarget.classList.add('active');
@@ -33,13 +33,13 @@ const ContactItem: React.FC<PropType> = ({ contact, onClick }) => {
       <div className="contact-info">
         <Flex justify='space-between' align='center'>
           <h3>{contact.name}</h3>
-          <div style={{ color: '#888' }}>10.01</div>
+          {/* <div style={{ color: '#888' }}>10.01</div> */}
         </Flex>
-        <p>Hey, how are you?</p>
+        <p>+{contact.phoneNumber}</p>
       </div>
     </Flex>
 
   );
-}
+})
 
 export default ContactItem;

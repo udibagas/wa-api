@@ -32,7 +32,7 @@ async function sendWhatsAppMessage({
     case "template":
       const payload = {
         name: templateName,
-        language: { code: "id_ID" },
+        language: { code: "id" },
         components,
       };
 
@@ -46,6 +46,7 @@ async function sendWhatsAppMessage({
   }
 
   const body = await response.responseBodyToJSON();
+  console.log(body);
   if (response.statusCode() !== 200) throw body;
   return body;
 }

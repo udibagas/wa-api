@@ -166,9 +166,9 @@ const NewMessage: React.FC = () => {
 
           <Form.Item name="MessageTemplateId" label="Message Template">
             <Select
-              placeholder="Select template"
+              placeholder="None"
               allowClear
-              options={[{ label: 'None', value: null }, ...templates.map((t) => ({ label: t.name, value: t.id }))]}
+              options={templates.map((t) => ({ label: t.name, value: t.id }))}
             >
             </Select>
           </Form.Item>

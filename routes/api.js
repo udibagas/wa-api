@@ -46,7 +46,7 @@ router.post("/delete-file", (req, res) => {
   });
 });
 
-router.post("/sendMessage", upload.single("image"), sendMessage);
+router.post("/sendMessage", sendMessage);
 router.post("/sendTemplate", sendTemplate);
 router.use("/users", require("./users"));
 router.use("/apps", require("./apps"));
@@ -54,6 +54,7 @@ router.use("/groups", require("./groups"));
 router.use("/recipients", require("./recipients"));
 router.use("/message-templates", require("./message-templates"));
 router.use("/scheduled-messages", require("./scheduled-messages"));
+router.use("/chats", require("./chats"));
 router.get("/stats", require("../controllers/stats.controller").stats);
 router.get("/logs", index);
 router.delete("/logs", clear);
