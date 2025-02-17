@@ -11,7 +11,7 @@ import client from "../api/client";
 import apolloClient from "../apollo/client";
 import { GET_MASTER_DATA } from "../graphql/queries";
 import { useNavigate } from "react-router";
-import RecipientSelectOption from "../components/RecipientSelectOption";
+import ContactSelectOption from "../components/ContactSelectOption";
 
 const NewMessage: React.FC = () => {
   const [body, setBody] = useState<string>('')
@@ -48,10 +48,10 @@ const NewMessage: React.FC = () => {
 
     console.log(values);
 
-    const { groups = [], recipients = [] } = values;
+    const { groups = [], contacts = [] } = values;
     let templateName = '';
 
-    if (!groups.length && !recipients.length) {
+    if (!groups.length && !contacts.length) {
       message.error('Mohon pilih group atau penerima');
       return;
     }
@@ -201,10 +201,10 @@ const NewMessage: React.FC = () => {
           </Form.Item>
 
           <Form.Item
-            name="recipients"
-            label="Recipients"
+            name="contacts"
+            label="Contacts"
           >
-            <RecipientSelectOption />
+            <ContactSelectOption />
           </Form.Item>
 
           {!templateId && <Form.Item name="file" label="File" valuePropName="fileList" getValueFromEvent={normFile}>

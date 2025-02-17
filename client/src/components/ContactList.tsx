@@ -1,20 +1,20 @@
 import { Input } from "antd";
 import React, { useEffect, useState } from "react";
 import ContactItem from "./ContactItem";
-import { RecipientType } from "../types";
+import { ContactType } from "../types";
 import { gql } from "@apollo/client";
 import apolloClient from "../apollo/client";
 import { useQuery } from "@tanstack/react-query";
 
-const ContactList: React.FC<{ onSelect: (contact: RecipientType) => void }> = ({ onSelect }) => {
-  const { data: recipients } = useQuery({
-    queryKey: ['allRecipients'],
+const ContactList: React.FC<{ onSelect: (contact: ContactType) => void }> = ({ onSelect }) => {
+  const { data: contacts } = useQuery({
+    queryKey: ['allContacts'],
     staleTime: 1000 * 60 * 10, // 10 minutes
     queryFn: async () => {
       const { data } = await apolloClient.query({
         query: gql`
-          query GetAllRecipients {
-            recipients {
+          query GetAllContacts {
+            contacts {
               id
               name
               phoneNumber
@@ -23,27 +23,27 @@ const ContactList: React.FC<{ onSelect: (contact: RecipientType) => void }> = ({
         `
       });
 
-      const recipients: RecipientType[] = data.recipients;
-      return recipients;
+      const contacts: ContactType[] = data.contacts;
+      return contacts;
     },
   });
 
   const [search, setSearch] = useState<string>('');
-  const [filteredRecipients, setFilteredRecipients] = useState<RecipientType[]>([]);
+  const [filteredContacts, setFilteredContacts] = useState<ContactType[]>([]);
 
   useEffect(() => {
-    if (!recipients) return;
+    if (!contacts) return;
 
     if (!search) {
-      setFilteredRecipients(recipients);
+      setFilteredContacts(contacts);
       return;
     }
 
-    const filtered = recipients.filter((r) => r.name.toLowerCase().includes(search.toLowerCase()));
-    setFilteredRecipients(filtered);
-  }, [recipients, search]);
+    const filtered = contacts.filter((r) => r.name.toLowerCase().includes(search.toLowerCase()));
+    setFilteredContacts(filtered);
+  }, [contacts, search]);
 
-  function onClick(contact: RecipientType) {
+  function onClick(contact: ContactType) {
     onSelect(contact);
   }
 
@@ -57,7 +57,7 @@ const ContactList: React.FC<{ onSelect: (contact: RecipientType) => void }> = ({
       />
 
       <div style={{ height: 'calc(100vh - 265px)', overflowY: 'auto' }}>
-        {filteredRecipients?.map((r) => (
+        {filteredContacts?.map((r) => (
           <ContactItem key={r.id} contact={r} onClick={onClick} />
         ))}
       </div>

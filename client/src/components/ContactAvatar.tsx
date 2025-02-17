@@ -1,5 +1,5 @@
 import React from "react";
-import { RecipientType } from "../types";
+import { ContactType } from "../types";
 import { Avatar } from "antd";
 
 const getRandomColor = () => {
@@ -11,7 +11,7 @@ const getRandomColor = () => {
   return color;
 };
 
-const ContactAvatar: React.FC<{ contact: RecipientType, size?: number }> = React.memo(({ contact, size = 45 }) => {
+const ContactAvatar: React.FC<{ contact: ContactType, size?: number }> = React.memo(({ contact, size = 45 }) => {
   return (
     <Avatar
       style={{

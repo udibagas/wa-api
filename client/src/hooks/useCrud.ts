@@ -47,7 +47,7 @@ const useCrud = <T extends { id?: number }>(
     });
 
     queryClient.invalidateQueries({
-      queryKey: ["allRecipients"],
+      queryKey: ["allContacts"],
     });
 
     apolloClient.cache.reset();

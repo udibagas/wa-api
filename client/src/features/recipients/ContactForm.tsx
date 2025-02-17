@@ -2,11 +2,11 @@ import React from "react";
 import { Modal, Form, Input, Select, DatePicker } from "antd";
 import CancelButton from "../../components/buttons/CancelButton";
 import SaveButton from "../../components/buttons/SaveButton";
-import { CustomFormProps, GroupType, RecipientType } from "../../types";
+import { CustomFormProps, GroupType, ContactType } from "../../types";
 import { useQuery } from "@tanstack/react-query";
 import { getItems } from "../../api/client";
 
-const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
+const ContactForm: React.FC<CustomFormProps<ContactType>> = ({ visible, isEditing, onCancel, onOk, errors, form }) => {
   const { data: groups } = useQuery({
     queryKey: ["groups"],
     queryFn: () => getItems<GroupType[]>("/groups"),
@@ -16,7 +16,7 @@ const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEd
   return (
     <Modal
       width={450}
-      title={isEditing ? "Edit Recipient" : "Add Recipient"}
+      title={isEditing ? "Edit Contact" : "Add Contact"}
       open={visible}
       onCancel={onCancel}
       footer={[
@@ -86,4 +86,4 @@ const RecipientForm: React.FC<CustomFormProps<RecipientType>> = ({ visible, isEd
   );
 };
 
-export default RecipientForm;
+export default ContactForm;

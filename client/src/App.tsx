@@ -4,7 +4,6 @@ import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import User from "./pages/User";
 import Login from "./pages/Login";
-import Recipient from "./pages/Recipient";
 import AppPage from "./pages/App";
 import Template from "./pages/Template";
 import Log from "./pages/Log";
@@ -18,6 +17,7 @@ import Loading from "./pages/Loading";
 import client from "./api/client";
 import ScheduledMessage from "./pages/ScheduledMessage";
 import Chat from "./pages/Chat";
+import Contact from "./pages/Contact";
 
 const authLoader = async () => {
   try {
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
       { path: 'chat', element: <Chat /> },
       { path: "scheduled-message", element: <ScheduledMessage /> },
       { path: "groups", element: <Group /> },
-      { path: "recipients", element: <Recipient /> },
+      { path: "contacts", element: <Contact /> },
       { path: "apps", element: <AppPage /> },
       { path: "users", element: <User /> },
       { path: "templates", element: <Template /> },

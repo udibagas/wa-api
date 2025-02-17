@@ -19,7 +19,7 @@ const Home: React.FC = () => {
     messageCount: 0,
     successMessageCount: 0,
     failedMessageCount: 0,
-    recipientCount: 0,
+    contactCount: 0,
     successRate: 0,
   });
 
@@ -64,9 +64,9 @@ const Home: React.FC = () => {
     { title: 'Total Messages', value: data.messageCount, color: '#faad14', prefix: <WhatsAppOutlined /> },
     { title: 'Successful Messages', value: data.successMessageCount, color: '#3f8600', prefix: <CheckSquareOutlined /> },
     { title: 'Failed Messages', value: data.failedMessageCount, color: '#cf1322', prefix: <CloseSquareOutlined /> },
-    // { title: 'Total Recipients', value: data.recipientCount, color: '#1890ff', prefix: <TeamOutlined /> },
-    // { title: 'Total Groups', value: totalRecipients, color: '#1890ff', prefix: <BlockOutlined /> },
-    // { title: 'Total Templates', value: totalRecipients, color: '#1890ff', prefix: <FileTextOutlined /> },
+    // { title: 'Total Contacts', value: data.contactCount, color: '#1890ff', prefix: <TeamOutlined /> },
+    // { title: 'Total Groups', value: totalContacts, color: '#1890ff', prefix: <BlockOutlined /> },
+    // { title: 'Total Templates', value: totalContacts, color: '#1890ff', prefix: <FileTextOutlined /> },
   ];
 
   return (

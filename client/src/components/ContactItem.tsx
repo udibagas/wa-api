@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 import { Flex } from 'antd';
-import { RecipientType } from '../types';
+import { ContactType } from '../types';
 import ContactAvatar from './ContactAvatar';
 import '../css/ContactItem.css';
 
 type PropType = {
-  contact: RecipientType,
-  onClick: (contact: RecipientType) => void
+  contact: ContactType,
+  onClick: (contact: ContactType) => void
 }
 
 const ContactItem: React.FC<PropType> = React.memo(({ contact, onClick }) => {

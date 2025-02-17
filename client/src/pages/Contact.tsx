@@ -1,15 +1,15 @@
 import React, { useCallback } from "react";
 import { Input, Table } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
-import RecipientForm from "../features/recipients/RecipientForm"
+import ContactForm from "../features/recipients/ContactForm";
 import PageHeader from "../components/PageHeader";
 import AddButton from "../components/buttons/AddButton";
 import ActionButton from "../components/buttons/ActionButton";
-import { PaginatedData, RecipientType } from "../types";
+import { PaginatedData, ContactType } from "../types";
 import dayjs from "dayjs";
 import useCrud from "../hooks/useCrud";
 
-const Recipient: React.FC = () => {
+const Contact: React.FC = () => {
   const {
     useFetch,
     refreshData,
@@ -27,11 +27,11 @@ const Recipient: React.FC = () => {
     isEditing,
     currentPage,
 
-  } = useCrud<RecipientType>("/recipients", "recipients");
+  } = useCrud<ContactType>("/contacts", "contacts");
 
-  const { data, isPending } = useFetch<PaginatedData<RecipientType>>();
+  const { data, isPending } = useFetch<PaginatedData<ContactType>>();
 
-  const prepareEdit = useCallback((record: RecipientType) => {
+  const prepareEdit = useCallback((record: ContactType) => {
     return handleEdit(record, {
       dateOfBirth: record.dateOfBirth ? dayjs(record.dateOfBirth) : null,
       groups: record.groups.map((group) => group.id),
@@ -43,7 +43,7 @@ const Recipient: React.FC = () => {
       title: "No.",
       width: 60,
       key: "id",
-      render: (_: string, __: RecipientType, index: number) => currentPage > 1 ? (currentPage - 1) * 10 + index + 1 : index + 1,
+      render: (_: string, __: ContactType, index: number) => currentPage > 1 ? (currentPage - 1) * 10 + index + 1 : index + 1,
     },
     { title: "Name", dataIndex: "name", key: "name", ellipsis: true },
     { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber", ellipsis: true },
@@ -52,7 +52,7 @@ const Recipient: React.FC = () => {
       dataIndex: "dateOfBirth",
       key: "dateOfBirth",
       ellipsis: true,
-      render: (_: string, record: RecipientType) => {
+      render: (_: string, record: ContactType) => {
         return record.dateOfBirth ? dayjs(record.dateOfBirth).format("DD-MMM-YYYY") : "-";
       }
     },
@@ -61,7 +61,7 @@ const Recipient: React.FC = () => {
       title: "Group",
       key: "groups",
       ellipsis: true,
-      render: (_: string, record: RecipientType) => {
+      render: (_: string, record: ContactType) => {
         return record.groups.map((group) => group.name).join(", ");
       }
     },
@@ -70,7 +70,7 @@ const Recipient: React.FC = () => {
       key: "action",
       width: 80,
       align: "center" as const,
-      render: (_: string, record: RecipientType) => (
+      render: (_: string, record: ContactType) => (
         <ActionButton
           onDelete={() => handleDelete(record.id as number)}
           onEdit={() => prepareEdit(record)}
@@ -82,12 +82,12 @@ const Recipient: React.FC = () => {
   return (
     <>
       <PageHeader
-        title="Recipient Management"
-        subtitle="Manage recipients"
+        title="Contact Management"
+        subtitle="Manage contacts"
       >
-        <AddButton label="Add New Recipient" onClick={handleAdd} />
+        <AddButton label="Add New Contact" onClick={handleAdd} />
         <Input.Search
-          placeholder="Search recipient..."
+          placeholder="Search contact..."
           onSearch={(value) => setSearch(value)}
           style={{ width: 200 }}
           allowClear
@@ -112,14 +112,14 @@ const Recipient: React.FC = () => {
             setCurrentPage(page);
           },
         }}
-        onRow={(record: RecipientType) => {
+        onRow={(record: ContactType) => {
           return {
             onDoubleClick: () => prepareEdit(record),
           };
         }}
       />
 
-      <RecipientForm
+      <ContactForm
         visible={showForm}
         isEditing={isEditing}
         onCancel={handleModalClose}
@@ -131,4 +131,4 @@ const Recipient: React.FC = () => {
   );
 };
 
-export default Recipient;
+export default Contact;

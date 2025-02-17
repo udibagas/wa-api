@@ -1,10 +1,4 @@
-const {
-  index,
-  create,
-  update,
-  destroy,
-} = require("../controllers/user.controller");
-
+const { User } = require("../models");
 const router = require("express").Router();
 
 router

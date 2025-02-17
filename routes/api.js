@@ -51,7 +51,7 @@ router.post("/sendTemplate", sendTemplate);
 router.use("/users", require("./users"));
 router.use("/apps", require("./apps"));
 router.use("/groups", require("./groups"));
-router.use("/recipients", require("./recipients"));
+router.use("/contacts", require("./contacts"));
 router.use("/message-templates", require("./message-templates"));
 router.use("/scheduled-messages", require("./scheduled-messages"));
 router.use("/chats", require("./chats"));

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Button, Empty, Flex, message, Tooltip } from 'antd';
 import ContactList from '../components/ContactList';
-import { FileType, Message, RecipientType } from '../types';
+import { FileType, Message, ContactType } from '../types';
 import '../css/Chat.css';
 import { createItem, getItems } from '../api/client';
 import { useQuery } from '@tanstack/react-query';
@@ -22,7 +22,7 @@ const EmptyMessage: React.FC = () => (
 
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [contact, setContact] = useState<RecipientType | null>(null);
+  const [contact, setContact] = useState<ContactType | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [file, setFile] = useState<FileType | null>(null);
 
@@ -70,7 +70,7 @@ const Chat: React.FC = () => {
     }
   }, [data]);
 
-  async function handleSelectContact(contact: RecipientType) {
+  async function handleSelectContact(contact: ContactType) {
     setContact(contact);
   }
 

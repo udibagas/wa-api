@@ -1,25 +1,25 @@
 import { Select } from "antd";
-import { RecipientType } from "../types";
+import { ContactType } from "../types";
 import { useQuery } from "@tanstack/react-query";
 import apolloClient from "../apollo/client";
 import { gql } from "@apollo/client";
 import React from "react";
 
-type RecipientSelectOptionProps = {
+type ContactSelectOptionProps = {
   id: string,
   value: number[],
   onChange: (value: number[]) => void
 }
 
-const RecipientSelectOption: React.FC<RecipientSelectOptionProps> = ({ onChange }) => {
-  const { data: recipients } = useQuery({
-    queryKey: ['allRecipients'],
+const ContactSelectOption: React.FC<ContactSelectOptionProps> = ({ onChange }) => {
+  const { data: contacts } = useQuery({
+    queryKey: ['allContacts'],
     staleTime: 1000 * 60 * 10, // 10 minutes
     queryFn: async () => {
       const { data } = await apolloClient.query({
         query: gql`
-          query GetAllRecipients {
-            recipients {
+          query GetAllContacts {
+            contacts {
               id
               name
               phoneNumber
@@ -28,8 +28,8 @@ const RecipientSelectOption: React.FC<RecipientSelectOptionProps> = ({ onChange 
         `
       });
 
-      const recipients: RecipientType[] = data.recipients;
-      return recipients;
+      const contacts: ContactType[] = data.contacts;
+      return contacts;
     },
   });
 
@@ -38,8 +38,8 @@ const RecipientSelectOption: React.FC<RecipientSelectOptionProps> = ({ onChange 
       allowClear
       onChange={onChange}
       mode="multiple"
-      placeholder="Enter recipient name/phone number"
-      options={recipients?.map((t) => ({ label: `${t.name} - ${t.phoneNumber}`, value: t.id }))}
+      placeholder="Enter contact name/phone number"
+      options={contacts?.map((t) => ({ label: `${t.name} - ${t.phoneNumber}`, value: t.id }))}
       filterOption={(input, option) =>
         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
       }
@@ -57,4 +57,4 @@ const RecipientSelectOption: React.FC<RecipientSelectOptionProps> = ({ onChange 
   )
 }
 
-export default RecipientSelectOption;
+export default ContactSelectOption;

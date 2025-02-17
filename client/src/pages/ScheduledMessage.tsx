@@ -36,9 +36,9 @@ const ScheduledMessage: React.FC = () => {
       }
     },
     {
-      title: "Recipients",
+      title: "Contacts",
       render: (_: string, record: ScheduledMessageType) => {
-        return record.recipients.length
+        return record.contacts.length
       }
     },
     {

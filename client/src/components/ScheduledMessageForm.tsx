@@ -5,7 +5,7 @@ import SaveButton from "./buttons/SaveButton";
 import { CustomFormProps, FileType, GroupType, ScheduledMessageType } from "../types";
 import TextArea from "antd/es/input/TextArea";
 import WhatsAppChatBubble from "./WhatsAppChatBubble";
-import RecipientSelectOption from "./RecipientSelectOption";
+import ContactSelectOption from "./ContactSelectOption";
 import { useQuery } from "@tanstack/react-query";
 import { getItems } from "../api/client";
 
@@ -83,12 +83,12 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
             </Form.Item>
 
             <Form.Item
-              label="Recipients"
-              name="recipients"
-              validateStatus={errors.recipient ? "error" : ""}
-              help={errors.recipient?.join(", ")}
+              label="Contacts"
+              name="contacts"
+              validateStatus={errors.contact ? "error" : ""}
+              help={errors.contact?.join(", ")}
             >
-              <RecipientSelectOption />
+              <ContactSelectOption />
             </Form.Item>
 
             <Form.Item

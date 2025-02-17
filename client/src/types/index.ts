@@ -13,7 +13,7 @@ export type GroupType = {
   description: string;
 };
 
-export type RecipientType = {
+export type ContactType = {
   id: number;
   name: string;
   phoneNumber: string;
@@ -42,7 +42,7 @@ export type TemplateType = {
 export type MessageType = {
   MessageTemplateId: number;
   groups: number[];
-  recipients: number[];
+  contacts: number[];
 };
 
 export type Message = {
@@ -99,13 +99,13 @@ export type LogType = {
   id: number;
   createdAt: Date;
   AppId: number;
-  RecipientId: number;
+  ContactId: number;
   MessageTemplateId: number;
   response: object;
   status: StatusType;
   messageTemplate: { name: string };
   app: { name: string };
-  recipient: { name: string; phoneNumber: string };
+  contact: { name: string; phoneNumber: string };
 };
 
 export type ScheduledMessageType = {
@@ -116,7 +116,7 @@ export type ScheduledMessageType = {
   time: string;
   message: string;
   file: FileType;
-  recipients: number[];
+  contacts: number[];
   recurring: boolean;
   createdAt: string;
   updatedAt: string;

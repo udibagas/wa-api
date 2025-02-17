@@ -9,7 +9,7 @@ const errorHandlerMiddleware = require("./middlewares/errorHandler.middleware");
 const { createHandler } = require("graphql-http/lib/use/express");
 const { auth } = require("./middlewares/auth.middleware");
 const { ruruHTML } = require("ruru/server");
-const { Recipient, ScheduledMessage } = require("./models");
+const { Contact, ScheduledMessage } = require("./models");
 const { Op } = require("sequelize");
 const port = process.env.PORT || 3000;
 
@@ -43,10 +43,8 @@ ScheduledMessage.findAll().then((data) => {
 });
 
 // bikin cron job buat ulang tahun
-Recipient.findAll({ where: { dateOfBirth: { [Op.not]: null } } }).then(
-  (data) => {
-    data.forEach((i) => {
-      i.createJob();
-    });
-  }
-);
+Contact.findAll({ where: { dateOfBirth: { [Op.not]: null } } }).then((data) => {
+  data.forEach((i) => {
+    i.createJob();
+  });
+});
