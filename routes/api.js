@@ -56,7 +56,6 @@ router.use("/message-templates", require("./message-templates"));
 router.use("/scheduled-messages", require("./scheduled-messages"));
 router.use("/chats", require("./chats"));
 router.use("/logs", require("./logs"));
-
-router.get("/stats", require("../controllers/stats.controller").stats);
+router.use("/stats", require("./stats"));
 
 module.exports = router;

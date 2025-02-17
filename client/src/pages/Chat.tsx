@@ -6,11 +6,7 @@ import '../css/Chat.css';
 import { createItem, getItems } from '../api/client';
 import { useQuery } from '@tanstack/react-query';
 import ChatForm from '../components/ChatForm';
-import {
-  CommentOutlined,
-  NotificationOutlined,
-  TeamOutlined
-} from '@ant-design/icons';
+import { CommentOutlined, NotificationOutlined, TeamOutlined } from '@ant-design/icons';
 import ChatMessage from '../components/ChatMessage';
 import ChatHeader from '../components/ChatHeader';
 
@@ -36,7 +32,6 @@ const Chat: React.FC = () => {
         })
 
         setMessages([...messages, message]);
-
       } catch (error) {
         message.error(`Failed to send message: ${(error as Error).message}`);
       }

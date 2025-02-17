@@ -1,4 +1,4 @@
-const { User, App, MessageTemplate, Group, Recipient } = require("../models");
+const { User, App, MessageTemplate, Group, Contact } = require("../models");
 
 exports.resolver = {
   users: async () => await User.findAll({ order: [["name", "asc"]] }),
@@ -6,7 +6,7 @@ exports.resolver = {
   templates: async () =>
     await MessageTemplate.findAll({ order: [["id", "asc"]] }),
   groups: async () => await Group.findAll({ order: [["id", "asc"]] }),
-  recipients: async () => {
-    return await Recipient.findAll({ order: [["name", "asc"]] });
+  contacts: async () => {
+    return await Contact.findAll({ order: [["name", "asc"]] });
   },
 };

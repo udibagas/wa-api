@@ -1,6 +1,7 @@
+const router = require("express").Router();
 const { Contact, Log } = require("../models");
 
-exports.stats = async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const recipientCount = await Contact.count();
     const messageCount = await Log.count();
@@ -22,4 +23,6 @@ exports.stats = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
+});
+
+module.exports = router;

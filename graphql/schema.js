@@ -6,7 +6,7 @@ exports.schema = buildSchema(`
     apps: [App]
     templates: [Template]
     groups: [Group]
-    recipients: [Recipient]
+    contacts: [Contact]
   }
 
   type User {
@@ -32,7 +32,7 @@ exports.schema = buildSchema(`
     name: String!
   }
 
-  type Recipient {
+  type Contact {
     id: Int!
     name: String!
     phoneNumber: String!
