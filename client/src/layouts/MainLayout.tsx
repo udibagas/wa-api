@@ -47,7 +47,17 @@ const MainLayout: React.FC = () => {
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
       >
-        <div className="logo">
+        <div style={{
+          width: collapsed ? "40px" : "80px",
+          height: collapsed ? "40px" : "80px",
+          margin: "20px auto",
+          backgroundColor: "aliceblue",
+          borderRadius: "50%",
+          textAlign: "center",
+          lineHeight: collapsed ? "40px" : "80px",
+          fontSize: collapsed ? "1.5rem" : "3rem",
+          color: "black",
+        }}>
           {user?.name[0]}
         </div>
 
