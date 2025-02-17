@@ -8,6 +8,9 @@ const { Contact, ScheduledMessage } = require("./models");
 const { Op } = require("sequelize");
 const port = process.env.PORT || 3000;
 
+// SPA
+app.use(express.static("client/dist"));
+
 // Middleware
 const origin = process.env.CLIENT_URL?.split(",") ?? [];
 app.use(cors({ origin, credentials: true }));

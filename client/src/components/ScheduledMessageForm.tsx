@@ -5,7 +5,7 @@ import SaveButton from "./buttons/SaveButton";
 import { CustomFormProps, FileType, GroupType, ScheduledMessageType } from "../types";
 import TextArea from "antd/es/input/TextArea";
 import WhatsAppChatBubble from "./WhatsAppChatBubble";
-import ContactSelectOption from "./ContactSelectOption";
+import ContactSelectOption from "./ContactSelectOption"
 import { useQuery } from "@tanstack/react-query";
 import { getItems } from "../api/client";
 
@@ -88,7 +88,9 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
               validateStatus={errors.contact ? "error" : ""}
               help={errors.contact?.join(", ")}
             >
-              <ContactSelectOption />
+              <ContactSelectOption id="contact-select" value={[]} onChange={(value: number[]) => {
+                form.setFieldsValue({ contacts: value });
+              }} />
             </Form.Item>
 
             <Form.Item
