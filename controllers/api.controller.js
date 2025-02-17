@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { MessageTemplate, Recipient, Log } = require("../models");
+const { MessageTemplate, Contact, Log } = require("../models");
 const sendWhatsAppMessage = require("../utils/sendWhatsAppMessage");
 
 exports.sendMessage = async (req, res, next) => {
@@ -38,7 +38,7 @@ exports.sendTemplate = async (req, res, next) => {
       caption,
       type,
       MessageTemplateId,
-      recipients = [],
+      contacts = [],
       file,
       templateName,
     } = req.body;
@@ -66,10 +66,10 @@ exports.sendTemplate = async (req, res, next) => {
 
     const target = [];
 
-    if (recipients.length) {
-      const res = await Recipient.findAll({
+    if (contacts.length) {
+      const res = await Contact.findAll({
         where: {
-          id: { [Op.in]: recipients },
+          id: { [Op.in]: contacts },
         },
       });
 
@@ -77,7 +77,7 @@ exports.sendTemplate = async (req, res, next) => {
     }
 
     if (groups.length) {
-      const res = await Recipient.findAll({
+      const res = await Contact.findAll({
         include: {
           association: "groups",
           where: {
@@ -96,17 +96,17 @@ exports.sendTemplate = async (req, res, next) => {
     }
 
     // slower method
-    // const uniqueRecipients = target.filter(
+    // const uniqueContacts = target.filter(
     //   (r, i, self) => self.findIndex((t) => t.id === r.id) === i
     // );
 
     // faster method
     // todo: handle in query
-    const uniqueRecipients = Array.from(
+    const uniqueContacts = Array.from(
       new Map(target.map((item) => [item.id, item])).values()
     );
 
-    for (const { id, name, phoneNumber } of uniqueRecipients) {
+    for (const { id, name, phoneNumber } of uniqueContacts) {
       console.log("Send to", phoneNumber);
       let status = "success"; // default status
       let response = null; // default response
@@ -130,7 +130,7 @@ exports.sendTemplate = async (req, res, next) => {
           Log.create({
             AppId,
             MessageTemplateId,
-            RecipientId: id,
+            ContactId: id,
             response,
             status,
           });
