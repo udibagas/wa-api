@@ -1,8 +1,8 @@
-const { Recipient, Log } = require("../models");
+const { Contact, Log } = require("../models");
 
 exports.stats = async (req, res, next) => {
   try {
-    const recipientCount = await Recipient.count();
+    const recipientCount = await Contact.count();
     const messageCount = await Log.count();
     const successMessageCount = await Log.count({
       where: { status: "success" },

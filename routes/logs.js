@@ -1,7 +1,9 @@
+const { Op } = require("sequelize");
+const { Log } = require("../models");
 const router = require("express").Router();
 
 router
-  .get("/logs", async (req, res, next) => {
+  .get("/", async (req, res, next) => {
     const { page = 1, limit = 10, search, status } = req.query;
     const offset = (page - 1) * limit;
 
@@ -67,7 +69,7 @@ router
     }
   })
 
-  .delete("/logs", async (req, res, next) => {
+  .delete("/", async (req, res, next) => {
     try {
       await Log.destroy({ where: {} });
       res.status(204).end();

@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { Contact } = require("../models");
 const router = require("express").Router();
 
