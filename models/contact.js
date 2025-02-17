@@ -5,11 +5,11 @@ const { CronJob } = require("cron");
 const jobs = [];
 
 module.exports = (sequelize, DataTypes) => {
-  class Recipient extends Model {
+  class Contact extends Model {
     static associate(models) {
-      Recipient.belongsToMany(models.Group, {
-        through: models.RecipientGroup,
-        foreignKey: "RecipientId",
+      Contact.belongsToMany(models.Group, {
+        through: models.ContactGroup,
+        foreignKey: "ContactId",
         as: "groups",
       });
     }
@@ -99,7 +99,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  Recipient.init(
+  Contact.init(
     {
       name: {
         type: DataTypes.STRING,
@@ -137,17 +137,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Recipient",
+      modelName: "Contact",
     }
   );
 
-  Recipient.afterSave((recipient) => {
+  Contact.afterSave((recipient) => {
     recipient.createJob();
   });
 
-  Recipient.afterDestroy((recipient) => {
+  Contact.afterDestroy((recipient) => {
     recipient.deleteExistingJob();
   });
 
-  return Recipient;
+  return Contact;
 };

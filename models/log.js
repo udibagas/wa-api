@@ -3,8 +3,8 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Log extends Model {
     static associate(models) {
-      Log.belongsTo(models.Recipient, {
-        foreignKey: "RecipientId",
+      Log.belongsTo(models.Contact, {
+        foreignKey: "ContactId",
         as: "recipient",
       });
 
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Log.init(
     {
-      RecipientId: DataTypes.INTEGER,
+      ContactId: DataTypes.INTEGER,
       AppId: DataTypes.INTEGER,
       MessageTemplateId: DataTypes.INTEGER,
       response: DataTypes.JSON,

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Button, Empty, Flex, message, Tooltip } from 'antd';
 import ContactList from '../components/ContactList';
-import { Message, RecipientType } from '../types';
+import { FileType, Message, RecipientType } from '../types';
 import '../css/Chat.css';
 import { createItem, getItems } from '../api/client';
 import { useQuery } from '@tanstack/react-query';
@@ -24,6 +24,7 @@ const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [contact, setContact] = useState<RecipientType | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [file, setFile] = useState<FileType | null>(null);
 
   const handleSend = async (text: string) => {
     if (text.trim()) {
@@ -118,10 +119,13 @@ const Chat: React.FC = () => {
             {messages.map((message) => (
               <ChatMessage key={message.id} message={message} />
             ))}
+
+            <img src={file?.url} alt="" style={{ width: 200 }} />
+
             <div ref={messagesEndRef} />
           </div>
 
-          <ChatForm onSubmit={handleSend} />
+          <ChatForm onSubmit={handleSend} onUpload={(file) => setFile(file)} />
         </> : <EmptyMessage />}
       </div>
     </Flex>

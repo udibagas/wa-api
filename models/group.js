@@ -3,13 +3,13 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Group extends Model {
     static associate(models) {
-      Group.belongsToMany(models.Recipient, {
-        through: models.RecipientGroup,
+      Group.belongsToMany(models.Contact, {
+        through: models.ContactGroup,
         foreignKey: "GroupId",
         as: "recipients",
       });
 
-      Group.hasMany(models.RecipientGroup, {
+      Group.hasMany(models.ContactGroup, {
         foreignKey: "GroupId",
         as: "recipientGroups",
         onDelete: "CASCADE",

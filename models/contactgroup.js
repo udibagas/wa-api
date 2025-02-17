@@ -2,31 +2,31 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class RecipientGroup extends Model {
+  class ContactGroup extends Model {
     static associate(models) {
-      RecipientGroup.belongsTo(models.Recipient, {
-        foreignKey: "RecipientId",
-        as: "recipient",
+      ContactGroup.belongsTo(models.Contact, {
+        foreignKey: "ContactId",
+        as: "contact",
       });
 
-      RecipientGroup.belongsTo(models.Group, {
+      ContactGroup.belongsTo(models.Group, {
         foreignKey: "GroupId",
         as: "group",
       });
     }
   }
 
-  RecipientGroup.init(
+  ContactGroup.init(
     {
-      RecipientId: DataTypes.INTEGER,
+      ContactId: DataTypes.INTEGER,
       GroupId: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "RecipientGroup",
+      modelName: "ContactGroup",
       timestamps: false,
     }
   );
 
-  return RecipientGroup;
+  return ContactGroup;
 };

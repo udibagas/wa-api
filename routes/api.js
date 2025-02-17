@@ -5,7 +5,6 @@ const path = require("path");
 const multer = require("multer");
 const moment = require("moment");
 const { login, logout, me } = require("../controllers/auth.controller");
-const { index, clear } = require("../controllers/logs.controller");
 
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
@@ -48,6 +47,7 @@ router.post("/delete-file", (req, res) => {
 
 router.post("/sendMessage", sendMessage);
 router.post("/sendTemplate", sendTemplate);
+
 router.use("/users", require("./users"));
 router.use("/apps", require("./apps"));
 router.use("/groups", require("./groups"));
@@ -55,8 +55,8 @@ router.use("/recipients", require("./recipients"));
 router.use("/message-templates", require("./message-templates"));
 router.use("/scheduled-messages", require("./scheduled-messages"));
 router.use("/chats", require("./chats"));
+router.use("/logs", require("./logs"));
+
 router.get("/stats", require("../controllers/stats.controller").stats);
-router.get("/logs", index);
-router.delete("/logs", clear);
 
 module.exports = router;
