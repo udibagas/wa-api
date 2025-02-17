@@ -212,7 +212,7 @@ const NewMessage: React.FC = () => {
               maxCount={1}
               name="file"
               listType="picture"
-              action={client.defaults.baseURL + '/upload'}
+              action={client.defaults.baseURL + '/file'}
               accept="image/*, application/*"
               withCredentials
               onChange={({ file }) => {
@@ -221,7 +221,7 @@ const NewMessage: React.FC = () => {
                 }
               }}
               onRemove={(file) => {
-                client.post('/delete-file', { path: file.response.file.path })
+                client.post('/file/delete', { path: file.response.file.path })
                 setFile({} as FileType);
               }}
             >
