@@ -88,7 +88,7 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
               validateStatus={errors.contact ? "error" : ""}
               help={errors.contact?.join(", ")}
             >
-              <ContactSelectOption id="contact-select" value={[]} onChange={(value: number[]) => {
+              <ContactSelectOption onChange={(value: number[]) => {
                 form.setFieldsValue({ contacts: value });
               }} />
             </Form.Item>

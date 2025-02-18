@@ -1,7 +1,8 @@
 const router = require("express").Router();
+const { auth } = require("../middlewares/auth.middleware");
 const { Contact, Log } = require("../models");
 
-router.get("/", async (req, res, next) => {
+router.use(auth).get("/", async (req, res, next) => {
   try {
     const recipientCount = await Contact.count();
     const messageCount = await Log.count();

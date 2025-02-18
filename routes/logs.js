@@ -1,8 +1,10 @@
 const { Op } = require("sequelize");
 const { Log } = require("../models");
+const { auth } = require("../middlewares/auth.middleware");
 const router = require("express").Router();
 
 router
+  .use(auth)
   .get("/", async (req, res, next) => {
     const { page = 1, limit = 10, search, status } = req.query;
     const offset = (page - 1) * limit;

@@ -27,7 +27,7 @@ const MainLayout: React.FC = () => {
       okText: 'Yes',
       cancelText: 'No',
       onOk: () => {
-        client.post('/logout').then(() => {
+        client.post('/auth/logout').then(() => {
           navigate('/login');
         });
       },

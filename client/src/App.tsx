@@ -21,7 +21,7 @@ import Contact from "./pages/Contact";
 
 const authLoader = async () => {
   try {
-    const { data: user } = await client.get('/me');
+    const { data: user } = await client.get('/auth/me');
     return { user }
   } catch (error: unknown) {
     console.error(error);

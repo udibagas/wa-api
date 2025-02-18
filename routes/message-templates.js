@@ -1,7 +1,9 @@
-const { MessageTemplate } = require("../models");
+const { auth } = require("../middlewares/auth.middleware");
+const { MessageTemplate, App } = require("../models");
 const router = require("express").Router();
 
 router
+  .use(auth)
   .get("/", async (req, res, next) => {
     try {
       const messageTemplates = await MessageTemplate.findAll({

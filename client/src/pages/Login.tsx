@@ -17,7 +17,7 @@ const Login: React.FC = () => {
   const onFinish: FormProps<LoginValues>['onFinish'] = async (values) => {
     console.log("Success:", values);
     try {
-      await client.post("/login", values);
+      await client.post("/auth/login", values);
       message.success("Login successful!");
       navigate('/');
     } catch (error) {

@@ -1,7 +1,9 @@
+const { auth } = require("../middlewares/auth.middleware");
 const { App } = require("../models");
 const router = require("express").Router();
 
 router
+  .use(auth)
   .get("/", async (req, res, next) => {
     try {
       const apps = await App.findAll({

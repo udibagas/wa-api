@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 const moment = require("moment");
+const { auth } = require("../middlewares/auth.middleware");
 
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
@@ -21,6 +22,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router
+  .use(auth)
   .post("/", upload.single("file"), (req, res) => {
     const protocol = req.protocol;
     const host = req.get("host");

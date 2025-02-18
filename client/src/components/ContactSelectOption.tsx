@@ -6,8 +6,7 @@ import { gql } from "@apollo/client";
 import React from "react";
 
 type ContactSelectOptionProps = {
-  id: string,
-  value: number[],
+  // value: number[],
   onChange: (value: number[]) => void
 }
 

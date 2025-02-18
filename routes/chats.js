@@ -1,8 +1,10 @@
+const { auth } = require("../middlewares/auth.middleware");
 const { Chat } = require("../models");
 const { Op } = require("sequelize");
 const router = require("express").Router();
 
 router
+  .use(auth)
   .get("/", async (req, res, next) => {
     const { phoneNumber } = req.query;
     try {

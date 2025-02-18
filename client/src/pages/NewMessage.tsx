@@ -136,7 +136,7 @@ const NewMessage: React.FC = () => {
     });
   }
 
-  const normFile = (e: any) => {
+  const normFile = (e: unknown) => {
     if (Array.isArray(e)) {
       return e[0].response.file;
     }
@@ -204,7 +204,7 @@ const NewMessage: React.FC = () => {
             name="contacts"
             label="Contacts"
           >
-            <ContactSelectOption id="contact-select" value={[]} onChange={(value: number[]) => {
+            <ContactSelectOption onChange={(value: number[]) => {
               form.setFieldsValue({ contacts: value });
             }} />
           </Form.Item>
