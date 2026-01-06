@@ -114,8 +114,23 @@ router
         //   phoneNumber,
         // })
 
-        whatsappService
-          .sendTextMessage(phoneNumber, message.replaceAll("{{name}}", name))
+        let res;
+
+        if (type === "text") {
+          res = whatsappService.sendTextMessage(
+            phoneNumber,
+            message.replaceAll("{{name}}", name)
+          );
+        } else {
+          res = whatsappService.sendMediaMessage(
+            phoneNumber,
+            type,
+            caption.replaceAll("{{name}}", name),
+            file
+          );
+        }
+
+        res
           .then((res) => {
             console.log(res);
             response = res;
