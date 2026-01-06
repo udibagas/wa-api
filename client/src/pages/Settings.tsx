@@ -152,7 +152,7 @@ const Settings: React.FC = () => {
   const clearSessionMutation = useMutation({
     mutationFn: async () => {
       const response = await client.post(
-        "/notifications/whatsapp/clear-session"
+        "/settings/whatsapp/clear-session"
       );
       return response.data;
     },
@@ -189,7 +189,7 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: "24px" }}>
+    <div>
       <Title level={3}>
         <SettingOutlined /> Pengaturan WhatsApp
       </Title>
