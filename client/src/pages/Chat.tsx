@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Button, Empty, Flex, message, Tooltip } from 'antd';
+import { Button, Empty, Flex, message, Tooltip } from 'antd';
 import ContactList from '../components/ContactList';
 import { FileType, Message, ContactType } from '../types';
 import '../css/Chat.css';
@@ -102,14 +102,6 @@ const Chat: React.FC = () => {
           <ChatHeader contact={contact} />
 
           <div className="chat-messages">
-            <Alert
-              message="Perhatian!"
-              description="Message non template hanya akan terkirim jika penerima berinteraksi terlebih dahulu dalam waktu 24 jam."
-              type="warning"
-              showIcon
-              style={{ marginBottom: 20 }}
-              closable
-            />
 
             {messages.map((message) => (
               <ChatMessage key={message.id} message={message} />
