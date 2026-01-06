@@ -136,7 +136,8 @@ const NewMessage: React.FC = () => {
     });
   }
 
-  const normFile = (e: unknown) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const normFile = (e: any) => {
     if (Array.isArray(e)) {
       return e[0].response.file;
     }
