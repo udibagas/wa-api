@@ -37,6 +37,7 @@ const TemplateForm: React.FC<CustomFormProps<TemplateType>> = ({ visible, isEdit
           onFinish={onOk}
           requiredMark={false}
           labelCol={{ span: 7 }}
+          layout="vertical"
         >
           <Form.Item name="id" hidden>
             <Input />
