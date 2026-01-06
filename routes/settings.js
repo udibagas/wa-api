@@ -44,19 +44,19 @@ router.post("/whatsapp/test", async (req, res) => {
     if (sent) {
       res.json({
         success: true,
-        message: "Test notification sent successfully",
+        message: "Test message sent successfully",
       });
     } else {
       res.status(500).json({
         success: false,
-        message: "Failed to send test notification",
+        message: "Failed to send test message",
       });
     }
   } catch (error) {
-    console.error("Error sending test notification:", error);
+    console.error("Error sending test message:", error);
     res.status(500).json({
       success: false,
-      message: "Error sending test notification",
+      message: "Error sending test message",
       error: error.message,
     });
   }
