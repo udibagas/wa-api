@@ -34,9 +34,9 @@ router
   .post("/", upload.single("file"), async (req, res) => {
     try {
       let resourceType = "auto";
-      if (req.file.type.startsWith("image/")) {
+      if (req.file.mimetype.startsWith("image/")) {
         resourceType = "image";
-      } else if (req.file.type === "application/pdf") {
+      } else if (req.file.mimetype === "application/pdf") {
         resourceType = "raw"; // PDFs should be uploaded as 'raw'
       }
 
