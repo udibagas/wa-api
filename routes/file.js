@@ -4,6 +4,14 @@ const path = require("path");
 const multer = require("multer");
 const moment = require("moment");
 const { auth } = require("../middlewares/auth.middleware");
+const cloudinary = require("cloudinary").v2;
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
@@ -23,11 +31,35 @@ const upload = multer({ storage: storage });
 
 router
   .use(auth)
-  .post("/", upload.single("file"), (req, res) => {
-    const protocol = req.protocol;
-    const host = req.get("host");
-    req.file.url = `${protocol}://${host}/${req.file.path}`;
-    res.json({ file: req.file });
+  .post("/", upload.single("file"), async (req, res) => {
+    try {
+      // Upload to Cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "wa-api",
+        resource_type: "auto",
+      });
+
+      // Delete local file after successful upload
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error("Error deleting local file:", err);
+      });
+
+      res.json({
+        file: {
+          ...req.file,
+          cloudinaryUrl: result.secure_url,
+          cloudinaryPublicId: result.public_id,
+          url: result.secure_url,
+        },
+      });
+    } catch (error) {
+      console.error("Cloudinary upload error:", error);
+      // Fallback to local file URL if Cloudinary fails
+      const protocol = req.protocol;
+      const host = req.get("host");
+      req.file.url = `${protocol}://${host}/${req.file.path}`;
+      res.json({ file: req.file });
+    }
   })
 
   .post("/delete", (req, res) => {
