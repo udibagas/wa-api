@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import PageHeader from "../components/PageHeader";
-import { Alert, Button, Form, message, Result, Select, Upload } from "antd";
+import { Button, Form, message, Result, Select, Upload } from "antd";
 import { FileType, MasterData, MessageType } from "../types";
 import WhatsAppChatBubble from "../components/WhatsAppChatBubble";
 import { Modal } from "antd";
@@ -157,13 +157,6 @@ const NewMessage: React.FC = () => {
           style={{ width: 500 }}
           onFinish={handleSend}
         >
-          {!templateId && <Alert
-            message="Perhatian!"
-            description="Message non template hanya akan terkirim jika penerima berinteraksi terlebih dahulu dalam waktu 24 jam."
-            type="warning"
-            showIcon
-            style={{ marginBottom: 20 }}
-          />}
 
           <Form.Item name="MessageTemplateId" label="Message Template">
             <Select
