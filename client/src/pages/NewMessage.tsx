@@ -80,7 +80,7 @@ const NewMessage: React.FC = () => {
       templateName
     };
 
-    client.post('sendTemplate', payload)
+    client.post('whatsapp/bulk-send', payload)
       .then(res => {
         // message.success(res.data.message);
         const modal = Modal.info({
