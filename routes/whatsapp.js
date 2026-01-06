@@ -2,6 +2,7 @@ const { auth } = require("../middlewares/auth.middleware");
 const router = require("express").Router();
 const whatsappService = require("../services/whatsapps.service");
 const { Log, MessageTemplate, Contact } = require("../models");
+const { Op } = require("sequelize");
 
 router
   .use(auth)
@@ -137,3 +138,5 @@ router
       next(error);
     }
   });
+
+module.exports = router;
