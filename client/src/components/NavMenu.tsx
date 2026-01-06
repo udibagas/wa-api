@@ -32,7 +32,7 @@ function getItem(
 const items: MenuItem[] = [
   getItem(<Link to="/">Dashboard</Link>, 'home', <BarChartOutlined />),
   getItem(<Link to="/new-message">New Message</Link>, 'new-message', <WhatsAppOutlined />),
-  getItem(<Link to="/chat">Chat</Link>, 'chat', <WhatsAppOutlined />),
+  // getItem(<Link to="/chat">Chat</Link>, 'chat', <WhatsAppOutlined />),
   getItem(<Link to="/scheduled-message">Scheduled Message</Link>, 'scheduled-message', <CalendarOutlined />),
   getItem(<Link to="/groups">Groups</Link>, 'groups', <BlockOutlined />),
   getItem(<Link to="/contacts">Contacts</Link>, 'contacts', <TeamOutlined />),
