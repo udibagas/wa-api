@@ -197,6 +197,31 @@ class WhatsAppService {
     }
   }
 
+  async sendMediaMessage(recipient, type, caption, file) {
+    if (!this.enabled) {
+      console.log("WhatsApp notifications are disabled");
+      return { success: false, message: "WhatsApp notifications are disabled" };
+    }
+
+    try {
+      if (!this.isConnected) {
+        await this.connectToWhatsApp();
+      }
+
+      if (!this.isConnected || !this.sock) {
+        throw new Error("Unable to connect to WhatsApp");
+      }
+
+      const formattedNumber = this.formatPhoneNumber(recipient);
+      return this.sock.sendMessage(formattedNumber, {
+        caption,
+        [type]: { url: file.url },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   /**
    * Test notification function
    * @param {string} phoneNumber
