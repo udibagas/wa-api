@@ -54,7 +54,7 @@ router
     }
   })
 
-  .patch("/:id/submit", async (req, res, next) => {
+  .delete("/:id", async (req, res, next) => {
     try {
       const messageTemplate = await MessageTemplate.findByPk(req.params.id);
 
@@ -71,7 +71,7 @@ router
     }
   })
 
-  .delete("/:id", (req, res, next) => {
+  .patch("/:id/submit", (req, res, next) => {
     MessageTemplate.findByPk(req.params.id)
       .then((messageTemplate) => {
         if (!messageTemplate) {
