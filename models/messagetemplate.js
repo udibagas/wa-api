@@ -1,6 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
-const mailer = require("../service/mailer");
+const mailer = require("../services/mailer.service");
 
 module.exports = (sequelize, DataTypes) => {
   class MessageTemplate extends Model {

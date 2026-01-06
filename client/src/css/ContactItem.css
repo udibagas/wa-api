@@ -5,7 +5,8 @@
   border-radius: 10px;
 }
 
-.contact-item:hover, .contact-item.active {
+.contact-item:hover,
+.contact-item.active {
   background-color: #f1f1f1;
 }
 
@@ -23,6 +24,7 @@
 .contact-info h3 {
   margin: 0;
   font-size: 1rem;
+  font-weight: 600;
 }
 
 .contact-info p {

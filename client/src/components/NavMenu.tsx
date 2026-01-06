@@ -40,6 +40,7 @@ const items: MenuItem[] = [
   getItem(<Link to="/templates">Templates</Link>, 'templates', <FileTextOutlined />),
   getItem(<Link to="/logs">Logs</Link>, 'logs', <BarsOutlined />),
   getItem(<Link to="/users">Users</Link>, 'users', <UserOutlined />),
+  getItem(<Link to="/settings">Settings</Link>, 'settings', <SettingFilled />),
 ];
 
 const NavMenu: React.FC = () => {

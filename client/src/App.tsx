@@ -18,6 +18,7 @@ import client from "./api/client";
 import ScheduledMessage from "./pages/ScheduledMessage";
 import Chat from "./pages/Chat";
 import Contact from "./pages/Contact";
+import Settings from "./pages/Settings";
 
 const authLoader = async () => {
   try {
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
       { path: "users", element: <User /> },
       { path: "templates", element: <Template /> },
       { path: "logs", element: <Log /> },
+      { path: "settings", element: <Settings /> },
       { path: "profile", element: <Profile />, loader: authLoader, hydrateFallbackElement: <Loading /> },
       { path: "*", element: <NotFound /> },
     ],

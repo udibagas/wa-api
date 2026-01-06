@@ -12,6 +12,7 @@ router.get("/gql", (_req, res) => {
   res.end(ruruHTML({ endpoint: "/graphql" }));
 });
 
+// scan directory and add router automatically
 fs.readdirSync(__dirname)
   .filter((file) => {
     return (
