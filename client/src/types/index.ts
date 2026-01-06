@@ -105,7 +105,7 @@ export type LogType = {
   status: StatusType;
   messageTemplate: { name: string };
   app: { name: string };
-  contact: { name: string; phoneNumber: string };
+  recipient: { name: string; phoneNumber: string };
 };
 
 export type ScheduledMessageType = {

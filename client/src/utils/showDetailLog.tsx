@@ -24,7 +24,7 @@ export function showDetailLog(record: LogType) {
         </Descriptions.Item>}
 
         <Descriptions.Item label="Contact">
-          {record.contact.name} - {record.contact.phoneNumber}
+          {record.recipient?.name} - {record.recipient?.phoneNumber}
         </Descriptions.Item>
 
         {record.messageTemplate && <Descriptions.Item label="Template">
