@@ -19,7 +19,10 @@ router
       } = req.body;
 
       if (type === "text") {
-        whatsappService.sendTextMessage(phoneNumber, message);
+        whatsappService.sendTextMessage(
+          phoneNumber,
+          message.replaceAll("{{name}}", name)
+        );
       }
 
       res.status(200).json(body);
@@ -112,7 +115,7 @@ router
         // })
 
         whatsappService
-          .sendTextMessage(phoneNumber, message)
+          .sendTextMessage(phoneNumber, message.replaceAll("{{name}}", name))
           .then((res) => {
             console.log(res);
             response = res;
