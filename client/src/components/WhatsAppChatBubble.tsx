@@ -2,6 +2,7 @@ import React from "react";
 import "../css/WhatsAppChatBubble.css";
 import {
   AudioTwoTone,
+  CameraOutlined,
   FileExcelTwoTone,
   FileImageTwoTone,
   FilePdfTwoTone,
@@ -9,10 +10,13 @@ import {
   FileTextTwoTone,
   FileWordTwoTone,
   FileZipTwoTone,
-  PlaySquareTwoTone
+  PaperClipOutlined,
+  PlaySquareTwoTone,
+  SmileOutlined
 } from "@ant-design/icons";
 import { FileType, FileTypes } from "../types";
 import { markupTextToWhatsApp } from "../utils/markupTextToWhatsApp";
+import { CheckCheck, EllipsisVertical, Mic } from "lucide-react"
 
 function readableSize(size: number): string {
   if (size === 0) return "0 B";
@@ -79,18 +83,55 @@ type WhatsAppChatBubbleProps = {
 const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ message, file }) => {
   return (
     <div className="chat-container">
+      <div className="whatsapp-header">
+        <div className="header-left">
+          <div className="back-arrow">←</div>
+          <div className="contact-avatar">TP</div>
+          <div className="contact-info">
+            <div className="contact-name">TPSM</div>
+            <div className="contact-status">online</div>
+          </div>
+        </div>
+        <div className="header-right">
+
+          <span className="header-icon">
+            <EllipsisVertical />
+          </span>
+        </div>
+      </div>
+
       <div className="speech-wrapper">
         <div className="bubble">
           <div className="txt">
-            <p className="name">TPSM</p>
 
             {file?.url && <FilePreview {...file} />}
 
             <p className="message" dangerouslySetInnerHTML={{ __html: markupTextToWhatsApp(message) }} />
-            <span className="timestamp">now</span>
+            <span className="timestamp">
+              now
+              <CheckCheck color="#53bdeb" size={15} />
+            </span>
           </div>
           <div className="bubble-arrow"></div>
         </div>
+      </div>
+
+      <div className="whatsapp-footer">
+        <div className="input-container">
+          <span className="footer-icon">
+            <SmileOutlined />
+          </span>
+          <input type="text" placeholder="Type a message" className="message-input" />
+          <span className="footer-icon">
+            <PaperClipOutlined />
+          </span>
+          <span className="footer-icon">
+            <CameraOutlined />
+          </span>
+        </div>
+        <button className="send-button">
+          <Mic />
+        </button>
       </div>
     </div>
   );
