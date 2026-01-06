@@ -132,11 +132,9 @@ router
 
         res
           .then((res) => {
-            console.log(res);
             response = res;
           })
           .catch((error) => {
-            console.error(error);
             status = "failed";
             response = error;
           })
