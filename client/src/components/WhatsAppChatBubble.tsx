@@ -101,7 +101,7 @@ const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ message, file }
       </div>
 
       <div className="speech-wrapper">
-        <div className="bubble">
+        {message && <div className="bubble">
           <div className="txt">
 
             {file?.url && <FilePreview {...file} />}
@@ -112,8 +112,7 @@ const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ message, file }
               <CheckCheck color="#53bdeb" size={15} />
             </span>
           </div>
-          <div className="bubble-arrow"></div>
-        </div>
+        </div>}
       </div>
 
       <div className="whatsapp-footer">
