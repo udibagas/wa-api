@@ -31,12 +31,12 @@ router
       ],
     };
 
-    if (req.user.role !== "admin") {
-      options.where = {
-        ...options.where,
-        "$app.UserId$": req.user.id,
-      };
-    }
+    // if (req.user.role !== "admin") {
+    //   options.where = {
+    //     ...options.where,
+    //     "$app.UserId$": req.user.id,
+    //   };
+    // }
 
     if (search) {
       options.where = {

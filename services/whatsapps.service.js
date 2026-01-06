@@ -177,8 +177,7 @@ class WhatsAppService {
   // Function to send a text message
   async sendTextMessage(recipient, message) {
     if (!this.enabled) {
-      console.log("WhatsApp notifications are disabled");
-      return { success: false, message: "WhatsApp notifications are disabled" };
+      throw new Error("WhatsApp notifications are disabled");
     }
 
     try {
@@ -199,8 +198,7 @@ class WhatsAppService {
 
   async sendMediaMessage(recipient, type, caption, file) {
     if (!this.enabled) {
-      console.log("WhatsApp notifications are disabled");
-      return { success: false, message: "WhatsApp notifications are disabled" };
+      throw new Error("WhatsApp notifications are disabled");
     }
 
     try {
