@@ -227,43 +227,22 @@ class WhatsAppService {
   }
 
   /**
-   * Send guest registration notification to host
-   * @param {Object} guestData
-   * @param {Object} visitData
-   * @param {Object} hostData
-   * @returns {Promise<boolean>}
-   */
-  async notifyHostOfGuestRegistration(guestData, visitData, hostData) {
-    if (!hostData || !hostData.phoneNumber) {
-      console.log(
-        "Host phone number not available, skipping WhatsApp notification"
-      );
-      return false;
-    }
-
-    const message = this.createGuestNotificationMessage(
-      guestData,
-      visitData,
-      hostData
-    );
-    return await this.sendNotification(hostData.phoneNumber, message);
-  }
-
-  /**
    * Test notification function
    * @param {string} phoneNumber
    * @returns {Promise<boolean>}
    */
   async sendTestNotification(phoneNumber) {
-    const testMessage = `🧪 *TEST NOTIFIKASI*
+    const testMessage = `🧪 *TEST PESAN*
 
-Ini adalah pesan test dari sistem Buku Tamu.
+Ini adalah pesan test dari sistem BlastIt!.
 Jika Anda menerima pesan ini, berarti sistem notifikasi WhatsApp berfungsi dengan baik.
 
 Waktu: ${new Date().toLocaleString("id-ID")}
 
 ---
-Sistem Buku Tamu 📋`;
+Terima kasih,
+
+Tim BlastIt!`;
 
     return await this.sendNotification(phoneNumber, testMessage);
   }
