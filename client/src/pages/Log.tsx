@@ -31,12 +31,6 @@ const Log: React.FC = () => {
       render: (_: string, record: LogType) => moment(record.createdAt).format("DD-MMM-YYYY HH:mm:ss")
     },
     {
-      title: "App",
-      key: "AppId",
-      dataIndex: ["app", 'name'],
-      ellipsis: true,
-    },
-    {
       title: "Contact",
       key: "contact",
       dataIndex: ["recipient", 'name'],
@@ -46,6 +40,12 @@ const Log: React.FC = () => {
       title: "Phone Number",
       key: "phoneNumber",
       dataIndex: ["recipient", 'phoneNumber'],
+      ellipsis: true,
+    },
+    {
+      title: "App",
+      key: "AppId",
+      dataIndex: ["app", 'name'],
       ellipsis: true,
     },
     {
