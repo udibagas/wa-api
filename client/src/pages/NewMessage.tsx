@@ -67,7 +67,6 @@ const NewMessage: React.FC = () => {
     }
 
     if (templateId) {
-      type = 'template';
       templateName = templates?.find((t) => t.id === templateId)?.name as string;
     }
 
@@ -204,7 +203,7 @@ const NewMessage: React.FC = () => {
             }} />
           </Form.Item>
 
-          {!templateId && <Form.Item name="file" label="File" valuePropName="fileList" getValueFromEvent={normFile}>
+          <Form.Item name="file" label="File" valuePropName="fileList" getValueFromEvent={normFile}>
             <Upload
               maxCount={1}
               name="file"
@@ -224,7 +223,7 @@ const NewMessage: React.FC = () => {
             >
               <Button icon={<UploadOutlined />}>Select file</Button>
             </Upload>
-          </Form.Item>}
+          </Form.Item>
 
           <Button block type="primary" htmlType="submit" icon={<SendOutlined />}>
             SEND
