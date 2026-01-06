@@ -19,21 +19,21 @@ const LogTable: React.FC = React.memo(() => {
       render: (_: string, record: LogType) => moment(record.createdAt).format("DD-MMM-YYYY HH:mm:ss")
     },
     {
-      title: "App",
-      key: "AppId",
-      dataIndex: ["app", 'name'],
-      ellipsis: true,
-    },
-    {
       title: "Contact",
-      key: "contact",
-      dataIndex: ["contact", 'name'],
+      key: "recipient",
+      dataIndex: ["recipient", 'name'],
       ellipsis: true,
     },
     {
       title: "Phone Number",
       key: "phoneNumber",
-      dataIndex: ["contact", 'phoneNumber'],
+      dataIndex: ["recipient", 'phoneNumber'],
+      ellipsis: true,
+    },
+    {
+      title: "App",
+      key: "AppId",
+      dataIndex: ["app", 'name'],
       ellipsis: true,
     },
     {
