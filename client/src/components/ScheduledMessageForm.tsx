@@ -21,7 +21,7 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
   return (
     <Modal
       width={900}
-      title={isEditing ? "Edit Schedule Message" : "Create New Schedule Message"}
+      title={isEditing ? "Edit Scheduled Message" : "Create New Scheduled Message"}
       open={visible}
       onCancel={onCancel}
       footer={[
@@ -32,13 +32,14 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
       <div style={{ display: "flex", justifyContent: "space-between", gap: 20, marginTop: 40 }}>
         <div>
           <Form
-            style={{ width: 500 }}
+            style={{ width: 400 }}
             variant="filled"
             form={form}
             id="form"
             onFinish={onOk}
             requiredMark={false}
             labelCol={{ span: 7 }}
+            layout="vertical"
           >
             <Form.Item name="id" hidden>
               <Input />
