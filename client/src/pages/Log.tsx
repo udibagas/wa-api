@@ -39,13 +39,13 @@ const Log: React.FC = () => {
     {
       title: "Contact",
       key: "contact",
-      dataIndex: ["contact", 'name'],
+      dataIndex: ["recipient", 'name'],
       ellipsis: true,
     },
     {
       title: "Phone Number",
       key: "phoneNumber",
-      dataIndex: ["contact", 'phoneNumber'],
+      dataIndex: ["recipient", 'phoneNumber'],
       ellipsis: true,
     },
     {
