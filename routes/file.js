@@ -33,10 +33,17 @@ router
   .use(auth)
   .post("/", upload.single("file"), async (req, res) => {
     try {
+      let resourceType = "auto";
+      if (req.file.type.startsWith("image/")) {
+        resourceType = "image";
+      } else if (req.file.type === "application/pdf") {
+        resourceType = "raw"; // PDFs should be uploaded as 'raw'
+      }
+
       // Upload to Cloudinary
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "wa-api",
-        resource_type: "auto",
+        resource_type: resourceType,
       });
 
       // Delete local file after successful upload
