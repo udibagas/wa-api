@@ -156,6 +156,7 @@ const NewMessage: React.FC = () => {
           labelCol={{ span: 8 }}
           style={{ width: 500 }}
           onFinish={handleSend}
+          layout="vertical"
         >
 
           <Form.Item name="MessageTemplateId" label="Message Template">
@@ -225,11 +226,9 @@ const NewMessage: React.FC = () => {
             </Upload>
           </Form.Item>}
 
-          <Form.Item label={null}>
-            <Button block type="primary" htmlType="submit" icon={<SendOutlined />}>
-              SEND
-            </Button>
-          </Form.Item>
+          <Button block type="primary" htmlType="submit" icon={<SendOutlined />}>
+            SEND
+          </Button>
         </Form>
 
         <WhatsAppChatBubble message={body} file={file} />
