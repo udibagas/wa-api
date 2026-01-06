@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Form, Input, Switch, Select } from "antd";
+import { Modal, Form, Input, Switch, Select, Card } from "antd";
 import CancelButton from "./buttons/CancelButton";
 import SaveButton from "./buttons/SaveButton";
 import { CustomFormProps, FileType, GroupType, ScheduledMessageType } from "../types";
@@ -29,7 +29,7 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
         <SaveButton label={isEditing ? "Update" : "Add"} key='submit' />,
       ]}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 20 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 20, marginTop: 40 }}>
         <div>
           <Form
             style={{ width: 500 }}
@@ -118,8 +118,7 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
         <WhatsAppChatBubble message={message} file={{} as FileType} />
       </div>
 
-      <div>
-        <h4 style={{ marginBottom: 10 }}>Time Format</h4>
+      <Card title="Time Format Guide" style={{ marginTop: 20, marginBottom: 20 }}>
         <table className="table">
           <thead>
             <tr>
@@ -198,7 +197,7 @@ const TemplateForm: React.FC<CustomFormProps<ScheduledMessageType>> = ({ visible
         0 0 12 * * * = setiap hari jam 12:00 <br />
         0 0 8 * * 1 = setiap hari senin jam 08:00 <br />
         0 0 8 1 * * = setiap tanggal 1 jam 08:00 <br />
-      </div>
+      </Card>
 
     </Modal>
   );
