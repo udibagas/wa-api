@@ -190,39 +190,10 @@ class WhatsAppService {
         throw new Error("Unable to connect to WhatsApp");
       }
 
-      await this.sock.sendMessage(recipient, { text: message });
-      console.log(`WhatsApp message sent to ${recipient}`);
-
-      return { success: true, message: "Message sent successfully" };
+      const formattedNumber = this.formatPhoneNumber(recipient);
+      return this.sock.sendMessage(formattedNumber, { text: message });
     } catch (error) {
-      console.error("Error sending WhatsApp message:", error);
       throw error;
-    }
-  }
-
-  /**
-   * Send WhatsApp notification
-   * @param {string} phoneNumber
-   * @param {string} message
-   * @returns {Promise<boolean>}
-   */
-  async sendNotification(phoneNumber, message) {
-    if (!this.enabled) {
-      console.log("WhatsApp notifications are disabled");
-      return false;
-    }
-
-    if (!phoneNumber) {
-      console.error("Phone number is required for WhatsApp notification");
-      return false;
-    }
-
-    try {
-      const formattedNumber = this.formatPhoneNumber(phoneNumber);
-      return await this.sendTextMessage(formattedNumber, message);
-    } catch (error) {
-      console.error("Error sending WhatsApp notification:", error);
-      return false;
     }
   }
 
@@ -244,7 +215,7 @@ Terima kasih,
 
 Tim BlastIt!`;
 
-    return await this.sendNotification(phoneNumber, testMessage);
+    return await this.sendTextMessage(phoneNumber, testMessage);
   }
 
   /**

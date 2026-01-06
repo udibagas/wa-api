@@ -1,6 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
-const sendWhatsAppMessage = require("../utils/sendWhatsAppMessage");
+const whatsappsService = require("../services/whatsapps.service");
+// const sendWhatsAppMessage = require("../utils/sendWhatsAppMessage");
 
 module.exports = (sequelize, DataTypes) => {
   class Chat extends Model {
@@ -9,13 +10,14 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     sendMessage() {
-      return sendWhatsAppMessage({
-        message: this.message,
-        caption: this.message,
-        phoneNumber: this.to,
-        type: this.type,
-        file: this.file,
-      });
+      // return sendWhatsAppMessage({
+      //   message: this.message,
+      //   caption: this.message,
+      //   phoneNumber: this.to,
+      //   type: this.type,
+      //   file: this.file,
+      // });
+      return whatsappsService.sendTextMessage(this.to, this.message);
     }
   }
 
@@ -38,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
   Chat.afterCreate((chat) => {
     chat
       .sendMessage()
-      .then((body) => {
-        chat.update({ status: "sent", wamid: body.messages[0].id });
+      .then(({ success, message }) => {
+        chat.update({ status: "delivered" });
       })
       .catch(() => {
         chat.update({ status: "failed" });
