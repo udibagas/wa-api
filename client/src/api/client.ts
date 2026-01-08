@@ -3,7 +3,7 @@ import { message } from "antd";
 import { FileType } from "../types";
 
 const client = axios.create({
-  baseURL: "",
+  baseURL: "/api",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
