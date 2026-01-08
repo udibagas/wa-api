@@ -9,30 +9,16 @@ router
   // send individual message
   .post("/send", async (req, res, next) => {
     try {
-      const {
-        message,
-        caption,
+      const { message, phoneNumber, type, file } = req.body;
+
+      const result = await whatsappService.sendMessage(
         phoneNumber,
+        message,
         type,
-        templateName,
-        components = [],
-      } = req.body;
+        file
+      );
 
-      if (type === "text") {
-        whatsappService.sendTextMessage(
-          phoneNumber,
-          message.replaceAll("{{name}}", name)
-        );
-      } else {
-        res = whatsappService.sendMediaMessage(
-          phoneNumber,
-          type,
-          caption.replaceAll("{{name}}", name),
-          file
-        );
-      }
-
-      res.status(200).json(body);
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }
@@ -44,12 +30,10 @@ router
       const {
         groups = [],
         message,
-        caption,
         type,
         MessageTemplateId,
         contacts = [],
         file,
-        templateName,
       } = req.body;
 
       let template = null;
@@ -64,15 +48,6 @@ router
       }
 
       const AppId = template?.appId ?? null;
-
-      const payload = {
-        type,
-        file,
-        message,
-        caption,
-        templateName,
-      };
-
       const target = [];
 
       if (contacts.length) {
@@ -110,27 +85,16 @@ router
       );
 
       for (const { id, name, phoneNumber } of uniqueContacts) {
-        console.log("Send to", phoneNumber);
         let status = "success"; // default status
         let response = null; // default response
 
-        let res;
-
-        if (type === "text") {
-          res = whatsappService.sendTextMessage(
+        whatsappService
+          .sendMessage(
             phoneNumber,
-            message.replaceAll("{{name}}", name)
-          );
-        } else {
-          res = whatsappService.sendMediaMessage(
-            phoneNumber,
+            message.replaceAll("{{name}}", name),
             type,
-            caption.replaceAll("{{name}}", name),
             file
-          );
-        }
-
-        res
+          )
           .then((res) => {
             response = res;
           })
