@@ -140,6 +140,7 @@ router
           })
           .finally(() => {
             Log.create({
+              UserId: req.user.id,
               AppId,
               MessageTemplateId,
               ContactId: id,
