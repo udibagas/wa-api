@@ -88,7 +88,7 @@ const WhatsAppChatBubble: React.FC<WhatsAppChatBubbleProps> = ({ message, file }
           <div className="back-arrow">←</div>
           <div className="contact-avatar">TP</div>
           <div className="contact-info">
-            <div className="contact-name">TPSM</div>
+            <div className="contact-name">TPK Semarang</div>
             <div className="contact-status">online</div>
           </div>
         </div>
