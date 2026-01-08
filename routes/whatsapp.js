@@ -23,6 +23,13 @@ router
           phoneNumber,
           message.replaceAll("{{name}}", name)
         );
+      } else {
+        res = whatsappService.sendMediaMessage(
+          phoneNumber,
+          type,
+          caption.replaceAll("{{name}}", name),
+          file
+        );
       }
 
       res.status(200).json(body);
@@ -106,13 +113,6 @@ router
         console.log("Send to", phoneNumber);
         let status = "success"; // default status
         let response = null; // default response
-
-        // sendWhatsAppMessage({
-        //   ...payload,
-        //   message: message.replaceAll("{{name}}", name),
-        //   caption: caption.replaceAll("{{name}}", name),
-        //   phoneNumber,
-        // })
 
         let res;
 
