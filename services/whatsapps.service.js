@@ -122,6 +122,8 @@ class WhatsAppService {
           this.qrDataURL = null;
           console.log("WhatsApp connection closed");
 
+          let shouldReconnect = true;
+
           if (lastDisconnect?.error) {
             const statusCode =
               lastDisconnect.error instanceof Boom
@@ -134,21 +136,32 @@ class WhatsAppService {
             );
 
             if (statusCode === DisconnectReason.loggedOut) {
-              console.log("Device logged out. Clearing saved session...");
+              console.log(
+                "Device logged out. Clearing saved session and will reconnect with new QR..."
+              );
               // Clear the saved session when logged out
               this.clearAuthSession();
-              return;
-            }
-
-            if (statusCode === DisconnectReason.restartRequired) {
-              console.log("Restart required. Reconnecting...");
-              setTimeout(() => this.connectToWhatsApp(), 5000);
-              return;
+              // Still reconnect to generate new QR code
+              shouldReconnect = true;
+            } else if (statusCode === DisconnectReason.restartRequired) {
+              console.log("Restart required. Reconnecting immediately...");
+              shouldReconnect = true;
+            } else if (statusCode === DisconnectReason.connectionClosed) {
+              console.log("Connection closed unexpectedly. Reconnecting...");
+              shouldReconnect = true;
+            } else if (statusCode === DisconnectReason.connectionLost) {
+              console.log("Connection lost. Reconnecting...");
+              shouldReconnect = true;
+            } else if (statusCode === DisconnectReason.timedOut) {
+              console.log("Connection timed out. Reconnecting...");
+              shouldReconnect = true;
             }
           }
 
-          console.log("Attempting to reconnect in 5 seconds...");
-          setTimeout(() => this.connectToWhatsApp(), 5000);
+          if (shouldReconnect) {
+            console.log("Attempting to reconnect in 5 seconds...");
+            setTimeout(() => this.connectToWhatsApp(), 5000);
+          }
         } else if (connection === "open") {
           console.log("Connected to WhatsApp!");
           this.isConnected = true;
@@ -158,6 +171,12 @@ class WhatsAppService {
         } else if (connection === "connecting") {
           console.log("Connecting to WhatsApp...");
         }
+      });
+
+      // Handle errors during connection
+      sock.ev.on("error", (error) => {
+        console.error("WhatsApp socket error:", error);
+        // Don't reconnect on every error to avoid loops, but log it
       });
 
       // Save session state periodically and when the connection closes
@@ -170,6 +189,11 @@ class WhatsAppService {
     } catch (error) {
       this.isConnecting = false;
       console.error("Error creating WhatsApp connection:", error);
+
+      // Attempt to reconnect after initialization error
+      console.log("Will attempt to reconnect in 10 seconds...");
+      setTimeout(() => this.connectToWhatsApp(), 10000);
+
       throw error;
     }
   }
