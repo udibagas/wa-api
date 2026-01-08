@@ -78,7 +78,7 @@ class WhatsAppService {
         printQRInTerminal: false,
         auth: state,
         logger: require("pino")({ level: "silent" }), // Silent logging to reduce noise
-        browser: ["Guest Book System", "Chrome", "1.0.0"],
+        browser: ["BlastIt TPKS", "Chrome", "1.0.0"],
         generateHighQualityLinkPreview: true,
       });
 
