@@ -174,8 +174,7 @@ class WhatsAppService {
     }
   }
 
-  // Function to send a text message
-  async sendTextMessage(recipient, message) {
+  async sendMessage(recipient, message, type = "text", file = null) {
     if (!this.enabled) {
       throw new Error("WhatsApp notifications are disabled");
     }
@@ -190,29 +189,13 @@ class WhatsAppService {
       }
 
       const formattedNumber = this.formatPhoneNumber(recipient);
-      return this.sock.sendMessage(formattedNumber, { text: message });
-    } catch (error) {
-      throw error;
-    }
-  }
 
-  async sendMediaMessage(recipient, type, caption, file) {
-    if (!this.enabled) {
-      throw new Error("WhatsApp notifications are disabled");
-    }
-
-    try {
-      if (!this.isConnected) {
-        await this.connectToWhatsApp();
+      if (type === "text") {
+        return this.sock.sendMessage(formattedNumber, { text: message });
       }
 
-      if (!this.isConnected || !this.sock) {
-        throw new Error("Unable to connect to WhatsApp");
-      }
-
-      const formattedNumber = this.formatPhoneNumber(recipient);
       return this.sock.sendMessage(formattedNumber, {
-        caption,
+        caption: message,
         [type]: { url: file.url },
       });
     } catch (error) {
@@ -238,7 +221,7 @@ Terima kasih,
 
 Tim BlastIt!`;
 
-    return await this.sendTextMessage(phoneNumber, testMessage);
+    return await this.sendMessage(phoneNumber, testMessage);
   }
 
   /**
