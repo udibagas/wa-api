@@ -20,6 +20,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
 
 app.use(require("./routes"));
+
+// SPA fallback
+app.get("*", (req, res) => {
+  res.sendFile(__dirname + "/client/dist/index.html");
+});
+
 app.use(errorHandlerMiddleware);
 
 app.listen(port, () => {
