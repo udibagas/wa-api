@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       //   type: this.type,
       //   file: this.file,
       // });
-      return whatsappsService.sendTextMessage(this.to, this.message);
+      return whatsappsService.sendMessage(this.to, this.message);
     }
   }
 
