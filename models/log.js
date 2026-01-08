@@ -17,12 +17,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "MessageTemplateId",
         as: "messageTemplate",
       });
+
+      Log.belongsTo(models.User, {
+        foreignKey: "UserId",
+        as: "user",
+      });
     }
   }
 
   Log.init(
     {
       ContactId: DataTypes.INTEGER,
+      UserId: DataTypes.INTEGER,
       AppId: DataTypes.INTEGER,
       MessageTemplateId: DataTypes.INTEGER,
       response: DataTypes.JSON,
