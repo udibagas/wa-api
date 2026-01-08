@@ -1,0 +1,15 @@
+[Unit]
+Description=Blastit WA-API Service
+After=network.target
+
+[Service]
+Type=simple
+User=bagasdev
+WorkingDirectory=/home/bagasdev/apps/wa-api
+ExecStart=/usr/bin/npm run start
+Restart=on-failure
+RestartSec=10
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
