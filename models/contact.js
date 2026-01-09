@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       
       Salam hangat,
 
-      TPKS
+      TPK Semarang
       `;
 
       const template = await sequelize.models.MessageTemplate.findOne({
