@@ -28,6 +28,10 @@ router
           association: "messageTemplate",
           attributes: ["name"],
         },
+        {
+          association: "user",
+          attributes: ["id", "name"],
+        },
       ],
     };
 
