@@ -19,6 +19,10 @@ export function showDetailLog(record: LogType) {
           {moment(record.createdAt).format("DD-MMM-YYYY HH:mm:ss")}
         </Descriptions.Item>
 
+        {record.user && <Descriptions.Item label="User">
+          {record.user?.name}
+        </Descriptions.Item>}
+
         {record.app && <Descriptions.Item label="App">
           {record.app?.name}
         </Descriptions.Item>}

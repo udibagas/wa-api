@@ -31,6 +31,12 @@ const LogTable: React.FC = React.memo(() => {
       ellipsis: true,
     },
     {
+      title: "User",
+      key: "UserId",
+      dataIndex: ["user", 'name'],
+      ellipsis: true,
+    },
+    {
       title: "App",
       key: "AppId",
       dataIndex: ["app", 'name'],

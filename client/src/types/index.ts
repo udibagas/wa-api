@@ -99,6 +99,7 @@ export type LogType = {
   id: number;
   createdAt: Date;
   AppId: number;
+  UserId: number;
   ContactId: number;
   MessageTemplateId: number;
   response: object;
@@ -106,6 +107,7 @@ export type LogType = {
   messageTemplate: { name: string };
   app: { name: string };
   recipient: { name: string; phoneNumber: string };
+  user?: { name: string };
 };
 
 export type ScheduledMessageType = {
