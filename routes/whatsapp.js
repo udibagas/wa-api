@@ -9,16 +9,33 @@ router
   // send individual message
   .post("/send", async (req, res, next) => {
     try {
-      const { message, phoneNumber, type, file } = req.body;
+      const { message, phoneNumbers, type, file } = req.body;
 
-      const result = await whatsappService.sendMessage(
-        phoneNumber,
-        message,
-        type,
-        file
+      if (!phoneNumbers || !phoneNumbers.length) {
+        const error = new Error("Phone number is required");
+        error.status = 400;
+        throw error;
+      }
+
+      if (!message || !message.trim().length) {
+        const error = new Error("Message is required");
+        error.status = 400;
+        throw error;
+      }
+
+      if (!type || !["text", "document", "image"].includes(type)) {
+        const error = new Error("Invalid message type");
+        error.status = 400;
+        throw error;
+      }
+
+      const response = await Promise.all(
+        phoneNumbers.map((phoneNumber) =>
+          whatsappService.sendMessage(phoneNumber, message, type, file)
+        )
       );
 
-      res.status(200).json(result);
+      res.status(200).json(response);
     } catch (error) {
       next(error);
     }
