@@ -1,0 +1,29 @@
+
+
+
+# @BASE_URL=http://10.130.0.187:3000/api
+@BASE_URL=http://localhost:3000/api
+# Token bisa didapatkan dari response login
+@TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBtYWlsLmNvbSIsImlhdCI6MTc2ODI5MTUyNiwiZXhwIjoxNzcwODgzNTI2fQ.ktBcwpon21JhAkmC9tQFqhBtaZrrw62ZhslDFsP3KP4
+@EMAIL=admin@mail.com
+@PASSWORD=admin
+
+### Login
+POST {{BASE_URL}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{EMAIL}}",
+  "password": "{{PASSWORD}}"
+}
+
+### Send WhatsApp Message
+POST {{BASE_URL}}/whatsapp/send
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "phoneNumbers": ["120363401155419837@g.us"],
+  "message": "Hello, this is a test message!",
+  "type": "text"
+}
