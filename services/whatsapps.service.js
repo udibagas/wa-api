@@ -69,9 +69,8 @@ class WhatsAppService {
     this.isConnecting = true;
 
     try {
-      const { state, saveCreds } = await useMultiFileAuthState(
-        "./wa_auth_info"
-      );
+      const { state, saveCreds } =
+        await useMultiFileAuthState("./wa_auth_info");
 
       // Create a new WhatsApp connection
       const sock = makeWASocket({
@@ -132,12 +131,12 @@ class WhatsAppService {
 
             console.log(
               "Disconnect reason:",
-              lastDisconnect.error.message || lastDisconnect.error
+              lastDisconnect.error.message || lastDisconnect.error,
             );
 
             if (statusCode === DisconnectReason.loggedOut) {
               console.log(
-                "Device logged out. Clearing saved session and will reconnect with new QR..."
+                "Device logged out. Clearing saved session and will reconnect with new QR...",
               );
               // Clear the saved session when logged out
               this.clearAuthSession();
@@ -212,13 +211,25 @@ class WhatsAppService {
         throw new Error("Unable to connect to WhatsApp");
       }
 
-      const formattedNumber = this.formatPhoneNumber(recipient);
-
-      if (type === "text") {
-        return this.sock.sendMessage(formattedNumber, { text: message });
+      // Check if recipient is a group ID or phone number
+      // Group IDs contain @g.us, phone numbers need to be formatted
+      let recipientId;
+      if (recipient.includes("@g.us")) {
+        // It's a group ID, use it directly
+        recipientId = recipient;
+      } else if (recipient.includes("@s.whatsapp.net")) {
+        // Already formatted phone number, use it directly
+        recipientId = recipient;
+      } else {
+        // It's a phone number, format it
+        recipientId = this.formatPhoneNumber(recipient);
       }
 
-      return this.sock.sendMessage(formattedNumber, {
+      if (type === "text") {
+        return this.sock.sendMessage(recipientId, { text: message });
+      }
+
+      return this.sock.sendMessage(recipientId, {
         caption: message,
         [type]: { url: file.url },
       });
