@@ -79,6 +79,7 @@ class WhatsAppService {
         logger: require("pino")({ level: "silent" }), // Silent logging to reduce noise
         browser: ["BlastIt TPKS", "Chrome", "1.0.0"],
         generateHighQualityLinkPreview: true,
+        version: [2, 3000, 1033105955],
       });
 
       console.log("WhatsApp socket created, waiting for connection...");
@@ -129,10 +130,15 @@ class WhatsAppService {
                 ? lastDisconnect.error.output?.statusCode
                 : null;
 
-            console.log(
-              "Disconnect reason:",
-              lastDisconnect.error.message || lastDisconnect.error,
-            );
+            // Better error handling
+            const errorMessage =
+              lastDisconnect.error instanceof Boom
+                ? lastDisconnect.error.message
+                : lastDisconnect.error?.message ||
+                  JSON.stringify(lastDisconnect.error);
+
+            console.log("Disconnect reason:", errorMessage);
+            console.log("Status code:", statusCode);
 
             if (statusCode === DisconnectReason.loggedOut) {
               console.log(
@@ -153,6 +159,10 @@ class WhatsAppService {
               shouldReconnect = true;
             } else if (statusCode === DisconnectReason.timedOut) {
               console.log("Connection timed out. Reconnecting...");
+              shouldReconnect = true;
+            } else if (!statusCode) {
+              // Handle non-Boom errors
+              console.log("Unknown error type, will attempt to reconnect...");
               shouldReconnect = true;
             }
           }
