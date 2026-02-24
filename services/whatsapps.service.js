@@ -72,6 +72,10 @@ class WhatsAppService {
       const { state, saveCreds } =
         await useMultiFileAuthState("./wa_auth_info");
 
+      const res = await fetch(
+        `https://raw.githubusercontent.com/WhiskeySockets/Baileys/master/src/Defaults/baileys-version.json`,
+      ).then((res) => res.json());
+
       // Create a new WhatsApp connection
       const sock = makeWASocket({
         printQRInTerminal: false,
@@ -79,7 +83,7 @@ class WhatsAppService {
         logger: require("pino")({ level: "silent" }), // Silent logging to reduce noise
         browser: ["BlastIt TPKS", "Chrome", "1.0.0"],
         generateHighQualityLinkPreview: true,
-        version: [2, 3000, 1033105955],
+        version: res.version, // Use the fetched version
       });
 
       console.log("WhatsApp socket created, waiting for connection...");
