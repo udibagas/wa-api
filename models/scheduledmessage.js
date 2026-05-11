@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     async proceed() {
       console.log(new Date().toLocaleTimeString(), this.name);
 
-      const recipients = await sequelize.models.Recipient.findAll({
+      const recipients = await sequelize.models.Contact.findAll({
         where: { id: { [Op.in]: this.recipients } },
       });
 
