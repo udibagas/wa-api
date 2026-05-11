@@ -58,11 +58,11 @@ router
   })
 
   .put("/:id", async (req, res, next) => {
-    const { name, message, groups, recipients, time, recurring } = req.body;
+    const { name, message, groups, contacts, time, recurring } = req.body;
     const target = [];
 
-    if (recipients?.length > 0) {
-      target.push(...recipients);
+    if (contacts?.length > 0) {
+      target.push(...contacts);
     }
 
     if (groups?.length > 0) {
