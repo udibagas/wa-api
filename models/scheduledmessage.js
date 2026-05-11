@@ -1,7 +1,7 @@
 "use strict";
 const { CronJob, CronTime } = require("cron");
 const { Model, Op } = require("sequelize");
-const sendWhatsAppMessage = require("../utils/sendWhatsAppMessage");
+const whatsappService = require("../services/whatsapps.service");
 const { jobs } = require("../jobs");
 
 module.exports = (sequelize, DataTypes) => {
@@ -39,22 +39,20 @@ module.exports = (sequelize, DataTypes) => {
     async proceed() {
       console.log(new Date().toLocaleTimeString(), this.name);
 
-      // const recipients = await sequelize.models.Recipient.findAll({
-      //   where: { id: { [Op.in]: this.recipients } },
-      // });
+      const recipients = await sequelize.models.Recipient.findAll({
+        where: { id: { [Op.in]: this.recipients } },
+      });
 
-      // if (recipients.length === 0) {
-      //   console.log("Recipients not found");
-      // }
+      if (recipients.length === 0) {
+        console.log("Recipients not found");
+      }
 
-      // for (const recipient of recipients) {
-      //   await sendWhatsAppMessage({
-      //     type: "text", // sementara text dulu
-      //     message: this.message,
-      //     caption: this.message,
-      //     phoneNumber: recipient.phoneNumber,
-      //   });
-      // }
+      for (const recipient of recipients) {
+        whatsappService
+          .sendMessage(recipient.phoneNumber, this.message, "text")
+          .then((r) => console.log(r))
+          .catch((e) => console.error(e.message));
+      }
     }
   }
 
@@ -111,7 +109,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "ScheduledMessage",
-    }
+    },
   );
 
   ScheduledMessage.afterSave((instance) => {
