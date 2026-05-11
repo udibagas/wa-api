@@ -38,7 +38,7 @@ const ScheduledMessage: React.FC = () => {
     {
       title: "Contacts",
       render: (_: string, record: ScheduledMessageType) => {
-        return record.contacts.length
+        return record.recipients?.length ?? 0
       }
     },
     {

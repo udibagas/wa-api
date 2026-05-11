@@ -119,6 +119,7 @@ export type ScheduledMessageType = {
   message: string;
   file: FileType;
   contacts: number[];
+  recipients: number[];
   recurring: boolean;
   createdAt: string;
   updatedAt: string;
@@ -142,15 +143,16 @@ export type AxiosErrorResponseType = {
   errors?: Record<string, string[]>;
 };
 
-export type RecursivePartial<T> = NonNullable<T> extends object
-  ? {
-      [P in keyof T]?: NonNullable<T[P]> extends (infer U)[]
-        ? RecursivePartial<U>[]
-        : NonNullable<T[P]> extends object
-        ? RecursivePartial<T[P]>
-        : T[P];
-    }
-  : T;
+export type RecursivePartial<T> =
+  NonNullable<T> extends object
+    ? {
+        [P in keyof T]?: NonNullable<T[P]> extends (infer U)[]
+          ? RecursivePartial<U>[]
+          : NonNullable<T[P]> extends object
+            ? RecursivePartial<T[P]>
+            : T[P];
+      }
+    : T;
 
 export type CustomFormProps<T> = {
   visible: boolean;
