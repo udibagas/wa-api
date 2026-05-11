@@ -1,6 +1,7 @@
 const { auth } = require("../middlewares/auth.middleware");
 const { ScheduledMessage, Contact } = require("../models");
 const router = require("express").Router();
+const { Op } = require("sequelize");
 
 router
   .use(auth)
